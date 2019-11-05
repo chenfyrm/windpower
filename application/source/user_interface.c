@@ -1,319 +1,317 @@
 /****************************************Copyright (c)**************************************************
-**                       		     åŒ—	äº¬	äº¤	é€š	å¤§	å­¦
-**                                        ç”µæ°”å·¥ç¨‹å­¦é™¢
-**                                         604å®žéªŒå®¤
+**                       		     ±±	¾©	½»	Í¨	´ó	Ñ§
+**                                        µçÆø¹¤³ÌÑ§Ôº
+**                                         604ÊµÑéÊÒ
 **
 **                              
 ** 
-**--------------æ–‡ä»¶ä¿¡æ¯--------------------------------------------------------------------------------
-**æ–‡   ä»¶   å: user_interface.c
-**åˆ›   å»º   äºº:
-**æœ€åŽä¿®æ”¹æ—¥æœŸ:
-**æ        è¿°: å³çŽ‰1.5MWåŒé¦ˆé£Žç”µæœºç»„å¹¶ç½‘å˜æµå™¨æŽ§åˆ¶è½¯ä»¶å¤–è®¾æŽ§åˆ¶ç¨‹åº--201005atcpc-201007atbjtu
-				åŒ…æ‹¬å¯¹eeprom,sci,spi,ad,daçš„æŽ§åˆ¶ç¨‹åº
+**--------------ÎÄ¼þÐÅÏ¢--------------------------------------------------------------------------------
+**ÎÄ   ¼þ   Ãû: user_interface.c
+**´´   ½¨   ÈË: 
+**×îºóÐÞ¸ÄÈÕÆÚ: 
+**Ãè        Êö: ÓÒÓñ1.5MWË«À¡·çµç»ú×é²¢Íø±äÁ÷Æ÷¿ØÖÆÈí¼þÍâÉè¿ØÖÆ³ÌÐò--201005atcpc-201007atbjtu
+				°üÀ¨¶Ôeeprom,sci,spi,ad,daµÄ¿ØÖÆ³ÌÐò
 **              
-**--------------åŽ†å²ç‰ˆæœ¬ä¿¡æ¯----------------------------------------------------------------------------
-** åˆ›å»ºäºº:
-** ç‰ˆ  æœ¬:
-** æ—¥ã€€æœŸ:
-** æã€€è¿°:
+**--------------ÀúÊ·°æ±¾ÐÅÏ¢----------------------------------------------------------------------------
+** ´´½¨ÈË: 
+** °æ  ±¾: 
+** ÈÕ¡¡ÆÚ: 
+** Ãè¡¡Êö: 
 **
-**--------------å½“å‰ç‰ˆæœ¬ä¿®è®¢------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
-** æã€€è¿°:
+**--------------µ±Ç°°æ±¾ÐÞ¶©------------------------------------------------------------------------------
+** ÐÞ¸ÄÈË: 
+** ÈÕ¡¡ÆÚ: 
+** Ãè¡¡Êö: 
 **
 **------------------------------------------------------------------------------------------------------
 ********************************************************************************************************/
 #include "DSP2833x_Device.h"     // Headerfile Include File
 #include "DSP2833x_Examples.h"   // Examples Include File
 #include "math.h"				//20121103
-//å‡½æ•°å£°æ˜Ž
-#include "user_header.h"  						//å˜é‡å¸¸é‡å®šä¹‰
-#include "user_macro.h"							//å®å‡½æ•°
-#include "user_database.h"						//æ•°æ®åº“
-#include "user_interface.h"
+//º¯ÊýÉùÃ÷
+Uint16 		CheckCode(Uint16 index);
+Uint16 		SciDatpro(void);
 /*********************************************************************************************************
-** å‡½æ•°åç§°: EeStart
-** åŠŸèƒ½æè¿°: å¼€å§‹å¯¹eepromçš„æ“ä½œ
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 	 æ—¶é’Ÿçº¿é«˜æ—¶æ•°æ®çº¿ä¸‹é™æ²¿ä¸ºå¼€å§‹
+** º¯ÊýÃû³Æ: EeStart
+** ¹¦ÄÜÃèÊö: ¿ªÊ¼¶ÔeepromµÄ²Ù×÷
+** Êä¡¡Èë: 
+** Êä¡¡³ö:        
+** ×¢  ÊÍ: 	 Ê±ÖÓÏß¸ßÊ±Êý¾ÝÏßÏÂ½µÑØÎª¿ªÊ¼
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void EeStart(void)
 {
 	EALLOW;
-    GpioDataRegs.GPBSET.bit.GPIO32 = 1;     	 //æ•°æ®é«˜
-	GpioCtrlRegs.GPBDIR.bit.GPIO32 = 1;  		//æ•°æ®çº¿å˜ä¸ºè¾“å‡ºå£
+    GpioDataRegs.GPBSET.bit.GPIO32 = 1;     	 //Êý¾Ý¸ß
+	GpioCtrlRegs.GPBDIR.bit.GPIO32 = 1;  		//Êý¾ÝÏß±äÎªÊä³ö¿Ú
 	EDIS;
 	DELAY_US(DELAY_EE);
-    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 	DELAY_US(DELAY_EE);
-	GpioDataRegs.GPBCLEAR.bit.GPIO32 = 1;		 	//æ•°æ®ä½Ž
+	GpioDataRegs.GPBCLEAR.bit.GPIO32 = 1;		 	//Êý¾ÝµÍ
 	DELAY_US(DELAY_EE);
-   	GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 	DELAY_US(DELAY_EE);
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: EeStop
-** åŠŸèƒ½æè¿°: ç»“æŸå¯¹eepromçš„æ“ä½œ
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 	 æ—¶é’Ÿçº¿é«˜æ—¶æ•°æ®çº¿ä¸Šå‡æ²¿ä¸ºç»“æŸ
+** º¯ÊýÃû³Æ: EeStop
+** ¹¦ÄÜÃèÊö: ½áÊø¶ÔeepromµÄ²Ù×÷
+** Êä¡¡Èë: 
+** Êä¡¡³ö:        
+** ×¢  ÊÍ: 	 Ê±ÖÓÏß¸ßÊ±Êý¾ÝÏßÉÏÉýÑØÎª½áÊø
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void EeStop(void)
 {
 	EALLOW;
-    GpioDataRegs.GPBCLEAR.bit.GPIO32 = 1;     	 //æ•°æ®ä½Ž
-	GpioCtrlRegs.GPBDIR.bit.GPIO32 = 1;  		//æ•°æ®çº¿å˜ä¸ºè¾“å‡ºå£
+    GpioDataRegs.GPBCLEAR.bit.GPIO32 = 1;     	 //Êý¾ÝµÍ
+	GpioCtrlRegs.GPBDIR.bit.GPIO32 = 1;  		//Êý¾ÝÏß±äÎªÊä³ö¿Ú
 	EDIS;
 	DELAY_US(DELAY_EE);
-    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 	DELAY_US(DELAY_EE);
-    GpioDataRegs.GPBSET.bit.GPIO32 = 1;     	 //æ•°æ®é«˜
+    GpioDataRegs.GPBSET.bit.GPIO32 = 1;     	 //Êý¾Ý¸ß
 	DELAY_US(DELAY_EE);
-   	GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 	EALLOW;
-	GpioCtrlRegs.GPBDIR.bit.GPIO32= 0;			//æ•°æ®çº¿å˜ä¸ºè¾“å…¥å£
+	GpioCtrlRegs.GPBDIR.bit.GPIO32= 0;			//Êý¾ÝÏß±äÎªÊäÈë¿Ú
 	EDIS;
 	DELAY_US(DELAY_EE);
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: EeWrite
-** åŠŸèƒ½æè¿°: å°†numberä¸ªå­—èŠ‚æ•°æ®ï¼ˆä¸åŒ…æ‹¬åœ°å€ï¼‰è¿žç»­å†™å…¥åˆ°eepromï¼ˆä¸€èˆ¬è¦æ±‚åœ¨åŒä¸€é¡µé¢ï¼‰
-** è¾“ã€€å…¥: 	 number,è¡¨ç¤ºè¦å†™çš„å­—èŠ‚æ•°
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 	 EEPROM.data[0]:å†™æŽ§åˆ¶å­—;
-**			 EEPROM.data[1-2]:å¾…å†™æ•°æ®åœ°å€;
-**			 EEPROM.data[3-x]:å¾…å†™æ•°æ®;
+** º¯ÊýÃû³Æ: EeWrite
+** ¹¦ÄÜÃèÊö: ½«number¸ö×Ö½ÚÊý¾Ý£¨²»°üÀ¨µØÖ·£©Á¬ÐøÐ´Èëµ½eeprom£¨Ò»°ãÒªÇóÔÚÍ¬Ò»Ò³Ãæ£©
+** Êä¡¡Èë: 	 number,±íÊ¾ÒªÐ´µÄ×Ö½ÚÊý
+** Êä¡¡³ö:        
+** ×¢  ÊÍ: 	 EEPROM.data[0]:Ð´¿ØÖÆ×Ö;
+**			 EEPROM.data[1-2]:´ýÐ´Êý¾ÝµØÖ·; 
+**			 EEPROM.data[3-x]:´ýÐ´Êý¾Ý;
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void EeWrite(unsigned char number)
 {
 	int16 i,j;
-//----------------------------------------------//å‘é€èµ·å§‹ä½
+//----------------------------------------------//·¢ËÍÆðÊ¼Î»
 	EeStart();
-//----------------------------------------------//å¼€å§‹å‘é€æ•°æ®
-	for(j=0;j<number+3;j++)						//å…ˆå‘ä½Žå­—èŠ‚
+//----------------------------------------------//¿ªÊ¼·¢ËÍÊý¾Ý
+	for(j=0;j<number+3;j++)						//ÏÈ·¢µÍ×Ö½Ú
 	{
-		for(i=0;i<8;i++)						//æ¯ä¸ªå­—èŠ‚å…ˆå‘é«˜å­—ä½
+		for(i=0;i<8;i++)						//Ã¿¸ö×Ö½ÚÏÈ·¢¸ß×ÖÎ»
 		{
-			if((EEPROM.data[j] & ONEBYTE[i])==0)	//è¦å‘0
+			if((EEPROM.data[j] & ONEBYTE[i])==0)	//Òª·¢0
 			{
-				GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;	//æ•°æ®ä½Ž
+				GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;	//Êý¾ÝµÍ
 				DELAY_US(DELAY_EE);					
-    			GpioDataRegs.GPBSET.bit.GPIO33 = 1; //æ—¶é’Ÿé«˜
+    			GpioDataRegs.GPBSET.bit.GPIO33 = 1; //Ê±ÖÓ¸ß
 				DELAY_US(DELAY_EE);				
-   	   		    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;//æ—¶é’Ÿä½Ž
+   	   		    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;//Ê±ÖÓµÍ
 				DELAY_US(DELAY_EE);				
 			}
-			else									//è¦å‘1
+			else									//Òª·¢1
 			{
-				GpioDataRegs.GPBSET.bit.GPIO32 =1;	//æ•°æ®é«˜
+				GpioDataRegs.GPBSET.bit.GPIO32 =1;	//Êý¾Ý¸ß
 				DELAY_US(DELAY_EE);				
-   				GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+   				GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 				DELAY_US(DELAY_EE);				
-   	   		    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	   		    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 				DELAY_US(DELAY_EE);				
 			}
 		}
-//----------------------------------------------//å‘å®Œä¸€ä¸ªå­—èŠ‚
+//----------------------------------------------//·¢ÍêÒ»¸ö×Ö½Ú		
 		EALLOW;
-		GpioCtrlRegs.GPBDIR.bit.GPIO32= 0;		//æ•°æ®çº¿å˜ä¸ºè¾“å…¥å£
+		GpioCtrlRegs.GPBDIR.bit.GPIO32= 0;		//Êý¾ÝÏß±äÎªÊäÈë¿Ú
 		EDIS;
-    	GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+    	GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 		DELAY_US(DELAY_EE);
 		
-		if(GpioDataRegs.GPBDAT.bit.GPIO32==1)	//å¦‚æžœæ•°æ®çº¿è¯»åˆ°1è¡¨ç¤ºæ²¡æœ‰åº”ç­”
+		if(GpioDataRegs.GPBDAT.bit.GPIO32==1)	//Èç¹ûÊý¾ÝÏß¶Áµ½1±íÊ¾Ã»ÓÐÓ¦´ð
 		{
-			M_SetFlag(SL_EE_NOACK);				//ç½®æ— åº”ç­”æ ‡å¿—
+			M_SetFlag(SL_EE_NOACK);				//ÖÃÎÞÓ¦´ð±êÖ¾
 		}
 		
-   	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 
 		EALLOW;
-		GpioDataRegs.GPBCLEAR.bit.GPIO32= 1;		//æ•°æ®ä½Ž
-		GpioCtrlRegs.GPBDIR.bit.GPIO32= 1;		//æ•°æ®çº¿å˜ä¸ºè¾“å‡ºå£
+		GpioDataRegs.GPBCLEAR.bit.GPIO32= 1;		//Êý¾ÝµÍ
+		GpioCtrlRegs.GPBDIR.bit.GPIO32= 1;		//Êý¾ÝÏß±äÎªÊä³ö¿Ú
 		EDIS;
 		DELAY_US(DELAY_EE);
 	}
-//----------------------------------------------//å‘é€åœæ­¢ä½
+//----------------------------------------------//·¢ËÍÍ£Ö¹Î»
 	EeStop();
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: EeRead
-** åŠŸèƒ½æè¿°: ä»Žeepromè¿žç»­è¯»å‡ºnumberä¸ªå­—èŠ‚æ•°æ®
-** è¾“ã€€å…¥: 	 number,è¡¨ç¤ºè¦è¯»çš„å­—èŠ‚æ•°
-** è¾“ã€€å‡º:   EEPROM.data[0-1]:è¯»å‡ºçš„æ•°æ®
-** æ³¨  é‡Š: 	 å…ˆå†™å†™æŽ§åˆ¶å­—,å†å†™å¾…è¯»æ•°æ®åœ°å€,å†å†™è¯»æŽ§åˆ¶å­—,åœ¨è¯»å‡ºæ•°æ®
+** º¯ÊýÃû³Æ: EeRead
+** ¹¦ÄÜÃèÊö: ´ÓeepromÁ¬Ðø¶Á³önumber¸ö×Ö½ÚÊý¾Ý
+** Êä¡¡Èë: 	 number,±íÊ¾Òª¶ÁµÄ×Ö½ÚÊý
+** Êä¡¡³ö:   EEPROM.data[0-1]:¶Á³öµÄÊý¾Ý     
+** ×¢  ÊÍ: 	 ÏÈÐ´Ð´¿ØÖÆ×Ö,ÔÙÐ´´ý¶ÁÊý¾ÝµØÖ·,ÔÙÐ´¶Á¿ØÖÆ×Ö,ÔÚ¶Á³öÊý¾Ý
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void EeRead(unsigned char number)
 {
 	int16 i,j;
 	
-//----------------------------------------------//å‘é€èµ·å§‹ä½
+//----------------------------------------------//·¢ËÍÆðÊ¼Î»
 	EeStart();
-//----------------------------------------------//å¼€å§‹å‘é€åœ°å€æ•°æ®
-	for(j=0;j<3;j++)							//å…ˆå‘ä½Žå­—èŠ‚
+//----------------------------------------------//¿ªÊ¼·¢ËÍµØÖ·Êý¾Ý
+	for(j=0;j<3;j++)							//ÏÈ·¢µÍ×Ö½Ú
 	{
-		for(i=0;i<8;i++)						//æ¯ä¸ªå­—èŠ‚å…ˆå‘é«˜å­—ä½
+		for(i=0;i<8;i++)						//Ã¿¸ö×Ö½ÚÏÈ·¢¸ß×ÖÎ»
 		{
-			if((EEPROM.data[j] & ONEBYTE[i])==0)	//è¦å‘0
+			if((EEPROM.data[j] & ONEBYTE[i])==0)	//Òª·¢0
 			{
-				GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;	//æ•°æ®ä½Ž
+				GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;	//Êý¾ÝµÍ
 				DELAY_US(DELAY_EE);				
-   				GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+   				GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 				DELAY_US(DELAY_EE);				
-   	    		GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	    		GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 				DELAY_US(DELAY_EE);				
 			}
-			else									//è¦å‘1
+			else									//Òª·¢1
 			{
-				GpioDataRegs.GPBSET.bit.GPIO32 =1;	//æ•°æ®é«˜
+				GpioDataRegs.GPBSET.bit.GPIO32 =1;	//Êý¾Ý¸ß
 				DELAY_US(DELAY_EE);				
-    			GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+    			GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 				DELAY_US(DELAY_EE);				
-   	   		    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	   		    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 				DELAY_US(DELAY_EE);				
 			}
 		}
-//----------------------------------------------//å‘å®Œä¸€ä¸ªå­—èŠ‚
+//----------------------------------------------//·¢ÍêÒ»¸ö×Ö½Ú		
 		EALLOW;
-		GpioCtrlRegs.GPBDIR.bit.GPIO32= 0;		//æ•°æ®çº¿å˜ä¸ºè¾“å…¥å£
+		GpioCtrlRegs.GPBDIR.bit.GPIO32= 0;		//Êý¾ÝÏß±äÎªÊäÈë¿Ú
 		EDIS;
-   	    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+   	    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 		DELAY_US(DELAY_EE);
 		
-		if(GpioDataRegs.GPBDAT.bit.GPIO32==1)	//å¦‚æžœæ•°æ®çº¿è¯»åˆ°1è¡¨ç¤ºæ²¡æœ‰åº”ç­”
+		if(GpioDataRegs.GPBDAT.bit.GPIO32==1)	//Èç¹ûÊý¾ÝÏß¶Áµ½1±íÊ¾Ã»ÓÐÓ¦´ð
 		{
-			M_SetFlag(SL_EE_NOACK);				//ç½®æ— åº”ç­”æ ‡å¿—
+			M_SetFlag(SL_EE_NOACK);				//ÖÃÎÞÓ¦´ð±êÖ¾
 		}
 		
-   	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶
+   	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±
 		
 		EALLOW;
-		GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;		//æ•°æ®ä½Ž
-		GpioCtrlRegs.GPBDIR.bit.GPIO32= 1;		//æ•°æ®çº¿å˜ä¸ºè¾“å‡ºå£
+		GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;		//Êý¾ÝµÍ
+		GpioCtrlRegs.GPBDIR.bit.GPIO32= 1;		//Êý¾ÝÏß±äÎªÊä³ö¿Ú
 		EDIS;
 		
 		DELAY_US(DELAY_EE);
 	}
 	
-//----------------------------------------------//å†æ¬¡å‘é€èµ·å§‹ä½
+//----------------------------------------------//ÔÙ´Î·¢ËÍÆðÊ¼Î»
 	EeStart();
-//----------------------------------------------//å†æ¬¡å‘é€èµ·å§‹ä½
-	EEPROM.data[0] |= 0x01;						//æ”¹ä¸ºè¯»æŒ‡ä»¤
-	for(i=0;i<8;i++)							//å…ˆå‘é«˜å­—ä½
+//----------------------------------------------//ÔÙ´Î·¢ËÍÆðÊ¼Î»
+	EEPROM.data[0] |= 0x01;						//¸ÄÎª¶ÁÖ¸Áî
+	for(i=0;i<8;i++)							//ÏÈ·¢¸ß×ÖÎ»
 	{
-		if((EEPROM.data[0] & ONEBYTE[i])==0)		//è¦å‘0
+		if((EEPROM.data[0] & ONEBYTE[i])==0)		//Òª·¢0
 		{
-			GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;		//æ•°æ®ä½Ž
+			GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;		//Êý¾ÝµÍ
 			DELAY_US(DELAY_EE);					
-   		    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+   		    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 			DELAY_US(DELAY_EE);					
-   	  	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	  	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 			DELAY_US(DELAY_EE);					
 		}
-		else										//è¦å‘1
+		else										//Òª·¢1
 		{
-			GpioDataRegs.GPBSET.bit.GPIO32 =1;		//æ•°æ®é«˜
+			GpioDataRegs.GPBSET.bit.GPIO32 =1;		//Êý¾Ý¸ß	
 			DELAY_US(DELAY_EE);					
-   		    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+   		    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 			DELAY_US(DELAY_EE);					
-   	        GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	        GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 			DELAY_US(DELAY_EE);					
 		}
 	}
-//----------------------------------------------//å‘å®Œä¸€ä¸ªå­—èŠ‚
+//----------------------------------------------//·¢ÍêÒ»¸ö×Ö½Ú
 	EALLOW;
-	GpioCtrlRegs.GPBDIR.bit.GPIO32 =0;			//æ•°æ®çº¿å˜ä¸ºè¾“å…¥å£
+	GpioCtrlRegs.GPBDIR.bit.GPIO32 =0;			//Êý¾ÝÏß±äÎªÊäÈë¿Ú
 	EDIS;
-    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 	DELAY_US(DELAY_EE);
 	
-	if(GpioDataRegs.GPBDAT.bit.GPIO32==1)		//å¦‚æžœæ•°æ®çº¿è¯»åˆ°1è¡¨ç¤ºæ²¡æœ‰åº”ç­”
+	if(GpioDataRegs.GPBDAT.bit.GPIO32==1)		//Èç¹ûÊý¾ÝÏß¶Áµ½1±íÊ¾Ã»ÓÐÓ¦´ð
 	{
-		M_SetFlag(SL_EE_NOACK);					//ç½®æ— åº”ç­”æ ‡å¿—
+		M_SetFlag(SL_EE_NOACK);					//ÖÃÎÞÓ¦´ð±êÖ¾
 	}
 	
-   	GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 	DELAY_US(DELAY_EE);
-//----------------------------------------------//å¼€å§‹è¯»æ•°æ®
-	for(j=0;j<number;j++)						//å…ˆè¯»ä½Žå­—èŠ‚
+//----------------------------------------------//¿ªÊ¼¶ÁÊý¾Ý
+	for(j=0;j<number;j++)						//ÏÈ¶ÁµÍ×Ö½Ú
 	{
 		EEPROM.data[j]=0;
-		for(i=0;i<8;i++)						//æ¯ä¸ªå­—èŠ‚å…ˆè¯»é«˜ä½
+		for(i=0;i<8;i++)						//Ã¿¸ö×Ö½ÚÏÈ¶Á¸ßÎ»
 		{
-   		    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+   		    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 			DELAY_US(DELAY_EE);	
-			if(GpioDataRegs.GPBDAT.bit.GPIO32==1)//æ•°æ®ä¸º1
+			if(GpioDataRegs.GPBDAT.bit.GPIO32==1)//Êý¾ÝÎª1
 			{
-				EEPROM.data[j] |= ONEBYTE[i];	//ä¸ºé›¶åˆ™ä¸å˜
+				EEPROM.data[j] |= ONEBYTE[i];	//ÎªÁãÔò²»±ä
 			}
-   	   	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	   	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 			DELAY_US(DELAY_EE);
 		}
-//----------------------------------------------//æ”¶å®Œä¸€ä¸ªå­—èŠ‚
-		if(j!=number-1)							//æœ€åŽä¸€ä¸ªå­—èŠ‚ä¸å‘å‡ºåº”ç­”
+//----------------------------------------------//ÊÕÍêÒ»¸ö×Ö½Ú
+		if(j!=number-1)							//×îºóÒ»¸ö×Ö½Ú²»·¢³öÓ¦´ð
 		{
 			EALLOW;
-			GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;	//è¾“å‡ºä½Žæ¥åº”ç­”
-			GpioCtrlRegs.GPBDIR.bit.GPIO32= 1;	//æ•°æ®çº¿ä¸ºè¾“å‡ºå£
+			GpioDataRegs.GPBCLEAR.bit.GPIO32 =1;	//Êä³öµÍÀ´Ó¦´ð
+			GpioCtrlRegs.GPBDIR.bit.GPIO32= 1;	//Êý¾ÝÏßÎªÊä³ö¿Ú
 			EDIS;
 			DELAY_US(DELAY_EE);
 		}
-   	    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//æ—¶é’Ÿé«˜
+   	    GpioDataRegs.GPBSET.bit.GPIO33 = 1;     	//Ê±ÖÓ¸ß
 		DELAY_US(DELAY_EE);
-   	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//æ—¶é’Ÿä½Ž
+   	    GpioDataRegs.GPBCLEAR.bit.GPIO33 = 1;     	//Ê±ÖÓµÍ
 		EALLOW;
-		GpioCtrlRegs.GPBDIR.bit.GPIO32= 0;		//æ•°æ®çº¿ä¸ºè¾“å…¥å£
+		GpioCtrlRegs.GPBDIR.bit.GPIO32= 0;		//Êý¾ÝÏßÎªÊäÈë¿Ú
 		EDIS;
 		DELAY_US(DELAY_EE);		
 	}
-//----------------------------------------------//æŽ¥æ”¶å®Œæ¯•,å‘é€åœæ­¢ä½
+//----------------------------------------------//½ÓÊÕÍê±Ï,·¢ËÍÍ£Ö¹Î»
 	EeStop();
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: EeWpre
-** åŠŸèƒ½æè¿°: å‡†å¤‡å†™å…¥EEPROMçš„åœ°å€å’Œæ•°æ®
-** è¾“ã€€å…¥: 	 index:å¾…å†™å…¥å˜é‡çš„åºå·
-** è¾“ã€€å‡º:   EEPROM.data[0-4]:å†™æŽ§åˆ¶å­—ã€å¾…å†™æ•°æ®çš„åœ°å€å’Œå¾…å†™æ•°æ®
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: EeWpre
+** ¹¦ÄÜÃèÊö: ×¼±¸Ð´ÈëEEPROMµÄµØÖ·ºÍÊý¾Ý
+** Êä¡¡Èë: 	 index:´ýÐ´Èë±äÁ¿µÄÐòºÅ
+** Êä¡¡³ö:   EEPROM.data[0-4]:Ð´¿ØÖÆ×Ö¡¢´ýÐ´Êý¾ÝµÄµØÖ·ºÍ´ýÐ´Êý¾Ý    
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void EeWpre(unsigned char index)
@@ -321,21 +319,21 @@ void EeWpre(unsigned char index)
 	EEPROM.data[0]=0xA0;									//Slave ADdress
 	EEPROM.data[1]=((index<<1)&0xFF00)>>8;					//MSB ADdress
 	EEPROM.data[2]=(index<<1)&0xFF;							//LSB ADdress
-	EEPROM.data[3]=*(FUNC[index].para_add) & 0x00ff;		//ä½Ž8ä½æ•°æ®
-	EEPROM.data[4]=(*(FUNC[index].para_add) & 0xff00)>>8;	//é«˜8ä½æ•°æ®
+	EEPROM.data[3]=*(FUNC[index].para_add) & 0x00ff;		//µÍ8Î»Êý¾Ý
+	EEPROM.data[4]=(*(FUNC[index].para_add) & 0xff00)>>8;	//¸ß8Î»Êý¾Ý
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: EeRpre
-** åŠŸèƒ½æè¿°: å‡†å¤‡è¯»å–EEPROMæ•°æ®çš„åœ°å€
-** è¾“ã€€å…¥: 	 index:å¾…è¯»å–å˜é‡çš„åºå·
-** è¾“ã€€å‡º:   EEPROM.data[0-2]:è¯»æŽ§åˆ¶å­—å’Œå¾…è¯»å–æ•°æ®çš„åœ°å€
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: EeRpre
+** ¹¦ÄÜÃèÊö: ×¼±¸¶ÁÈ¡EEPROMÊý¾ÝµÄµØÖ·
+** Êä¡¡Èë: 	 index:´ý¶ÁÈ¡±äÁ¿µÄÐòºÅ
+** Êä¡¡³ö:   EEPROM.data[0-2]:¶Á¿ØÖÆ×ÖºÍ´ý¶ÁÈ¡Êý¾ÝµÄµØÖ·    
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void EeRpre(unsigned char index)
@@ -345,18 +343,18 @@ void EeRpre(unsigned char index)
 	EEPROM.data[2]=(index<<1)&0xFF;					//LSB ADdress
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: EeWrword
-** åŠŸèƒ½æè¿°: å†™ä¸€ä¸ªå­—çš„æ•°æ®åˆ°EEPROMå¹¶è¯»å‡ºæ¥æ ¡éªŒ
-** è¾“ã€€å…¥: 	 index:å¾…å†™å˜é‡çš„åºå·
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 	 å…ˆå°†å¾…å†™æ•°æ®å†™å…¥eepromå†è¯»å‡ºæ¥æ£€éªŒ
-**			 å¦‚æžœæ£€éªŒä¸å¯¹åœ¨ç½®æ ‡å¿—ä½SL_EE_FAIL
+** º¯ÊýÃû³Æ: EeWrword
+** ¹¦ÄÜÃèÊö: Ð´Ò»¸ö×ÖµÄÊý¾Ýµ½EEPROM²¢¶Á³öÀ´Ð£Ñé
+** Êä¡¡Èë: 	 index:´ýÐ´±äÁ¿µÄÐòºÅ
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 ÏÈ½«´ýÐ´Êý¾ÝÐ´ÈëeepromÔÙ¶Á³öÀ´¼ìÑé
+**			 Èç¹û¼ìÑé²»¶ÔÔÚÖÃ±êÖ¾Î»SL_EE_FAIL
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void EeWrword(unsigned char index)
@@ -364,29 +362,29 @@ void EeWrword(unsigned char index)
 	Uint16 data_rd;
 	
 	EeWpre(index);									
-	EeWrite(2);											//å†™å…¥2å­—èŠ‚æ•°æ®
-	EeRead(2);											//å°†2å­—èŠ‚æ•°æ®è¯»å‡º
+	EeWrite(2);											//Ð´Èë2×Ö½ÚÊý¾Ý
+	EeRead(2);											//½«2×Ö½ÚÊý¾Ý¶Á³ö
 	
-	data_rd=(EEPROM.data[1]<<8) | EEPROM.data[0];		//data_rdä¸ºè¯»å‡ºçš„æ•°æ®
+	data_rd=(EEPROM.data[1]<<8) | EEPROM.data[0];		//data_rdÎª¶Á³öµÄÊý¾Ý
 	
 	if(data_rd!=*(FUNC[index].para_add))
 		M_SetFlag(SL_EE_FAIL);
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: InitEeprom
-** åŠŸèƒ½æè¿°: åˆå§‹åŒ–eeprom
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 	 å…ˆå°†eepromä¸­çš„åŽŸæœ‰æ•°æ®è¯»å‡ºå¹¶è¿›è¡Œæ£€éªŒ
-**			 å¦‚æžœå‡ºçŽ°æ•°æ®é”™è¯¯åˆ™å°†eepromä¸­æ•°æ®å…¨éƒ¨åˆå§‹åŒ–
-**			 æ£€æµ‹åœ¨åˆå§‹åŒ–è¿‡ç¨‹ä¸­æ˜¯å¦å‡ºçŽ°eepromæ“ä½œé”™è¯¯
-**			 å¦‚æžœæ²¡æœ‰é”™è¯¯åˆ™ç½®SL_CODEOKè¡¨ç¤ºeepromå·¥ä½œæ­£å¸¸,å¦åˆ™æ¸…SL_CODEOKè¡¨ç¤ºeepromå·¥ä½œé”™è¯¯
+** º¯ÊýÃû³Æ: InitEeprom
+** ¹¦ÄÜÃèÊö: ³õÊ¼»¯eeprom
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 ÏÈ½«eepromÖÐµÄÔ­ÓÐÊý¾Ý¶Á³ö²¢½øÐÐ¼ìÑé
+**			 Èç¹û³öÏÖÊý¾Ý´íÎóÔò½«eepromÖÐÊý¾ÝÈ«²¿³õÊ¼»¯
+**			 ¼ì²âÔÚ³õÊ¼»¯¹ý³ÌÖÐÊÇ·ñ³öÏÖeeprom²Ù×÷´íÎó
+**			 Èç¹ûÃ»ÓÐ´íÎóÔòÖÃSL_CODEOK±íÊ¾eeprom¹¤×÷Õý³£,·ñÔòÇåSL_CODEOK±íÊ¾eeprom¹¤×÷´íÎó
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void InitEeprom(void)
@@ -395,53 +393,53 @@ void InitEeprom(void)
 //	Uint16 j;
 	if(DEBUG_OPER==0)
 	{
-//----------------------------------------------//å°†eepromçš„æ•°æ®å…¨éƒ¨è¯»å…¥ram
+//----------------------------------------------//½«eepromµÄÊý¾ÝÈ«²¿¶ÁÈëram
 		for(i=0;i<PARA_NUM;i++)					
 		{
-			EeRpre(i);								//æŽ§åˆ¶å­—å’Œåœ°å€å¡«å…¥EEPROM.data[]
+			EeRpre(i);								//¿ØÖÆ×ÖºÍµØÖ·ÌîÈëEEPROM.data[]
 			EeRead(2);
-												//è¯»å‡ºçš„æ•°æ®æ”¾å…¥RAM
+												//¶Á³öµÄÊý¾Ý·ÅÈëRAM
 			*FUNC[i].para_add=(EEPROM.data[1]<<8) | EEPROM.data[0];	
 		
-			if(CheckCode(i)==1)						//æ£€æŸ¥ç¨‹åºçš„è¿”å›žå€¼=1åˆ™è¡¨ç¤ºæœ‰é”™è¯¯
+			if(CheckCode(i)==1)						//¼ì²é³ÌÐòµÄ·µ»ØÖµ=1Ôò±íÊ¾ÓÐ´íÎó
 			{
 				for(j=0;j<PARA_NUM;j++)
 				{
-					*FUNC[j].para_add=FUNC[j].init;	//RAMæ•°æ®æ¢å¤åˆå€¼
-					EeWrword(j);					//å†™å…¥2å­—èŠ‚æ•°æ®
+					*FUNC[j].para_add=FUNC[j].init;	//RAMÊý¾Ý»Ö¸´³õÖµ
+					EeWrword(j);					//Ð´Èë2×Ö½ÚÊý¾Ý
 				}
-				break;								//æ•°æ®æ ¡éªŒæœ‰é”™åˆ™è·³å‡º
+				break;								//Êý¾ÝÐ£ÑéÓÐ´íÔòÌø³ö
 			}
 		}
 	}
 	else
 	{
-//-----------------------------------------//è°ƒè¯•æ—¶ç›´æŽ¥å°†EEPROMåˆå§‹åŒ–!!!
+//-----------------------------------------//µ÷ÊÔÊ±Ö±½Ó½«EEPROM³õÊ¼»¯!!!
 		for(j=0;j<PARA_NUM;j++)
 		{
-			*FUNC[j].para_add=FUNC[j].init;	//RAMæ•°æ®æ¢å¤åˆå€¼
-			EeWrword(j);					//å†™å…¥2å­—èŠ‚æ•°æ®
+			*FUNC[j].para_add=FUNC[j].init;	//RAMÊý¾Ý»Ö¸´³õÖµ
+			EeWrword(j);					//Ð´Èë2×Ö½ÚÊý¾Ý
 		}
 	}
 //-----------------------------------------	
 	if(M_ChkFlag(SL_EE_FAIL)==0)					
-		M_SetFlag(SL_CODEOK);					//EEPROMæ­£å¸¸
+		M_SetFlag(SL_CODEOK);					//EEPROMÕý³£
 	else
-		M_ClrFlag(SL_CODEOK);					//EEPROMæ•…éšœ
+		M_ClrFlag(SL_CODEOK);					//EEPROM¹ÊÕÏ
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: CheckCode
-** åŠŸèƒ½æè¿°: æ£€éªŒeepromä¸­æ•°æ®æ˜¯å¦æ­£ç¡®
-** è¾“ã€€å…¥: 	 index,å¾…æ£€éªŒæ•°æ®çš„åºå·
-** è¾“ã€€å‡º:   j,j=1è¡¨ç¤ºæ•°æ®é”™è¯¯;j=0è¡¨ç¤ºæ•°æ®æ­£ç¡®
-** æ³¨  é‡Š: 	 æ£€éªŒæ•°æ®æ˜¯å¦åœ¨æŒ‡å®šçš„èŒƒå›´ä¹‹å†…
+** º¯ÊýÃû³Æ: CheckCode
+** ¹¦ÄÜÃèÊö: ¼ìÑéeepromÖÐÊý¾ÝÊÇ·ñÕýÈ·
+** Êä¡¡Èë: 	 index,´ý¼ìÑéÊý¾ÝµÄÐòºÅ
+** Êä¡¡³ö:   j,j=1±íÊ¾Êý¾Ý´íÎó;j=0±íÊ¾Êý¾ÝÕýÈ·
+** ×¢  ÊÍ: 	 ¼ìÑéÊý¾ÝÊÇ·ñÔÚÖ¸¶¨µÄ·¶Î§Ö®ÄÚ
 **			 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 Uint16 CheckCode(Uint16 index)						
@@ -450,114 +448,114 @@ Uint16 CheckCode(Uint16 index)
 	int16  temp,max_temp,min_temp;
 	
 	data=*FUNC[index].para_add;
-//----------------------------------------------//åˆ¤æ–­è¯¥æ•°æ®çš„å±žæ€§
-	if((FUNC[index].attr & MAX_PT)==1)			//å…·æœ‰æœ€å¤§å€¼æŒ‡é’ˆå±žæ€§
+//----------------------------------------------//ÅÐ¶Ï¸ÃÊý¾ÝµÄÊôÐÔ	
+	if((FUNC[index].attr & MAX_PT)==1)			//¾ßÓÐ×î´óÖµÖ¸ÕëÊôÐÔ 
 		max=*FUNC[index].max_add;
-	else										//ä¸å…·æœ‰æœ€å¤§å€¼æŒ‡é’ˆå±žæ€§
-		max=FUNC[index].max;					//è¯»å‡ºè¿™ä¸ªé‡çš„æœ€å¤§å€¼
-//----------------------------------------------//å…·æœ‰æœ€å°å€¼æŒ‡é’ˆå±žæ€§
+	else										//²»¾ßÓÐ×î´óÖµÖ¸ÕëÊôÐÔ 
+		max=FUNC[index].max;					//¶Á³öÕâ¸öÁ¿µÄ×î´óÖµ
+//----------------------------------------------//¾ßÓÐ×îÐ¡ÖµÖ¸ÕëÊôÐÔ			
 	if((FUNC[index].attr & MIN_PT)==1)
 		min=*FUNC[index].min_add;
-	else 										//ä¸å…·æœ‰æœ€å°å€¼æŒ‡é’ˆå±žæ€§
-		min=FUNC[index].min;					//è¯»å‡ºè¿™ä¸ªé‡çš„æœ€å°å€¼
-//----------------------------------------------//å¼€å§‹æ ¡éªŒ
-	j=0;										//ç½®æ— æ•…éšœæ ‡å¿—
-	if((FUNC[index].attr & SIG)==0)				//æ— ç¬¦å·æ•°
+	else 										//²»¾ßÓÐ×îÐ¡ÖµÖ¸ÕëÊôÐÔ
+		min=FUNC[index].min;					//¶Á³öÕâ¸öÁ¿µÄ×îÐ¡Öµ
+//----------------------------------------------//¿ªÊ¼Ð£Ñé
+	j=0;										//ÖÃÎÞ¹ÊÕÏ±êÖ¾
+	if((FUNC[index].attr & SIG)==0)				//ÎÞ·ûºÅÊý
 	{
 		if(data>max)				
-			j=1;								//å¤§äºŽæœ€å¤§å€¼ï¼Œæœ‰é”™
-		else if(data<min)						//å°äºŽæœ€å°å€¼
+			j=1;								//´óÓÚ×î´óÖµ£¬ÓÐ´í
+		else if(data<min)						//Ð¡ÓÚ×îÐ¡Öµ
 		{
 			if((FUNC[index].attr & VA0)==0)		
-				j=1;							//åˆä¸å…·æœ‰VA0å±žæ€§ï¼Œæœ‰é”™
-			else if(data!=0)					//å…·æœ‰VA0å±žæ€§ä½†åˆä¸ä¸ºé›¶ï¼Œæœ‰é”™
+				j=1;							//ÓÖ²»¾ßÓÐVA0ÊôÐÔ£¬ÓÐ´í
+			else if(data!=0)					//¾ßÓÐVA0ÊôÐÔµ«ÓÖ²»ÎªÁã£¬ÓÐ´í
 				j=1;
 		}
 	}					
-	else										//æœ‰ç¬¦å·æ•°
+	else										//ÓÐ·ûºÅÊý
 	{
-		temp=(int)data;							//å…¨éƒ¨è½¬ä¸ºæœ‰ç¬¦å·æ•°
+		temp=(int)data;							//È«²¿×ªÎªÓÐ·ûºÅÊý
 		max_temp=(int)max;
 		min_temp=(int)min;
-		if(temp>max_temp)						//å¤§äºŽæœ€å¤§å€¼ï¼Œæœ‰é”™
+		if(temp>max_temp)						//´óÓÚ×î´óÖµ£¬ÓÐ´í
 			j=1;
-		else if(temp<min_temp)					//å°äºŽæœ€å°å€¼ï¼Œæœ‰é”™
-			j=1;								//æœ‰ç¬¦å·æ•°æ²¡æœ‰VA0å±žæ€§
+		else if(temp<min_temp)					//Ð¡ÓÚ×îÐ¡Öµ£¬ÓÐ´í
+			j=1;								//ÓÐ·ûºÅÊýÃ»ÓÐVA0ÊôÐÔ
 	}
-//----------------------------------------------//è¿”å›žå€¼ä¸ºj
+//----------------------------------------------//·µ»ØÖµÎªj	
 	return j;
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: EeCtrl
-** åŠŸèƒ½æè¿°: ç¨‹åºè¿è¡Œè¿‡ç¨‹ä¸­å¯¹eepromæ•°æ®çš„æ“ä½œ
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 	 åœ¨eepromæ­£ç¡®çš„å‰æä¸‹ï¼Œæ£€æµ‹æ ‡å¿—ä½
-**			 SL_INIEE:		æ˜¯å¦éœ€è¦è¿›è¡Œåˆå§‹åŒ–eepromæ“ä½œ;
-							å¦‚æžœæ˜¯åˆ™ç½®SL_EEBUSY_INIEE,å…¨éƒ¨åˆå§‹åŒ–å®Œä»¥åŽå†æ¸…SL_INIEEå’ŒSL_EEBUSY_INIEE
-**			 SL_MCODE:		æ˜¯å¦éœ€è¦ä¿®æ”¹åŠŸèƒ½ç å€¼
-							å¦‚æžœæ˜¯åˆ™ç½®SL_EEBUSY_MCODE,å°†EEPROM.mcodeä¸­æŒ‡å®šçš„æ•°æ®å†™å…¥eeprom
-							æ“ä½œå®ŒæˆåŽå†æ¸…SL_MCODEå’ŒSL_EEBUSY_MCODE
-**			 SL_ERRSAVE:	æ˜¯å¦éœ€è¦ä¿å­˜æ•…éšœä¿¡æ¯
-							å¦‚æžœæ˜¯åˆ™ç½®SL_EEBUSY_ERRSAVE,å°†TAB_ERRä¸­çš„æ•°æ®å†™å…¥eeprom
-							æ“ä½œå®ŒæˆåŽå†æ¸…SL_ERRSAVEå’ŒSL_EEBUSY_ERRSAVE
-**			 SL_POFSAVE:	æ˜¯å¦éœ€è¦ä¿å­˜æŽ‰ç”µä¿¡æ¯
-							å¦‚æžœæ˜¯åˆ™ç½®SL_EEBUSY_POFSAVE,å°†TAB_POFä¸­çš„æ•°æ®å†™å…¥eeprom
-							æ“ä½œå®ŒæˆåŽå†æ¸…SL_POFSAVEå’ŒSL_EEBUSY_POFSAVE
+** º¯ÊýÃû³Æ: EeCtrl
+** ¹¦ÄÜÃèÊö: ³ÌÐòÔËÐÐ¹ý³ÌÖÐ¶ÔeepromÊý¾ÝµÄ²Ù×÷
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 ÔÚeepromÕýÈ·µÄÇ°ÌáÏÂ£¬¼ì²â±êÖ¾Î»
+**			 SL_INIEE:		ÊÇ·ñÐèÒª½øÐÐ³õÊ¼»¯eeprom²Ù×÷;
+							Èç¹ûÊÇÔòÖÃSL_EEBUSY_INIEE,È«²¿³õÊ¼»¯ÍêÒÔºóÔÙÇåSL_INIEEºÍSL_EEBUSY_INIEE
+**			 SL_MCODE:		ÊÇ·ñÐèÒªÐÞ¸Ä¹¦ÄÜÂëÖµ
+							Èç¹ûÊÇÔòÖÃSL_EEBUSY_MCODE,½«EEPROM.mcodeÖÐÖ¸¶¨µÄÊý¾ÝÐ´Èëeeprom
+							²Ù×÷Íê³ÉºóÔÙÇåSL_MCODEºÍSL_EEBUSY_MCODE
+**			 SL_ERRSAVE:	ÊÇ·ñÐèÒª±£´æ¹ÊÕÏÐÅÏ¢
+							Èç¹ûÊÇÔòÖÃSL_EEBUSY_ERRSAVE,½«TAB_ERRÖÐµÄÊý¾ÝÐ´Èëeeprom
+							²Ù×÷Íê³ÉºóÔÙÇåSL_ERRSAVEºÍSL_EEBUSY_ERRSAVE
+**			 SL_POFSAVE:	ÊÇ·ñÐèÒª±£´æµôµçÐÅÏ¢
+							Èç¹ûÊÇÔòÖÃSL_EEBUSY_POFSAVE,½«TAB_POFÖÐµÄÊý¾ÝÐ´Èëeeprom
+							²Ù×÷Íê³ÉºóÔÙÇåSL_POFSAVEºÍSL_EEBUSY_POFSAVE
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void EeCtrl(void)
 {
-	if(M_ChkFlag(SL_EE_FAIL)==0)					//EEPROMæ— æ•…éšœ?
+	if(M_ChkFlag(SL_EE_FAIL)==0)					//EEPROMÎÞ¹ÊÕÏ?
 	{
-//----------------------------------------------//æ¢å¤å‡ºåŽ‚å‚æ•°è¿›è¡Œä¸­
-		if(M_ChkFlag(SL_EEBUSY_INI)!=0)			//RAMæ•°æ®æ¢å¤åˆå€¼
+//----------------------------------------------//»Ö¸´³ö³§²ÎÊý½øÐÐÖÐ
+		if(M_ChkFlag(SL_EEBUSY_INI)!=0)			//RAMÊý¾Ý»Ö¸´³õÖµ
 		{
 			*FUNC[EEPROM.point].para_add=FUNC[EEPROM.point].init;	
-			EeWrword(EEPROM.point);				//å†™å…¥2å­—èŠ‚æ•°æ®
+			EeWrword(EEPROM.point);				//Ð´Èë2×Ö½ÚÊý¾Ý
 			EEPROM.point++;
 			
-			if(EEPROM.point>=PARA_NUM)			//æ“ä½œå®Œæˆ?
+			if(EEPROM.point>=PARA_NUM)			//²Ù×÷Íê³É?
 			{
 				EEPROM.point=0;
 				M_ClrFlag(SL_EEBUSY_INI);
 				M_ClrFlag(SL_EEASK_INI);
 			}
 		}
-//----------------------------------------------//ä¿®æ”¹åŠŸèƒ½ç è¿›è¡Œä¸­
+//----------------------------------------------//ÐÞ¸Ä¹¦ÄÜÂë½øÐÐÖÐ
 		else if(M_ChkFlag(SL_EEBUSY_MCODE)!=0)
 		{
-			EeWrword(EEPROM.mcode);				//å†™å…¥2å­—èŠ‚æ•°æ®
+			EeWrword(EEPROM.mcode);				//Ð´Èë2×Ö½ÚÊý¾Ý
 			M_ClrFlag(SL_EEBUSY_MCODE);
 			M_ClrFlag(SL_EEASK_MCODE);
 		}
-//----------------------------------------------//ä¿å­˜æ•…éšœä¿¡æ¯è¿›è¡Œä¸­
+//----------------------------------------------//±£´æ¹ÊÕÏÐÅÏ¢½øÐÐÖÐ
 		else if(M_ChkFlag(SL_EEBUSY_ERRSAVE)!=0)
 		{
-			EeWrword(TAB_ERR[EEPROM.point]);	//å†™å…¥2å­—èŠ‚æ•°æ®
+			EeWrword(TAB_ERR[EEPROM.point]);	//Ð´Èë2×Ö½ÚÊý¾Ý
 			EEPROM.point++;
 			
-			if(EEPROM.point>=ERRO_NUM)			//æ“ä½œå®Œæˆ?
+			if(EEPROM.point>=ERRO_NUM)			//²Ù×÷Íê³É?
 			{
 				EEPROM.point=0;
 				M_ClrFlag(SL_EEBUSY_ERRSAVE);
 				M_ClrFlag(SL_EEASK_ERRSAVE);
 			}
 		}
-//----------------------------------------------//æ˜¯å¦å­˜åœ¨ä¿å­˜æŽ‰ç”µä¿¡æ¯è¯·æ±‚
+//----------------------------------------------//ÊÇ·ñ´æÔÚ±£´æµôµçÐÅÏ¢ÇëÇó
 /*
 		else if(M_ChkFlag(SL_EEBUSY_POFSAVE)!=0)
 		{
-			EeWrword(TAB_POF[EEPROM.point]);	//å†™å…¥2å­—èŠ‚æ•°æ®
+			EeWrword(TAB_POF[EEPROM.point]);	//Ð´Èë2×Ö½ÚÊý¾Ý
 			EEPROM.point++;
 			
-			if(EEPROM.point>=POFF_NUM)		//æ“ä½œå®Œæˆ?
+			if(EEPROM.point>=POFF_NUM)		//²Ù×÷Íê³É?
 			{
 				EEPROM.point=0;
 				M_ClrFlag(SL_EEBUSY_POFSAVE);
@@ -565,125 +563,125 @@ void EeCtrl(void)
 			}
 		}		
 */
-//----------------------------------------------//EEPROMæ²¡æœ‰æ“ä½œè¿›è¡Œä¸­
+//----------------------------------------------//EEPROMÃ»ÓÐ²Ù×÷½øÐÐÖÐ
 		else
 		{
 			EEPROM.point=0;
-			if(M_ChkFlag(SL_EEASK_INI)!=0)			//æ˜¯å¦å­˜åœ¨æ¢å¤å‡ºåŽ‚å‚æ•°è¯·æ±‚
+			if(M_ChkFlag(SL_EEASK_INI)!=0)			//ÊÇ·ñ´æÔÚ»Ö¸´³ö³§²ÎÊýÇëÇó
 				M_SetFlag(SL_EEBUSY_INI);
-			else if(M_ChkFlag(SL_EEASK_MCODE)!=0)	//æ˜¯å¦å­˜åœ¨ä¿®æ”¹åŠŸèƒ½ç è¯·æ±‚
+			else if(M_ChkFlag(SL_EEASK_MCODE)!=0)	//ÊÇ·ñ´æÔÚÐÞ¸Ä¹¦ÄÜÂëÇëÇó
 				M_SetFlag(SL_EEBUSY_MCODE);
-			else if(M_ChkFlag(SL_EEASK_ERRSAVE)!=0)	//æ˜¯å¦å­˜åœ¨ä¿å­˜æ•…éšœä¿¡æ¯è¯·æ±‚
+			else if(M_ChkFlag(SL_EEASK_ERRSAVE)!=0)	//ÊÇ·ñ´æÔÚ±£´æ¹ÊÕÏÐÅÏ¢ÇëÇó
 				{M_SetFlag(SL_EEBUSY_ERRSAVE);
-//				     M_SetFlag(SL_PHASEA);          //æµ‹é‡Saveå ç”¨æ—¶é—´,æµ‹é‡DSPæ¿ä¸ŠT1ç«¯å­ 20090803
-//    				*OUT3_ADDR = _OUT3_DATA;		//æµ‹é‡Saveå ç”¨æ—¶é—´,æµ‹é‡DSPæ¿ä¸ŠT1ç«¯å­ 20090803
+//				     M_SetFlag(SL_PHASEA);          //²âÁ¿SaveÕ¼ÓÃÊ±¼ä,²âÁ¿DSP°åÉÏT1¶Ë×Ó 20090803
+//    				*OUT3_ADDR = _OUT3_DATA;		//²âÁ¿SaveÕ¼ÓÃÊ±¼ä,²âÁ¿DSP°åÉÏT1¶Ë×Ó 20090803
 				}
-//			M_ClrFlag(SL_PHASEA);           //æµ‹é‡CPUå æœ‰çŽ‡,æµ‹é‡DSPæ¿ä¸ŠT1ç«¯å­
-//    		*OUT3_ADDR = _OUT3_DATA;		//æµ‹é‡Saveå ç”¨æ—¶é—´,æµ‹é‡DSPæ¿ä¸ŠT1ç«¯å­ 20090803
+//			M_ClrFlag(SL_PHASEA);           //²âÁ¿CPUÕ¼ÓÐÂÊ,²âÁ¿DSP°åÉÏT1¶Ë×Ó
+//    		*OUT3_ADDR = _OUT3_DATA;		//²âÁ¿SaveÕ¼ÓÃÊ±¼ä,²âÁ¿DSP°åÉÏT1¶Ë×Ó 20090803
 
 
 
-//			else if(M_ChkFlag(SL_EEASK_POFSAVE)!=0)	//æ˜¯å¦å­˜åœ¨ä¿å­˜æŽ‰ç”µä¿¡æ¯è¯·æ±‚
+//			else if(M_ChkFlag(SL_EEASK_POFSAVE)!=0)	//ÊÇ·ñ´æÔÚ±£´æµôµçÐÅÏ¢ÇëÇó
 //				M_SetFlag(SL_EEBUSY_POFSAVE);
 		}
 	}
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: SetRtimer
-** åŠŸèƒ½æè¿°: å®žæ—¶æ—¶é’Ÿè®¾å®š
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: SetRtimer
+** ¹¦ÄÜÃèÊö: ÊµÊ±Ê±ÖÓÉè¶¨
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void SetRtimer(void)
 {
 	Uint16 temp;
 	
-//----------------------------------------------//å†™å…¥æ—¶é—´å€¼
+//----------------------------------------------//Ð´ÈëÊ±¼äÖµ	
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x02;						//STATUS register
-	EeWrite(1);									//å†™å…è®¸
+	EeWrite(1);									//Ð´ÔÊÐí
 	
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x06;						//STATUS register
-	EeWrite(1);									//å†™å¯„å­˜å™¨å…è®¸
+	EeWrite(1);									//Ð´¼Ä´æÆ÷ÔÊÐí
 	
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x30;						//LSB ADdress
 	
 	temp=RTIMER.time[0]/10;
-	EEPROM.data[3]=(RTIMER.time[0]-temp*10)|(temp<<4);	//ç§’
+	EEPROM.data[3]=(RTIMER.time[0]-temp*10)|(temp<<4);	//Ãë
 	
 	
 	temp=RTIMER.time[1]/10;
-	EEPROM.data[4]=(RTIMER.time[1]-temp*10)|(temp<<4);	//åˆ†
+	EEPROM.data[4]=(RTIMER.time[1]-temp*10)|(temp<<4);	//·Ö
 	
 	temp=RTIMER.time[2]/10;
-	EEPROM.data[5]=0x80 | ((RTIMER.time[2]-temp*10)|(temp<<4));	//æ—¶
+	EEPROM.data[5]=0x80 | ((RTIMER.time[2]-temp*10)|(temp<<4));	//Ê±
 	
 	temp=RTIMER.time[3]/10;
-	EEPROM.data[6]=(RTIMER.time[3]-temp*10)|(temp<<4);	//æ—¥
+	EEPROM.data[6]=(RTIMER.time[3]-temp*10)|(temp<<4);	//ÈÕ
 	
 	temp=RTIMER.time[4]/10;
-	EEPROM.data[7]=(RTIMER.time[4]-temp*10)|(temp<<4);	//æœˆ
+	EEPROM.data[7]=(RTIMER.time[4]-temp*10)|(temp<<4);	//ÔÂ
 	
 	temp=RTIMER.time[5]/10;
-	EEPROM.data[8]=(RTIMER.time[5]-temp*10)|(temp<<4);	//å¹´
+	EEPROM.data[8]=(RTIMER.time[5]-temp*10)|(temp<<4);	//Äê
 	
-	EEPROM.data[9]=0x05;						//æ˜ŸæœŸ
+	EEPROM.data[9]=0x05;						//ÐÇÆÚ
 	EEPROM.data[10]=0x20;						//19/20
-	EeWrite(8);									//å†™å…¥æ—¶é—´å€¼
+	EeWrite(8);									//Ð´ÈëÊ±¼äÖµ
 
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x0;							//STATUS register
-	EeWrite(1);									//ç¦æ­¢å†™å…¥
+	EeWrite(1);									//½ûÖ¹Ð´Èë
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: RtRead
-** åŠŸèƒ½æè¿°: å®žæ—¶æ—¶é’Ÿè¯»å–
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:   RTIMER.time[0~5]--[ç§’ åˆ† æ—¶ æ—¥ æœˆ å¹´]
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: RtRead
+** ¹¦ÄÜÃèÊö: ÊµÊ±Ê±ÖÓ¶ÁÈ¡
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   RTIMER.time[0~5]--[Ãë ·Ö Ê± ÈÕ ÔÂ Äê]
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void RtRead(void)
 {
 	Uint16 i;
 
-	if(M_ChkFlag(SL_SETRTIMER)!=0)				//éœ€è¦æ ¡æ­£å®žæ—¶æ—¶é’Ÿ?
+	if(M_ChkFlag(SL_SETRTIMER)!=0)				//ÐèÒªÐ£ÕýÊµÊ±Ê±ÖÓ?
 	{
 		SetRtimer();
 		M_ClrFlag(SL_SETRTIMER);
 	}
 	else
 	{
-		//----------------------------------------------//è¯»å–æ—¶é—´å€¼åˆ°data[0~7]
+		//----------------------------------------------//¶ÁÈ¡Ê±¼äÖµµ½data[0~7]
 		EEPROM.data[0]=0xDE;						//Slave ADdress
 		EEPROM.data[1]=0;							//MSB ADdress
 		EEPROM.data[2]=0x30;						//LSB ADdress
 		EeRead(8);
 		//----------------------------------------------
-		M_ClrBit(EEPROM.data[2],0x80);				//æ¸…é™¤24å°æ—¶è®¾ç½®ä½
+		M_ClrBit(EEPROM.data[2],0x80);				//Çå³ý24Ð¡Ê±ÉèÖÃÎ»
 	
 		for(i=0;i<6;i++)
 		{
@@ -692,39 +690,39 @@ void RtRead(void)
 	}
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: InitRtimer
-** åŠŸèƒ½æè¿°: å®žæ—¶æ—¶é’Ÿåˆå§‹åŒ–
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 	 åªåœ¨å®žæ—¶æ—¶é’Ÿåˆå§‹åŒ–çš„æ—¶å€™å°†éœ€è¦è®¾å®šçš„æ—¶é—´å€¼è®¾å®šåˆ°ç›¸åº”ä½ç½®
+** º¯ÊýÃû³Æ: InitRtimer
+** ¹¦ÄÜÃèÊö: ÊµÊ±Ê±ÖÓ³õÊ¼»¯
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 Ö»ÔÚÊµÊ±Ê±ÖÓ³õÊ¼»¯µÄÊ±ºò½«ÐèÒªÉè¶¨µÄÊ±¼äÖµÉè¶¨µ½ÏàÓ¦Î»ÖÃ
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void InitRtimer(void)
 {
-//----------------------------------------------//å†™å…¥æŽ§åˆ¶å­—
+//----------------------------------------------//Ð´Èë¿ØÖÆ×Ö
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x0;							//STATUS register
-	EeWrite(1);									//ç¦æ­¢å†™å…¥
+	EeWrite(1);									//½ûÖ¹Ð´Èë
 
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x02;						//STATUS register
-	EeWrite(1);									//å†™å…è®¸
+	EeWrite(1);									//Ð´ÔÊÐí
 
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x06;						//STATUS register
-	EeWrite(1);									//å†™å¯„å­˜å™¨å…è®¸
+	EeWrite(1);									//Ð´¼Ä´æÆ÷ÔÊÐí
 
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
@@ -733,49 +731,49 @@ void InitRtimer(void)
 	EEPROM.data[4]=0x0;							//Control register 1
 	EEPROM.data[5]=0x0;							//Control register 2
 	EEPROM.data[6]=0x0;							//Control register 3
-	EeWrite(4);									//å†™å…¥4å­—èŠ‚æŽ§åˆ¶å­—
+	EeWrite(4);									//Ð´Èë4×Ö½Ú¿ØÖÆ×Ö
 	
-	DELAY_US(10000L);							//å»¶æ—¶10ms
+	DELAY_US(10000L);							//ÑÓÊ±10ms
 
-//----------------------------------------------//å†™å…¥æ—¶é—´å€¼
+//----------------------------------------------//Ð´ÈëÊ±¼äÖµ	
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x0;							//STATUS register
-	EeWrite(1);									//ç¦æ­¢å†™å…¥
+	EeWrite(1);									//½ûÖ¹Ð´Èë
 
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x02;						//STATUS register
-	EeWrite(1);									//å†™å…è®¸
+	EeWrite(1);									//Ð´ÔÊÐí
 	
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x06;						//STATUS register
-	EeWrite(1);									//å†™å¯„å­˜å™¨å…è®¸
+	EeWrite(1);									//Ð´¼Ä´æÆ÷ÔÊÐí
 	
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x30;						//LSB ADdress
-	EEPROM.data[3]=0;							//ç§’
-	EEPROM.data[4]=0x00;						//åˆ†
-	EEPROM.data[5]=0x80 | 0x00;					//æ—¶(0x80æŒ‡çš„æ˜¯24å°æ—¶æ¨¡å¼)
-	EEPROM.data[6]=0x15;						//æ—¥
-	EEPROM.data[7]=0x04;						//æœˆ
-	EEPROM.data[8]=0x09;						//å¹´
-	EEPROM.data[9]=0x05;						//æ˜ŸæœŸ
+	EEPROM.data[3]=0;							//Ãë
+	EEPROM.data[4]=0x00;						//·Ö
+	EEPROM.data[5]=0x80 | 0x00;					//Ê±(0x80Ö¸µÄÊÇ24Ð¡Ê±Ä£Ê½)
+	EEPROM.data[6]=0x15;						//ÈÕ
+	EEPROM.data[7]=0x04;						//ÔÂ
+	EEPROM.data[8]=0x09;						//Äê
+	EEPROM.data[9]=0x05;						//ÐÇÆÚ
 	EEPROM.data[10]=0x20;						//19/20
-	EeWrite(8);									//å†™å…¥æ—¶é—´å€¼
+	EeWrite(8);									//Ð´ÈëÊ±¼äÖµ
 
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x3F;						//LSB ADdress
 	EEPROM.data[3]=0x0;							//STATUS register
-	EeWrite(1);									//ç¦æ­¢å†™å…¥
+	EeWrite(1);									//½ûÖ¹Ð´Èë
 	
-//----------------------------------------------//è¯»å–æ—¶é—´å€¼åˆ°data[0~7]
+//----------------------------------------------//¶ÁÈ¡Ê±¼äÖµµ½data[0~7]
 	EEPROM.data[0]=0xDE;						//Slave ADdress
 	EEPROM.data[1]=0;							//MSB ADdress
 	EEPROM.data[2]=0x30;						//LSB ADdress
@@ -783,17 +781,17 @@ void InitRtimer(void)
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: CRC-16
-** åŠŸèƒ½æè¿°:è®¡ç®—æ•°æ®æµ* pDataçš„16ä½CRCæ ¡éªŒç ï¼Œæ•°æ®æµé•¿åº¦ä¸ºnLength
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: CRC-16
+** ¹¦ÄÜÃèÊö:¼ÆËãÊý¾ÝÁ÷* pDataµÄ16Î»CRCÐ£ÑéÂë£¬Êý¾ÝÁ÷³¤¶ÈÎªnLength 
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 const unsigned char auchCRCHi[] =
@@ -837,17 +835,17 @@ const unsigned  char auchCRCLo[] =
 } ;
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: CRC-16
-** åŠŸèƒ½æè¿°:è®¡ç®—æ•°æ®æµ* pDataçš„16ä½CRCæ ¡éªŒç ï¼Œæ•°æ®æµé•¿åº¦ä¸ºnLength
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: CRC-16
+** ¹¦ÄÜÃèÊö:¼ÆËãÊý¾ÝÁ÷* pDataµÄ16Î»CRCÐ£ÑéÂë£¬Êý¾ÝÁ÷³¤¶ÈÎªnLength 
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 unsigned short GetCrc_16(unsigned int *puchMsg , unsigned int usDataLen)
@@ -865,17 +863,17 @@ unsigned short GetCrc_16(unsigned int *puchMsg , unsigned int usDataLen)
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Sci485_TxInit
-** åŠŸèƒ½æè¿°: 485å‘é€åˆå§‹åŒ–
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Sci485_TxInit
+** ¹¦ÄÜÃèÊö: 485·¢ËÍ³õÊ¼»¯
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Sci485_TxInit(void)
@@ -900,22 +898,22 @@ void Sci485_TxInit(void)
 //----------------------------------------------------------------------------
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Sci485_RxInit
-** åŠŸèƒ½æè¿°: 485æŽ¥æ”¶åˆå§‹åŒ–
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Sci485_RxInit
+** ¹¦ÄÜÃèÊö: 485½ÓÊÕ³õÊ¼»¯
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Sci485_RxInit(void)
 {
-	Uint16 temp16;			//20100727åŠ å…¥æ³¢ç‰¹çŽ‡è®¾å®š
+	Uint16 temp16;			//20100727¼ÓÈë²¨ÌØÂÊÉè¶¨
 	Uint32 temp32;
 
 //----------------------------------------------------------------------------
@@ -939,132 +937,132 @@ void Sci485_RxInit(void)
 
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: READSTATE
-** åŠŸèƒ½æè¿°: è¯»å–å˜æµå™¨çŠ¶æ€-å¼€å…³é‡
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: READSTATE
+** ¹¦ÄÜÃèÊö: ¶ÁÈ¡±äÁ÷Æ÷×´Ì¬-¿ª¹ØÁ¿
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void READSTATE(void)
 {
 //----------------------------------------------------------------------------
 //----COMMAND1------------------------------------------------------------------
-	if(M_ChkFlag(SL_ENPCOPER)!=0)	  	_COMMAND1 |= 0x0001;	//0 PCæŽ§åˆ¶ä½¿èƒ½   0-CANæŽ§åˆ¶
+	if(M_ChkFlag(SL_ENPCOPER)!=0)	  	_COMMAND1 |= 0x0001;	//0 PC¿ØÖÆÊ¹ÄÜ   0-CAN¿ØÖÆ
 	else								_COMMAND1 &= 0xFFFE;
-	if(M_ChkFlag(SL_OPERATION)!=0)	  	_COMMAND1 |= 0x0002;	//1 è¿è¡Œæ¨¡å¼é€‰æ‹© 0-èƒŒé èƒŒè¿è¡Œ
+	if(M_ChkFlag(SL_OPERATION)!=0)	  	_COMMAND1 |= 0x0002;	//1 ÔËÐÐÄ£Ê½Ñ¡Ôñ 0-±³¿¿±³ÔËÐÐ
 	else								_COMMAND1 &= 0xFFFD;
-	if(M_ChkFlag(SL_OCS_EIN)!=0)	  	_COMMAND1 |= 0x0004;	//2 ä¸»æ–­è·¯å™¨æŽ§åˆ¶æŒ‡ä»¤CANæ¨¡å¼ä¸‹ä½¿ç”¨
+	if(M_ChkFlag(SL_OCS_EIN)!=0)	  	_COMMAND1 |= 0x0004;	//2 Ö÷¶ÏÂ·Æ÷¿ØÖÆÖ¸ÁîCANÄ£Ê½ÏÂÊ¹ÓÃ
 	else								_COMMAND1 &= 0xFFFB;
-	if(M_ChkFlag(SL_OCS_SYSRUN)!=0)	  	_COMMAND1 |= 0x0008;	//3 åŒæ­¥å¹¶ç½‘æŒ‡ä»¤CANæ¨¡å¼ä¸‹ä½¿ç”¨
+	if(M_ChkFlag(SL_OCS_SYSRUN)!=0)	  	_COMMAND1 |= 0x0008;	//3 Í¬²½²¢ÍøÖ¸ÁîCANÄ£Ê½ÏÂÊ¹ÓÃ
 	else								_COMMAND1 &= 0xFFF7;
-	if(M_ChkFlag(SL_OCS_PREC)!=0)	  	_COMMAND1 |= 0x0010;	//4 é¢„å……ç”µæŒ‡ä»¤PCæ¨¡å¼ä¸‹ä½¿ç”¨
+	if(M_ChkFlag(SL_OCS_PREC)!=0)	  	_COMMAND1 |= 0x0010;	//4 Ô¤³äµçÖ¸ÁîPCÄ£Ê½ÏÂÊ¹ÓÃ
 	else								_COMMAND1 &= 0xFFEF;
-	if(M_ChkFlag(SL_OCS_NPRSTART)!=0)	_COMMAND1 |= 0x0020;	//5 ç½‘ä¾§å˜æµå™¨å¯åŠ¨PCæ¨¡å¼ä¸‹ä½¿ç”¨
+	if(M_ChkFlag(SL_OCS_NPRSTART)!=0)	_COMMAND1 |= 0x0020;	//5 Íø²à±äÁ÷Æ÷Æô¶¯PCÄ£Ê½ÏÂÊ¹ÓÃ
 	else								_COMMAND1 &= 0xFFDF;
-	if(M_ChkFlag(SL_OCS_MPRSTART)!=0)	_COMMAND1 |= 0x0040;	//6 æœºä¾§å˜æµå™¨å¯åŠ¨PCæ¨¡å¼ä¸‹ä½¿ç”¨
+	if(M_ChkFlag(SL_OCS_MPRSTART)!=0)	_COMMAND1 |= 0x0040;	//6 »ú²à±äÁ÷Æ÷Æô¶¯PCÄ£Ê½ÏÂÊ¹ÓÃ
 	else								_COMMAND1 &= 0xFFBF;
-	if(M_ChkFlag(SL_OCS_OPENSTAC)!=0)	_COMMAND1 |= 0x0080;	//7 å®šå­æŽ¥è§¦å™¨æŽ§åˆ¶æŒ‡ä»¤PCæ¨¡å¼ä¸‹ä½¿ç”¨
+	if(M_ChkFlag(SL_OCS_OPENSTAC)!=0)	_COMMAND1 |= 0x0080;	//7 ¶¨×Ó½Ó´¥Æ÷¿ØÖÆÖ¸ÁîPCÄ£Ê½ÏÂÊ¹ÓÃ
 	else								_COMMAND1 &= 0xFF7F;
-	if(M_ChkFlag(SL_OCS_RESET)!=0)		_COMMAND1 |= 0x0100;	//8 å˜æµå™¨æ•…éšœå¤ä½æŒ‡ä»¤CAN/PCæ¨¡å¼ä¸‹ä½¿ç”¨
+	if(M_ChkFlag(SL_OCS_RESET)!=0)		_COMMAND1 |= 0x0100;	//8 ±äÁ÷Æ÷¹ÊÕÏ¸´Î»Ö¸ÁîCAN/PCÄ£Ê½ÏÂÊ¹ÓÃ
 	else								_COMMAND1 &= 0xFEFF;
-	if(M_ChkFlag(SL_PC_ERRDATASAVE)!=0)	_COMMAND1 |= 0x0200;	//9 å¤–éƒ¨RAMé”å­˜æ•…éšœæ•°æ®æŒ‡ä»¤
+	if(M_ChkFlag(SL_PC_ERRDATASAVE)!=0)	_COMMAND1 |= 0x0200;	//9 Íâ²¿RAMËø´æ¹ÊÕÏÊý¾ÝÖ¸Áî
 	else								_COMMAND1 &= 0xFDFF;
-	if(M_ChkFlag(SL_PC_ERRDATACLR)!=0)	_COMMAND1 |= 0x0400;	//10 å¤–éƒ¨RAMé‡Šæ”¾æ•…éšœæ•°æ®æŒ‡ä»¤
+	if(M_ChkFlag(SL_PC_ERRDATACLR)!=0)	_COMMAND1 |= 0x0400;	//10 Íâ²¿RAMÊÍ·Å¹ÊÕÏÊý¾ÝÖ¸Áî
 	else								_COMMAND1 &= 0xFBFF;
-	if(M_ChkFlag(SL_PC_BANKDATASAVE)!=0)_COMMAND1 |= 0x0800;	//11 å¤–éƒ¨RAMé”å­˜æ˜¾ç¤ºæ•°æ®æŒ‡ä»¤
+	if(M_ChkFlag(SL_PC_BANKDATASAVE)!=0)_COMMAND1 |= 0x0800;	//11 Íâ²¿RAMËø´æÏÔÊ¾Êý¾ÝÖ¸Áî
 	else								_COMMAND1 &= 0xF7FF;
-	if(M_ChkFlag(SL_PCOCS_CBOFF)!=0)	_COMMAND1 |= 0x1000;	//12 æŒ‡ä»¤PCæ¨¡å¼ä¸‹ä½¿ç”¨ PCæŽ§åˆ¶æ‰‹åŠ¨æ–­å¼€CB 1=æ–­å¼€ 2010atcpc
+	if(M_ChkFlag(SL_PCOCS_CBOFF)!=0)	_COMMAND1 |= 0x1000;	//12 Ö¸ÁîPCÄ£Ê½ÏÂÊ¹ÓÃ PC¿ØÖÆÊÖ¶¯¶Ï¿ªCB 1=¶Ï¿ª 2010atcpc
 	else								_COMMAND1 &= 0xEFFF;
 
 	
 //----STATE1------------------------------------------------------------------
-	if(M_ChkFlag(SL_RUN)!=0)	  		_STATE1 |= 0x0001;	//å˜æµå™¨å‘è„‰å†²è¿è¡Œ
+	if(M_ChkFlag(SL_RUN)!=0)	  		_STATE1 |= 0x0001;	//±äÁ÷Æ÷·¢Âö³åÔËÐÐ
 	else								_STATE1 &= 0xFFFE;
-	if(M_ChkFlag(SL_ERROR)!=0)	  		_STATE1 |= 0x0002;	//å˜æµå™¨å¤„äºŽæ•…éšœ
+	if(M_ChkFlag(SL_ERROR)!=0)	  		_STATE1 |= 0x0002;	//±äÁ÷Æ÷´¦ÓÚ¹ÊÕÏ
 	else								_STATE1 &= 0xFFFD;
-	if(M_ChkFlag(SL_CBCLOSED)!=0)	  	_STATE1 |= 0x0004;	//ä¸»æ–­è·¯å™¨é—­åˆå®Œæˆ
+	if(M_ChkFlag(SL_CBCLOSED)!=0)	  	_STATE1 |= 0x0004;	//Ö÷¶ÏÂ·Æ÷±ÕºÏÍê³É
 	else								_STATE1 &= 0xFFFB;
-	if(M_ChkFlag(SL_CHARGEOK)!=0)	  	_STATE1 |= 0x0008;	//é¢„å……ç”µå®Œæˆ
+	if(M_ChkFlag(SL_CHARGEOK)!=0)	  	_STATE1 |= 0x0008;	//Ô¤³äµçÍê³É
 	else								_STATE1 &= 0xFFF7;
-	if(M_ChkFlag(SL_NPR_PWMOUT)!=0)	  	_STATE1 |= 0x0010;	//ç½‘ä¾§å˜æµå™¨è¿è¡Œ
+	if(M_ChkFlag(SL_NPR_PWMOUT)!=0)	  	_STATE1 |= 0x0010;	//Íø²à±äÁ÷Æ÷ÔËÐÐ
 	else								_STATE1 &= 0xFFEF;
-	if(M_ChkFlag(SL_STEADYFB)!=0)	  	_STATE1 |= 0x0020;	//ä¸­é—´ç›´æµç”µåŽ‹ç¨³å®š
+	if(M_ChkFlag(SL_STEADYFB)!=0)	  	_STATE1 |= 0x0020;	//ÖÐ¼äÖ±Á÷µçÑ¹ÎÈ¶¨
 	else								_STATE1 &= 0xFFDF;
-	if(M_ChkFlag(SL_MPR_PWMOUT)!=0)	  	_STATE1 |= 0x0040;	//æœºä¾§å˜æµå™¨è¿è¡Œ
+	if(M_ChkFlag(SL_MPR_PWMOUT)!=0)	  	_STATE1 |= 0x0040;	//»ú²à±äÁ÷Æ÷ÔËÐÐ
 	else								_STATE1 &= 0xFFBF;
-	if(M_ChkFlag(SL_MPR_SYNOK)!=0)	  	_STATE1 |= 0x0080;	//å®šå­ä¾§åŒæ­¥å¹¶ç½‘å®Œæˆ
+	if(M_ChkFlag(SL_MPR_SYNOK)!=0)	  	_STATE1 |= 0x0080;	//¶¨×Ó²àÍ¬²½²¢ÍøÍê³É
 	else								_STATE1 &= 0xFF7F;
-	if(M_ChkFlag(SL_SPEED_IN_RANGE)!=0)	_STATE1 |= 0x0100;	//ç”µæœºè½¬é€Ÿåœ¨è¿è¡ŒèŒƒå›´å†…
+	if(M_ChkFlag(SL_SPEED_IN_RANGE)!=0)	_STATE1 |= 0x0100;	//µç»ú×ªËÙÔÚÔËÐÐ·¶Î§ÄÚ
 	else								_STATE1 &= 0xFEFF;
-	if(M_ChkFlag(SL_RAMERRORSAVE)!=0)	_STATE1 |= 0x0200;	//å¤–éƒ¨RAMæ•…éšœä¿¡æ¯å®Œæˆå­˜å‚¨æ ‡å¿—
+	if(M_ChkFlag(SL_RAMERRORSAVE)!=0)	_STATE1 |= 0x0200;	//Íâ²¿RAM¹ÊÕÏÐÅÏ¢Íê³É´æ´¢±êÖ¾
 	else								_STATE1 &= 0xFDFF;
-	if(M_ChkFlag(SL_RAMBANKSAVE)!=0)	_STATE1 |= 0x0400;	//å¤–éƒ¨RAMæ˜¾ç¤ºä¿¡æ¯é”å­˜æ ‡å¿—
+	if(M_ChkFlag(SL_RAMBANKSAVE)!=0)	_STATE1 |= 0x0400;	//Íâ²¿RAMÏÔÊ¾ÐÅÏ¢Ëø´æ±êÖ¾
 	else								_STATE1 &= 0xFBFF;
 //----MagnetCurve2013-12-13
-	if(M_ChkFlag(SL_MC_OK)!=0)			_STATE1 |= 0x0800;	//åŠ±ç£æ›²çº¿MagnetCurve200909
+	if(M_ChkFlag(SL_MC_OK)!=0)			_STATE1 |= 0x0800;	//Àø´ÅÇúÏßMagnetCurve200909
 	else								_STATE1 &= 0xF7FF;
-	if(M_ChkFlag(SL_MC_FAIL)!=0)		_STATE1 |= 0x1000;	//åŠ±ç£æ›²çº¿MagnetCurve200909
+	if(M_ChkFlag(SL_MC_FAIL)!=0)		_STATE1 |= 0x1000;	//Àø´ÅÇúÏßMagnetCurve200909
 	else								_STATE1 &= 0xEFFF;
 
 //----DISPLAY------------------------------------------------------------------
-	if(M_ChkFlag(SL_DISPLAY0)!=0)	  	_DISPLAY |= 0x0001;	//ç½‘ä¾§å˜æµå™¨è¿è¡Œ
+	if(M_ChkFlag(SL_DISPLAY0)!=0)	  	_DISPLAY |= 0x0001;	//Íø²à±äÁ÷Æ÷ÔËÐÐ
 	else								_DISPLAY &= 0xFFFE;
-	if(M_ChkFlag(SL_DISPLAY1)!=0)	  	_DISPLAY |= 0x0002;	//æœºä¾§å˜æµå™¨è¿è¡Œ
+	if(M_ChkFlag(SL_DISPLAY1)!=0)	  	_DISPLAY |= 0x0002;	//»ú²à±äÁ÷Æ÷ÔËÐÐ
 	else								_DISPLAY &= 0xFFFD;
-	if(M_ChkFlag(SL_DISPLAY2)!=0)	  	_DISPLAY |= 0x0004;	//ä¸­é—´ç›´æµç”µåŽ‹ç¨³å®š
+	if(M_ChkFlag(SL_DISPLAY2)!=0)	  	_DISPLAY |= 0x0004;	//ÖÐ¼äÖ±Á÷µçÑ¹ÎÈ¶¨
 	else								_DISPLAY &= 0xFFFB;
-	if(M_ChkFlag(SL_DISPLAY3)!=0)	  	_DISPLAY |= 0x0008;	//ä¸¥é‡æ•…éšœ
+	if(M_ChkFlag(SL_DISPLAY3)!=0)	  	_DISPLAY |= 0x0008;	//ÑÏÖØ¹ÊÕÏ
 	else								_DISPLAY &= 0xFFF7;
-	if(M_ChkFlag(SL_DISPLAY4)!=0)	  	_DISPLAY |= 0x0010;	//å®šå­ä¾§è¾¾åˆ°åŒæ­¥å¹¶ç½‘æ¡ä»¶
+	if(M_ChkFlag(SL_DISPLAY4)!=0)	  	_DISPLAY |= 0x0010;	//¶¨×Ó²à´ïµ½Í¬²½²¢ÍøÌõ¼þ
 	else								_DISPLAY &= 0xFFEF;
-	if(M_ChkFlag(SL_DISPLAY5)!=0)	  	_DISPLAY |= 0x0020;	//æ•…éšœ
+	if(M_ChkFlag(SL_DISPLAY5)!=0)	  	_DISPLAY |= 0x0020;	//¹ÊÕÏ
 	else								_DISPLAY &= 0xFFDF;
-	if(M_ChkFlag(SL_DISPLAY6)!=0)	  	_DISPLAY |= 0x0040;	//LVRTæ™¶é—¸ç®¡å¼€é€šæŒ‡ç¤º
+	if(M_ChkFlag(SL_DISPLAY6)!=0)	  	_DISPLAY |= 0x0040;	//LVRT¾§Õ¢¹Ü¿ªÍ¨Ö¸Ê¾
 	else								_DISPLAY &= 0xFFBF;
-	if(M_ChkFlag(SL_DISPLAY7)!=0)	  	_DISPLAY |= 0x0080;	//ç­‰å¾…é¢„å……ç”µæŒ‡ä»¤æŒ‡ç¤º
+	if(M_ChkFlag(SL_DISPLAY7)!=0)	  	_DISPLAY |= 0x0080;	//µÈ´ýÔ¤³äµçÖ¸ÁîÖ¸Ê¾
 	else								_DISPLAY &= 0xFF7F;
 			
 //----IO/INPUT------------------------------------------------------------------
-	if(M_ChkFlag(SL_IN1_CBSTS)!=0)	  	_INPUT |= 0x0001;	//P4.1ä¸»æ–­è·¯å™¨çŠ¶æ€åé¦ˆï¼š	1=é—­åˆï¼›0=æ–­å¼€
+	if(M_ChkFlag(SL_IN1_CBSTS)!=0)	  	_INPUT |= 0x0001;	//P4.1Ö÷¶ÏÂ·Æ÷×´Ì¬·´À¡£º	1=±ÕºÏ£»0=¶Ï¿ª
 	else								_INPUT &= 0xFFFE;
-	if(M_ChkFlag(SL_IN1_CBRESET)!=0)	_INPUT |= 0x0002;	//P4.2ä¸»æŽ§æ­£åœ¨å¤ä½ä¸»æ–­è·¯å™¨ï¼š1=å¤ä½ï¼›0=æœªå¤ä½
+	if(M_ChkFlag(SL_IN1_CBRESET)!=0)	_INPUT |= 0x0002;	//P4.2Ö÷¿ØÕýÔÚ¸´Î»Ö÷¶ÏÂ·Æ÷£º1=¸´Î»£»0=Î´¸´Î»
 	else								_INPUT &= 0xFFFD;
-	if(M_ChkFlag(SL_IN1_STATORK)!=0)	_INPUT |= 0x0004;	//P4.3å®šå­æŽ¥è§¦å™¨çŠ¶æ€åé¦ˆï¼š	1=é—­åˆï¼›0=æ–­å¼€
+	if(M_ChkFlag(SL_IN1_STATORK)!=0)	_INPUT |= 0x0004;	//P4.3¶¨×Ó½Ó´¥Æ÷×´Ì¬·´À¡£º	1=±ÕºÏ£»0=¶Ï¿ª
 	else								_INPUT &= 0xFFFB;
-	if(M_ChkFlag(SL_IN1_MIANK)!=0)	  	_INPUT |= 0x0008;	//P4.4ä¸»æŽ¥è§¦å™¨çŠ¶æ€åé¦ˆï¼š	1=é—­åˆï¼›0=æ–­å¼€
+	if(M_ChkFlag(SL_IN1_MIANK)!=0)	  	_INPUT |= 0x0008;	//P4.4Ö÷½Ó´¥Æ÷×´Ì¬·´À¡£º	1=±ÕºÏ£»0=¶Ï¿ª
 	else								_INPUT &= 0xFFF7;
-	if(M_ChkFlag(SL_IN1_MIANFILTER)!=0)	_INPUT |= 0x0010;	//P4.5ä¸»æ»¤æ³¢å™¨çŠ¶æ€åé¦ˆï¼š	1=é—­åˆï¼›0=æ–­å¼€
+	if(M_ChkFlag(SL_IN1_MIANFILTER)!=0)	_INPUT |= 0x0010;	//P4.5Ö÷ÂË²¨Æ÷×´Ì¬·´À¡£º	1=±ÕºÏ£»0=¶Ï¿ª
 	else								_INPUT &= 0xFFEF;
-	if(M_ChkFlag(SL_IN1_EXFAULTOK)!=0)	_INPUT |= 0x0020;	//P4.6å¤–éƒ¨æ•…éšœé“¾çŠ¶æ€åé¦ˆï¼š	1=æ­£å¸¸ï¼Œ0=æ•…éšœ
+	if(M_ChkFlag(SL_IN1_EXFAULTOK)!=0)	_INPUT |= 0x0020;	//P4.6Íâ²¿¹ÊÕÏÁ´×´Ì¬·´À¡£º	1=Õý³££¬0=¹ÊÕÏ	
 	else								_INPUT &= 0xFFDF;
-	if(M_ChkFlag(SL_IN1_MIANFAN)!=0)	_INPUT |= 0x0040;	//P4.7åŠŸçŽ‡é£ŽæœºçŠ¶æ€åé¦ˆï¼š	1=æ­£å¸¸ï¼Œ0=æ•…éšœ
+	if(M_ChkFlag(SL_IN1_MIANFAN)!=0)	_INPUT |= 0x0040;	//P4.7¹¦ÂÊ·ç»ú×´Ì¬·´À¡£º	1=Õý³££¬0=¹ÊÕÏ 
 	else								_INPUT &= 0xFFBF;
-	if(M_ChkFlag(SL_IN1_EXESTOP)!=0)	_INPUT |= 0x0080;	//P4.8å¤–éƒ¨æ€¥åœæ•…éšœåé¦ˆï¼š 	1=æ€¥åœæŒ‰é’®æŒ‰ä¸‹ï¼Œ0=æ€¥åœæŒ‰é’®æ‹”èµ·
+	if(M_ChkFlag(SL_IN1_EXESTOP)!=0)	_INPUT |= 0x0080;	//P4.8Íâ²¿¼±Í£¹ÊÕÏ·´À¡£º 	1=¼±Í£°´Å¥°´ÏÂ£¬0=¼±Í£°´Å¥°ÎÆð
 	else								_INPUT &= 0xFF7F;
-	if(M_ChkFlag(SL_IN3_CBTRIP)!=0)		_INPUT |= 0x0100;	//P4.9ä¸»æ–­è¿‡æµè„±æ‰£æ•…éšœåé¦ˆï¼š1=æ•…éšœï¼›0=æ­£å¸¸
+	if(M_ChkFlag(SL_IN3_CBTRIP)!=0)		_INPUT |= 0x0100;	//P4.9Ö÷¶Ï¹ýÁ÷ÍÑ¿Û¹ÊÕÏ·´À¡£º1=¹ÊÕÏ£»0=Õý³£
 	else								_INPUT &= 0xFEFF;
 
 //----IO/OUTPUT------------------------------------------------------------------
-	if(M_ChkFlag(CL_CBLVC)!=0)	  		_OUTPUT |= 0x0001;	//P5.5ä¸»æ–­è·¯å™¨æ¬ åŽ‹é“¾å¼€å…³æŒ‡ä»¤ï¼š	1=é—­åˆï¼›0=æ–­å¼€
+	if(M_ChkFlag(CL_CBLVC)!=0)	  		_OUTPUT |= 0x0001;	//P5.5Ö÷¶ÏÂ·Æ÷Ç·Ñ¹Á´¿ª¹ØÖ¸Áî£º	1=±ÕºÏ£»0=¶Ï¿ª
 	else								_OUTPUT &= 0xFFFE;
-	if(M_ChkFlag(CL_CBON)!=0)	  		_OUTPUT |= 0x0002;	//P5.6ä¸»æ–­è·¯å™¨åˆé—¸æŒ‡ä»¤ï¼š		1=åˆé—¸
+	if(M_ChkFlag(CL_CBON)!=0)	  		_OUTPUT |= 0x0002;	//P5.6Ö÷¶ÏÂ·Æ÷ºÏÕ¢Ö¸Áî£º		1=ºÏÕ¢
 	else								_OUTPUT &= 0xFFFD;
-	if(M_ChkFlag(CL_PRE)!=0)	  		_OUTPUT |= 0x0004;	//P5.7é¢„å……ç”µæŒ‡ä»¤ï¼š				1=é¢„å……ç”µï¼›0=ç¦æ­¢é¢„å……ç”µ
+	if(M_ChkFlag(CL_PRE)!=0)	  		_OUTPUT |= 0x0004;	//P5.7Ô¤³äµçÖ¸Áî£º				1=Ô¤³äµç£»0=½ûÖ¹Ô¤³äµç
 	else								_OUTPUT &= 0xFFFB;
-	if(M_ChkFlag(CL_MAINK)!=0)	  		_OUTPUT |= 0x0008;	//P5.8ä¸»æŽ¥è§¦å™¨å’Œæ»¤æ³¢å™¨å™¨æŒ‡ä»¤ï¼š	1=é—­åˆï¼›0=æ–­å¼€
+	if(M_ChkFlag(CL_MAINK)!=0)	  		_OUTPUT |= 0x0008;	//P5.8Ö÷½Ó´¥Æ÷ºÍÂË²¨Æ÷Æ÷Ö¸Áî£º	1=±ÕºÏ£»0=¶Ï¿ª
 	else								_OUTPUT &= 0xFFF7;
-	if(M_ChkFlag(CL_STATORK)!=0)	  	_OUTPUT |= 0x0010;	//P5.9å®šå­æŽ¥è§¦å™¨æŒ‡ä»¤ï¼š			1=é—­åˆï¼›0=æ–­å¼€
+	if(M_ChkFlag(CL_STATORK)!=0)	  	_OUTPUT |= 0x0010;	//P5.9¶¨×Ó½Ó´¥Æ÷Ö¸Áî£º			1=±ÕºÏ£»0=¶Ï¿ª
 	else								_OUTPUT &= 0xFFEF;
-	if(M_ChkFlag(CL_CBFCON)!=0)	  		_OUTPUT |= 0x0020;	//P5.10ä¸»æ–­è·¯å™¨æ¬ åŽ‹é“¾æŽ§åˆ¶ï¼Œ		1=é—­åˆï¼›0=æ–­å¼€
+	if(M_ChkFlag(CL_CBFCON)!=0)	  		_OUTPUT |= 0x0020;	//P5.10Ö÷¶ÏÂ·Æ÷Ç·Ñ¹Á´¿ØÖÆ£¬		1=±ÕºÏ£»0=¶Ï¿ª
 	else								_OUTPUT &= 0xFFDF;
-	if(M_ChkFlag(CL_FANWORK)!=0)	  	_OUTPUT |= 0x0040;	//P5.11åŠŸçŽ‡é£Žæ‰‡æŽ§åˆ¶ï¼š			1=è¿è¡Œï¼›0=åœæ­¢
+	if(M_ChkFlag(CL_FANWORK)!=0)	  	_OUTPUT |= 0x0040;	//P5.11¹¦ÂÊ·çÉÈ¿ØÖÆ£º			1=ÔËÐÐ£»0=Í£Ö¹
 	else								_OUTPUT &= 0xFFBF;
 
 //----LVRT------------------------------------------------------------------
@@ -1086,17 +1084,17 @@ void READSTATE(void)
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: WRCOMMAND
-** åŠŸèƒ½æè¿°: å†™å…¥å˜æµå™¨æŒ‡ä»¤-å¼€å…³é‡
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: WRCOMMAND
+** ¹¦ÄÜÃèÊö: Ð´Èë±äÁ÷Æ÷Ö¸Áî-¿ª¹ØÁ¿
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void WRCOMMAND(void)
@@ -1108,7 +1106,7 @@ void WRCOMMAND(void)
 		else						M_ClrFlag(SL_OPERATION);
 		if(((_COMMAND1&0x0004)!=0) && (M_ChkFlag(SL_ERROR)==0))	//201005atcpc
 		{
-	 		if(M_ChkCounter(MAIN_LOOP.cnt_ein,DELAY_EIN)>0)	M_SetFlag(SL_OCS_EIN);     		//å»¶æ—¶1sï¼Œé˜²æ­¢è¯¯æ“ä½œ
+	 		if(M_ChkCounter(MAIN_LOOP.cnt_ein,DELAY_EIN)>0)	M_SetFlag(SL_OCS_EIN);     		//ÑÓÊ±1s£¬·ÀÖ¹Îó²Ù×÷		
 		}
 		else 	
 		{
@@ -1118,7 +1116,7 @@ void WRCOMMAND(void)
      
 		if(((_COMMAND1&0x0008)!=0) && (M_ChkFlag(SL_ERROR)==0))		//201005atcpc					
 		{ 
-	  		if(M_ChkCounter(MAIN_LOOP.cnt_sysrun,DELAY_SYSRUN)>0)	 M_SetFlag(SL_OCS_SYSRUN); //å»¶æ—¶1sï¼Œé˜²æ­¢è¯¯æ“ä½œ
+	  		if(M_ChkCounter(MAIN_LOOP.cnt_sysrun,DELAY_SYSRUN)>0)	 M_SetFlag(SL_OCS_SYSRUN); //ÑÓÊ±1s£¬·ÀÖ¹Îó²Ù×÷
 		}				
 		else 	
 		{
@@ -1128,7 +1126,7 @@ void WRCOMMAND(void)
 	
 		if(((_COMMAND1&0x0010)!=0) && (M_ChkFlag(SL_ERROR)==0))		//201005atcpc					
 		{ 
-	  		if(M_ChkCounter(MAIN_LOOP.cnt_prec,DELAY_PREC)>0)	 M_SetFlag(SL_OCS_PREC); //å»¶æ—¶1sï¼Œé˜²æ­¢è¯¯æ“ä½œ
+	  		if(M_ChkCounter(MAIN_LOOP.cnt_prec,DELAY_PREC)>0)	 M_SetFlag(SL_OCS_PREC); //ÑÓÊ±1s£¬·ÀÖ¹Îó²Ù×÷
 		}				
 		else 	
 		{
@@ -1138,7 +1136,7 @@ void WRCOMMAND(void)
 
 		if(((_COMMAND1&0x0020)!=0) && (M_ChkFlag(SL_ERROR)==0))		//201005atcpc					
 		{ 
-	  		if(M_ChkCounter(MAIN_LOOP.cnt_nprcmd,DELAY_NPRCMD)>0)	 M_SetFlag(SL_OCS_NPRSTART); //å»¶æ—¶1sï¼Œé˜²æ­¢è¯¯æ“ä½œ
+	  		if(M_ChkCounter(MAIN_LOOP.cnt_nprcmd,DELAY_NPRCMD)>0)	 M_SetFlag(SL_OCS_NPRSTART); //ÑÓÊ±1s£¬·ÀÖ¹Îó²Ù×÷
 		}				
 		else 	
 		{
@@ -1148,7 +1146,7 @@ void WRCOMMAND(void)
 
 		if(((_COMMAND1&0x0040)!=0) && (M_ChkFlag(SL_ERROR)==0))		//201005atcpc					
 		{ 
-	  		if(M_ChkCounter(MAIN_LOOP.cnt_mprcmd,DELAY_MPRCMD)>0)	 M_SetFlag(SL_OCS_MPRSTART); //å»¶æ—¶1sï¼Œé˜²æ­¢è¯¯æ“ä½œ
+	  		if(M_ChkCounter(MAIN_LOOP.cnt_mprcmd,DELAY_MPRCMD)>0)	 M_SetFlag(SL_OCS_MPRSTART); //ÑÓÊ±1s£¬·ÀÖ¹Îó²Ù×÷
 		}				
 		else 	
 		{
@@ -1158,7 +1156,7 @@ void WRCOMMAND(void)
 
 		if((_COMMAND1&0x0080)!=0)							
 		{ 
-	  		if(M_ChkCounter(MAIN_LOOP.cnt_clostacmd,DELAY_CLOSTACMD)>0)	 M_SetFlag(SL_OCS_OPENSTAC); //å»¶æ—¶1sï¼Œé˜²æ­¢è¯¯æ“ä½œ
+	  		if(M_ChkCounter(MAIN_LOOP.cnt_clostacmd,DELAY_CLOSTACMD)>0)	 M_SetFlag(SL_OCS_OPENSTAC); //ÑÓÊ±1s£¬·ÀÖ¹Îó²Ù×÷
 		}				
 		else 	
 		{
@@ -1166,9 +1164,9 @@ void WRCOMMAND(void)
 			MAIN_LOOP.cnt_clostacmd=0;		
     	} 
 
-		if((_COMMAND1&0x0100)!=0)																	//ä¸Šä½æœºè¦æ±‚å¤ä½æ•…éšœ,ç”±å¤–éƒ¨I/Oç»™å®š
+		if((_COMMAND1&0x0100)!=0)																	//ÉÏÎ»»úÒªÇó¸´Î»¹ÊÕÏ,ÓÉÍâ²¿I/O¸ø¶¨
 		{ 
-	  		if(M_ChkCounter(MAIN_LOOP.cnt_reset,DELAY_RESET)>0)	 M_SetFlag(SL_OCS_RESET);     		//å»¶æ—¶2sï¼Œé˜²æ­¢è¯¯æ“ä½œ
+	  		if(M_ChkCounter(MAIN_LOOP.cnt_reset,DELAY_RESET)>0)	 M_SetFlag(SL_OCS_RESET);     		//ÑÓÊ±2s£¬·ÀÖ¹Îó²Ù×÷
 		}				
 		else 	
 		{
@@ -1176,23 +1174,23 @@ void WRCOMMAND(void)
 			MAIN_LOOP.cnt_reset=0;		
     	}	
     	
-		if((_COMMAND1&0x1000)!=0)	M_SetFlag(SL_PCOCS_CBOFF);	 //12 æŒ‡ä»¤PCæ¨¡å¼ä¸‹ä½¿ç”¨ PCæŽ§åˆ¶æ‰‹åŠ¨æ–­å¼€CB 1=æ–­å¼€ 2010atcpc
+		if((_COMMAND1&0x1000)!=0)	M_SetFlag(SL_PCOCS_CBOFF);	 //12 Ö¸ÁîPCÄ£Ê½ÏÂÊ¹ÓÃ PC¿ØÖÆÊÖ¶¯¶Ï¿ªCB 1=¶Ï¿ª 2010atcpc
 		else						M_ClrFlag(SL_PCOCS_CBOFF);
    	}
 
-	if((_COMMAND1&0x0200)!=0)	M_SetFlag(SL_PC_ERRDATASAVE);	 //9 å¤–éƒ¨RAMé”å­˜æ•…éšœæ•°æ®æŒ‡ä»¤PC/CANæ¨¡å¼ä¸‹éƒ½å¯ä½¿ç”¨
+	if((_COMMAND1&0x0200)!=0)	M_SetFlag(SL_PC_ERRDATASAVE);	 //9 Íâ²¿RAMËø´æ¹ÊÕÏÊý¾ÝÖ¸ÁîPC/CANÄ£Ê½ÏÂ¶¼¿ÉÊ¹ÓÃ
 	else						M_ClrFlag(SL_PC_ERRDATASAVE);	
-	if((_COMMAND1&0x0400)!=0)	M_SetFlag(SL_PC_ERRDATACLR);	 //10 å¤–éƒ¨RAMé‡Šæ”¾æ•…éšœæ•°æ®æŒ‡ä»¤PC/CANæ¨¡å¼ä¸‹éƒ½å¯ä½¿ç”¨
+	if((_COMMAND1&0x0400)!=0)	M_SetFlag(SL_PC_ERRDATACLR);	 //10 Íâ²¿RAMÊÍ·Å¹ÊÕÏÊý¾ÝÖ¸ÁîPC/CANÄ£Ê½ÏÂ¶¼¿ÉÊ¹ÓÃ
 //	else						M_ClrFlag(SL_PC_ERRDATACLR);
 	else if(M_ChkFlag(SL_LV_CLRERRAM)==0)			M_ClrFlag(SL_PC_ERRDATACLR);		//20130306
-//	if((_COMMAND1&0x0800)!=0)	M_SetFlag(SL_PC_BANKDATASAVE);	 //11 å¤–éƒ¨RAMé”å­˜æ˜¾ç¤ºæ•°æ®æŒ‡ä»¤PC/CANæ¨¡å¼ä¸‹éƒ½å¯ä½¿ç”¨
+//	if((_COMMAND1&0x0800)!=0)	M_SetFlag(SL_PC_BANKDATASAVE);	 //11 Íâ²¿RAMËø´æÏÔÊ¾Êý¾ÝÖ¸ÁîPC/CANÄ£Ê½ÏÂ¶¼¿ÉÊ¹ÓÃ
 //	else						M_ClrFlag(SL_PC_BANKDATASAVE);
 
 //20130724
 	if((_COMMAND1&0x0800)!=0)
 	{
 		M_SetFlag(SL_PC_BANKDATASAVE);
-		M_SetFlag(SL_TRIG_ERRDSAVE);	 //11 å¤–éƒ¨RAMé”å­˜æ˜¾ç¤ºæ•°æ®æŒ‡ä»¤PC/CANæ¨¡å¼ä¸‹éƒ½å¯ä½¿ç”¨
+		M_SetFlag(SL_TRIG_ERRDSAVE);	 //11 Íâ²¿RAMËø´æÏÔÊ¾Êý¾ÝÖ¸ÁîPC/CANÄ£Ê½ÏÂ¶¼¿ÉÊ¹ÓÃ
 	}
 	else						M_ClrFlag(SL_PC_BANKDATASAVE);
 
@@ -1200,27 +1198,27 @@ void WRCOMMAND(void)
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: ScibDatpro
-** åŠŸèƒ½æè¿°: å¯¹sciæŽ¥æ”¶åˆ°çš„æ•°æ®è¿›è¡Œè§£æžæ ¡éªŒ
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:   response=0è¡¨ç¤ºéœ€è¦ä¸éœ€è¦å›žå¤;response=1è¡¨ç¤ºéœ€è¦ç«‹å³å›žå¤;response=2è¡¨ç¤ºä¸ç«‹å³å›žå¤,è¿›ç¨‹å®ŒåŽå†å›žå¤(å¦‚æ¢å¤å‡ºåŽ‚å‚æ•°)
-** æ³¨  é‡Š: 	 é€šä¿¡åè®®è¯´æ˜Žå¦‚ä¸‹
-				SCI.rxb[0]:æŠ¥å¤´(0x7E)
-				SCI.rxb[1]:ä¸‹ä½æœºåœ°å€
-				SCI.rxb[2]:å‘½ä»¤å­—(ä½Žå­—èŠ‚)
-				SCI.rxb[3]:å‘½ä»¤å­—(é«˜å­—èŠ‚)
-				SCI.rxb[4]:åŠŸèƒ½ç åºå·
-				SCI.rxb[5]:åŠŸèƒ½ç æ•°å€¼(ä½Žå­—èŠ‚)
-				SCI.rxb[6]:åŠŸèƒ½ç æ•°å€¼(é«˜å­—èŠ‚)
-				SCI.rxb[7]:çŠ¶æ€å­—(ä½Žå­—èŠ‚)
-				SCI.rxb[8]:çŠ¶æ€å­—(é«˜å­—èŠ‚)
-				SCI.rxb[9]:å¼‚æˆ–æ ¡éªŒ
+** º¯ÊýÃû³Æ: ScibDatpro
+** ¹¦ÄÜÃèÊö: ¶Ôsci½ÓÊÕµ½µÄÊý¾Ý½øÐÐ½âÎöÐ£Ñé
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   response=0±íÊ¾ÐèÒª²»ÐèÒª»Ø¸´;response=1±íÊ¾ÐèÒªÁ¢¼´»Ø¸´;response=2±íÊ¾²»Á¢¼´»Ø¸´,½ø³ÌÍêºóÔÙ»Ø¸´(Èç»Ö¸´³ö³§²ÎÊý)
+** ×¢  ÊÍ: 	 Í¨ÐÅÐ­ÒéËµÃ÷ÈçÏÂ
+				SCI.rxb[0]:±¨Í·(0x7E)
+				SCI.rxb[1]:ÏÂÎ»»úµØÖ·
+				SCI.rxb[2]:ÃüÁî×Ö(µÍ×Ö½Ú)
+				SCI.rxb[3]:ÃüÁî×Ö(¸ß×Ö½Ú)
+				SCI.rxb[4]:¹¦ÄÜÂëÐòºÅ
+				SCI.rxb[5]:¹¦ÄÜÂëÊýÖµ(µÍ×Ö½Ú)
+				SCI.rxb[6]:¹¦ÄÜÂëÊýÖµ(¸ß×Ö½Ú)
+				SCI.rxb[7]:×´Ì¬×Ö(µÍ×Ö½Ú)
+				SCI.rxb[8]:×´Ì¬×Ö(¸ß×Ö½Ú)
+				SCI.rxb[9]:Òì»òÐ£Ñé
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 Uint16 ScibDatpro(void)
@@ -1231,19 +1229,19 @@ Uint16 ScibDatpro(void)
 	
 	
 //------------------------------------------------------------------------------------------------		
-		if(SCI.rxb[0]!=_SCIB_ADDR)	//ä¸Šä½æœº&èŠ‚ç‚¹åœ°å€ä¸ç¬¦,å¹¶éžæ“ä½œå™¨å‘çš„æ•°æ®
-			response=0;				//ä¸è¿›è¡Œå¤„ç†å›žå¤,ç­‰å¾…ä¸‹ä¸€å¸§æ•°æ®
+		if(SCI.rxb[0]!=_SCIB_ADDR)	//ÉÏÎ»»ú&½ÚµãµØÖ·²»·û,²¢·Ç²Ù×÷Æ÷·¢µÄÊý¾Ý
+			response=0;				//²»½øÐÐ´¦Àí»Ø¸´,µÈ´ýÏÂÒ»Ö¡Êý¾Ý
 		
-		else							//æ“ä½œå™¨æŽ§åˆ¶æˆ–ä¸Šä½æœºæŽ§åˆ¶ä¸”èŠ‚ç‚¹åœ°å€ç›¸ç¬¦
+		else							//²Ù×÷Æ÷¿ØÖÆ»òÉÏÎ»»ú¿ØÖÆÇÒ½ÚµãµØÖ·Ïà·û
 		{
-			SCI.txb[0] = SCI.rxb[0];								//ä¸‹ä½æœºåœ°å€å­—èŠ‚
+			SCI.txb[0] = SCI.rxb[0];								//ÏÂÎ»»úµØÖ·×Ö½Ú
 			SCI.txb[1] = SCI.rxb[1];
 			
-			rx_crc=SCI.rxb[7];										//ä¿å­˜æ ¡éªŒå’Œ1ä¸ªå­—16ä½
+			rx_crc=SCI.rxb[7];										//±£´æÐ£ÑéºÍ1¸ö×Ö16Î»
 			rx_crc=((rx_crc<<8)&0xFF00)|SCI.rxb[6];					//[6][7]two words
 
 			length485=SCI485NUM_RX-2;
-            cRc_16=GetCrc_16(&SCI.rxb[0],length485);				//CRCæ ¡éªŒ
+            cRc_16=GetCrc_16(&SCI.rxb[0],length485);				//CRCÐ£Ñé
            
             if(rx_crc!=cRc_16)
               response=0;	
@@ -1252,21 +1250,21 @@ Uint16 ScibDatpro(void)
             {
                 response=1;
 				
-				//æŽ¥æ”¶æ•°æ®è½¬å­˜
-				rx_command=SCI.rxb[1];							//ä¿å­˜å‘½ä»¤å­—
+				//½ÓÊÕÊý¾Ý×ª´æ
+				rx_command=SCI.rxb[1];							//±£´æÃüÁî×Ö
 				
-				rx_startnum=SCI.rxb[2];							//ä¿å­˜åŠŸèƒ½ç åºå·
+				rx_startnum=SCI.rxb[2];							//±£´æ¹¦ÄÜÂëÐòºÅ
 				rx_startnum=((rx_startnum<<8)&0xFF00)|SCI.rxb[3];
 			    
-				rx_opernum=SCI.rxb[4];							//ä¿å­˜åŠŸèƒ½ç å€¼
+				rx_opernum=SCI.rxb[4];							//±£´æ¹¦ÄÜÂëÖµ
 				rx_opernum=((rx_opernum<<8)&0xFF00)|SCI.rxb[5];
 				
-				//å‘½ä»¤å­—îœ¬ï¿½
-
-				switch (rx_command&0xFFFF)					//å‘½ä»¤è§£æž???è·ŸFFFFåšä¸Žè¿ç®—æ²¡æœ‰ä½œç”¨å•Šï¼Ÿï¼Ÿï¼Ÿ
+				//ÃüÁî×Ö¦Àí
+				
+				switch (rx_command&0xFFFF)					//ÃüÁî½âÎö???¸úFFFF×öÓëÔËËãÃ»ÓÐ×÷ÓÃ°¡£¿£¿£¿
 				{
 //--------------------NO.1--READ------
-					case COM_RDAO:		//è¯»æ¨¡æ‹Ÿé‡
+					case COM_RDAO:		//¶ÁÄ£ÄâÁ¿
 					{
 						 if((rx_startnum+rx_opernum)>PARA_NUM)
                               response=0;
@@ -1278,8 +1276,8 @@ Uint16 ScibDatpro(void)
 							READSTATE();							    
 							for(i=rx_startnum;i<(rx_startnum+rx_opernum);i++)
                             {
-								SCI.txb[3+j]=(*FUNC[i].para_add&0xFF00)>>8; //201005atcpc ä¿è¯èƒ½ä¸ŽCANåŒæ—¶é€šè®¯
-								SCI.txb[4+j]=(*FUNC[i].para_add)&0x00FF;	//ç›´æŽ¥å°†RAMä¸­çš„æ•°æ®å‘é€
+								SCI.txb[3+j]=(*FUNC[i].para_add&0xFF00)>>8; //201005atcpc ±£Ö¤ÄÜÓëCANÍ¬Ê±Í¨Ñ¶
+								SCI.txb[4+j]=(*FUNC[i].para_add)&0x00FF;	//Ö±½Ó½«RAMÖÐµÄÊý¾Ý·¢ËÍ
 								j++;
 								j++; 
 							}
@@ -1299,42 +1297,42 @@ Uint16 ScibDatpro(void)
 					}
 
 //---------------------NO.3--WRITE A--------
-					case COM_WRAO:			//å†™æ¨¡æ‹Ÿé‡
+					case COM_WRAO:			//Ð´Ä£ÄâÁ¿
 					{		
 							 if(rx_startnum>PARA_NUM)
                                response=0;
 						     
 						     else
 					         {
-					        	if((((FUNC[rx_startnum].attr&WR1)==0)&&((FUNC[rx_startnum].attr&WR0)==0)&&((FUNC[rx_startnum].attr&WR3)==0))||(((FUNC[rx_startnum].attr&WR1)==WR1)&&(M_ChkFlag(SL_RUN)!=0)))//éžå†™æ“ä½œæˆ–è¿è¡Œä¸­ä¸å¯ä¿®
-									response=0;						//ç½®æ“ä½œå¤±è´¥æ ‡å¿—
+					        	if((((FUNC[rx_startnum].attr&WR1)==0)&&((FUNC[rx_startnum].attr&WR0)==0)&&((FUNC[rx_startnum].attr&WR3)==0))||(((FUNC[rx_startnum].attr&WR1)==WR1)&&(M_ChkFlag(SL_RUN)!=0)))//·ÇÐ´²Ù×÷»òÔËÐÐÖÐ²»¿ÉÐÞ
+									response=0;						//ÖÃ²Ù×÷Ê§°Ü±êÖ¾
 
 								else
 								{
-					        		if((FUNC[rx_startnum].attr&WR3)==WR3)//å±žäºŽåªä¿®æ”¹RAMæ•°æ®çš„å†™ç±»åž‹
+					        		if((FUNC[rx_startnum].attr&WR3)==WR3)//ÊôÓÚÖ»ÐÞ¸ÄRAMÊý¾ÝµÄÐ´ÀàÐÍ
 					        		{
-								   		*FUNC[rx_startnum].para_add=rx_opernum;	//ä¿®æ”¹RAMé‡Œçš„å€¼
+								   		*FUNC[rx_startnum].para_add=rx_opernum;	//ÐÞ¸ÄRAMÀïµÄÖµ
 
-					        			if(M_ChkFlag(SL_RUN)==0)			//è¿è¡Œä¸­ä¸å…è®¸ä¿®æ”¹æŽ§åˆ¶æ¨¡å¼201005atcpc
+					        			if(M_ChkFlag(SL_RUN)==0)			//ÔËÐÐÖÐ²»ÔÊÐíÐÞ¸Ä¿ØÖÆÄ£Ê½201005atcpc
 										{
 					        				if((_COMMAND1&0x0001)!=0)	M_SetFlag(SL_ENPCOPER);
 											else						M_ClrFlag(SL_ENPCOPER);	
 										}
 					        			
-					        			WRCOMMAND();	//åªæœ‰ä½¿èƒ½äº†PCOPERä¹‹åŽæ‰å…è®¸ä¿®æ”¹å…¶å®ƒé‡
+					        			WRCOMMAND();	//Ö»ÓÐÊ¹ÄÜÁËPCOPERÖ®ºó²ÅÔÊÐíÐÞ¸ÄÆäËüÁ¿
 					        		}
 					        		else
 					        		{
-								   		*FUNC[rx_startnum].para_add=rx_opernum;	//ä¿®æ”¹RAMå’ŒEEROM
+								   		*FUNC[rx_startnum].para_add=rx_opernum;	//ÐÞ¸ÄRAMºÍEEROM
 								
-										EEPROM.mcode=rx_startnum;			//å†™å…¥2å­—èŠ‚æ•°æ®
-										M_SetFlag(SL_EEASK_MCODE);			//è®¾EEPROMä¿®æ”¹åŠŸèƒ½ç è¯·æ±‚æ ‡å¿—
+										EEPROM.mcode=rx_startnum;			//Ð´Èë2×Ö½ÚÊý¾Ý
+										M_SetFlag(SL_EEASK_MCODE);			//ÉèEEPROMÐÞ¸Ä¹¦ÄÜÂëÇëÇó±êÖ¾					        			
 					        		}   
 																	
 									if((rx_startnum>=TIME_FIRST)&&(rx_startnum<=TIME_END))
-										M_SetFlag(SL_SETRTIMER);			//ç½®å®žæ—¶æ—¶é’Ÿéœ€è¦é‡æ–°è®¾å®šæ ‡å¿—
+										M_SetFlag(SL_SETRTIMER);			//ÖÃÊµÊ±Ê±ÖÓÐèÒªÖØÐÂÉè¶¨±êÖ¾
 								
-									SCI.txb[2]=SCI.rxb[2];					//å‡†å¤‡å‘é€æ•°æ®(æ“ä½œæˆåŠŸ)
+									SCI.txb[2]=SCI.rxb[2];					//×¼±¸·¢ËÍÊý¾Ý(²Ù×÷³É¹¦)
 									SCI.txb[3]=SCI.rxb[3];
 									SCI.txb[4]=SCI.rxb[4];
 									SCI.txb[5]=SCI.rxb[5];
@@ -1352,7 +1350,7 @@ Uint16 ScibDatpro(void)
 					}
 
 //--------------------NO.3--READ exRAM------
-					case COM_RDRAM:		//è¯»exRAM
+					case COM_RDRAM:		//¶ÁexRAM
 						   
 						 if((rx_startnum+rx_opernum)>PARA_NUM)
                               response=0;
@@ -1361,12 +1359,12 @@ Uint16 ScibDatpro(void)
 						 {						    
 						    j=0; 
 						    i=0;
-							rx_ramwavenum = rx_startnum;									//0-49ä»£è¡¨æ•°æ®æ³¢å½¢,50ä¸ºæ•…éšœæ—¶åˆ»æ•°æ® 201005atcpc
-							rx_ramsegstart = rx_opernum * RAM_SEGMENT;						//æœ¬æ¬¡æ³¢å½¢æ®µä¼ è¾“å¼€å§‹æ•°æ®åœ°å€ 0-(n-1)
+							rx_ramwavenum = rx_startnum;									//0-49´ú±íÊý¾Ý²¨ÐÎ,50Îª¹ÊÕÏÊ±¿ÌÊý¾Ý 201005atcpc
+							rx_ramsegstart = rx_opernum * RAM_SEGMENT;						//±¾´Î²¨ÐÎ¶Î´«Êä¿ªÊ¼Êý¾ÝµØÖ· 0-(n-1)
 							 
 							if(rx_ramwavenum<25)											//BANK_RAM:0-24
 							{
-								bank_pos = BANK_RAMDATA_POS + rx_ramsegstart;				//æœ¬æ¬¡æ³¢å½¢æ®µä¼ è¾“å¼€å§‹æ•°æ®åœ°å€+è¯¥æ³¢å½¢çš„åˆå§‹åœ°å€
+								bank_pos = BANK_RAMDATA_POS + rx_ramsegstart;				//±¾´Î²¨ÐÎ¶Î´«Êä¿ªÊ¼Êý¾ÝµØÖ·+¸Ã²¨ÐÎµÄ³õÊ¼µØÖ·
 								if(bank_pos >= RAM_BIAS)  bank_pos=bank_pos-RAM_BIAS;		//error_pos=0-3999
 								
 								for(i=0;i<RAM_SEGMENT;i++)
@@ -1381,7 +1379,7 @@ Uint16 ScibDatpro(void)
 							}
 							else if(rx_ramwavenum<50)										//ERROR_RAM:25-49 2010atcpc
 							{								
-								error_pos = ERROR_RAMDATA_POS + rx_ramsegstart;				//æœ¬æ¬¡æ³¢å½¢æ®µä¼ è¾“å¼€å§‹æ•°æ®åœ°å€+è¯¥æ³¢å½¢çš„åˆå§‹åœ°å€
+								error_pos = ERROR_RAMDATA_POS + rx_ramsegstart;				//±¾´Î²¨ÐÎ¶Î´«Êä¿ªÊ¼Êý¾ÝµØÖ·+¸Ã²¨ÐÎµÄ³õÊ¼µØÖ·
 								if(error_pos >= RAM_BIAS)  error_pos=error_pos-RAM_BIAS;	//error_pos=0-3999
 								
 								for(i=0;i<RAM_SEGMENT;i++)
@@ -1426,65 +1424,65 @@ Uint16 ScibDatpro(void)
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Sci485Ctrl
-** åŠŸèƒ½æè¿°: å¯¹sciçš„æŽ¥æ”¶å‘é€è¿›è¡Œç»¼åˆæŽ§åˆ¶
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Sci485Ctrl
+** ¹¦ÄÜÃèÊö: ¶ÔsciµÄ½ÓÊÕ·¢ËÍ½øÐÐ×ÛºÏ¿ØÖÆ
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Sci485Ctrl(void)
 {
 	Uint16 i,j,response;
 
-	if(M_ChkCounter(SCI.cnt_sciover,DELAY_SCIOVER)>=0)				//å‘é€/æŽ¥æ”¶è¶…æ—¶?
+	if(M_ChkCounter(SCI.cnt_sciover,DELAY_SCIOVER)>=0)				//·¢ËÍ/½ÓÊÕ³¬Ê±?
 	{
 		SCI.cnt_sciover=0;
 		M_ClrFlag(SL_TX);
 		M_ClrFlag(SL_RX);
-		Sci485_RxInit();											//485æŽ¥æ”¶åˆå§‹åŒ–
+		Sci485_RxInit();											//485½ÓÊÕ³õÊ¼»¯
 	}
-	else if(M_ChkFlag(SL_TX)!=0)									//å‘é€?
+	else if(M_ChkFlag(SL_TX)!=0)									//·¢ËÍ?
 	{
-		if(M_ChkFlag(SL_TXLONGDATA)==0)								//å‘é€æ•°æ®å®Œæˆ?
+		if(M_ChkFlag(SL_TXLONGDATA)==0)								//·¢ËÍÊý¾ÝÍê³É?
 		{
-			if(ScibRegs.SCIFFTX.bit.TXFFST == 0)						//å‘é€å®Œæˆ?Transmit FIFO is empty.
+			if(ScibRegs.SCIFFTX.bit.TXFFST == 0)						//·¢ËÍÍê³É?Transmit FIFO is empty.
 			{
-				SCI.cnt_sciover=0;										//æ¸…é™¤å‘é€/æŽ¥æ”¶è¶…æ—¶å®šæ—¶å™¨
-				if(ScibRegs.SCICTL2.bit.TXEMPTY==1)						//å‘é€å¯„å­˜å™¨ä¸ºç©º?Transmitter buffer and shift registers are both empty
+				SCI.cnt_sciover=0;										//Çå³ý·¢ËÍ/½ÓÊÕ³¬Ê±¶¨Ê±Æ÷
+				if(ScibRegs.SCICTL2.bit.TXEMPTY==1)						//·¢ËÍ¼Ä´æÆ÷Îª¿Õ?Transmitter buffer and shift registers are both empty
 		 		{
 					M_ClrFlag(SL_TX);
-					Sci485_RxInit();									//485æŽ¥æ”¶åˆå§‹åŒ–
+					Sci485_RxInit();									//485½ÓÊÕ³õÊ¼»¯
 				}
 			}
 		}
 	}
-	else															//æŽ¥æ”¶
+	else															//½ÓÊÕ
 	{
-		if(ScibRegs.SCIFFRX.bit.RXFFST == 0)						//æœªå¼€å§‹æŽ¥æ”¶æˆ–æŽ¥æ”¶å®Œæˆ?
+		if(ScibRegs.SCIFFRX.bit.RXFFST == 0)						//Î´¿ªÊ¼½ÓÊÕ»ò½ÓÊÕÍê³É?
 		{
-			SCI.cnt_sciover=0;										//æ¸…é™¤å‘é€/æŽ¥æ”¶è¶…æ—¶å®šæ—¶å™¨
+			SCI.cnt_sciover=0;										//Çå³ý·¢ËÍ/½ÓÊÕ³¬Ê±¶¨Ê±Æ÷
 			M_ClrRxFifoOvr();
 			
-			if(M_ChkFlag(SL_RX)!=0)									//æŽ¥æ”¶å®Œæˆ?
+			if(M_ChkFlag(SL_RX)!=0)									//½ÓÊÕÍê³É?
 			{
-				if(M_ChkCounter(SCI.cnt_scispace,DELAY_SCISPACE)>=0)//æŽ¥æ”¶åˆ°å‘é€é—´éš”åˆ°æ—¶?
+				if(M_ChkCounter(SCI.cnt_scispace,DELAY_SCISPACE)>=0)//½ÓÊÕµ½·¢ËÍ¼ä¸ôµ½Ê±?
 	    		{
-					if(M_ChkFlag(SL_RESUME)!=0)						//æ¢å¤å‡ºåŽ‚å‚æ•°è¿›è¡Œä¸­?
+					if(M_ChkFlag(SL_RESUME)!=0)						//»Ö¸´³ö³§²ÎÊý½øÐÐÖÐ?
 					{
-						if(M_ChkFlag(SL_EEASK_INI)==0)				//EEPROMä¿®æ”¹åŠŸèƒ½ç æ“ä½œå®Œæˆ?
+						if(M_ChkFlag(SL_EEASK_INI)==0)				//EEPROMÐÞ¸Ä¹¦ÄÜÂë²Ù×÷Íê³É?
 						{
-							M_ClrFlag(SL_RESUME);					//æ¸…æ¢å¤å‡ºåŽ‚å‚æ•°è¿›è¡Œä¸­æ ‡å¿—
-							M_SetFlag(SL_TX);						//ç½®å‘æŒç™–æ››ç–šï¿½
+							M_ClrFlag(SL_RESUME);					//Çå»Ö¸´³ö³§²ÎÊý½øÐÐÖÐ±êÖ¾
+							M_SetFlag(SL_TX);						//ÖÃ·¢ÎÎñ±êÖ¾Î»
 							M_ClrFlag(SL_RX);
 							
-							Sci485_TxInit();						//485å‘é€åˆå§‹åŒ–
+							Sci485_TxInit();						//485·¢ËÍ³õÊ¼»¯
 							
 //							for(i=0;i<length485;i++)				//different here!!!change
 //							ScibRegs.SCITXBUF=SCI.txb[i];
@@ -1502,14 +1500,14 @@ void Sci485Ctrl(void)
 					}
 					else
 					{
-						response=ScibDatpro();						//è°ƒç”¨æ•°æ®è§£æžç¨‹åº
+						response=ScibDatpro();						//µ÷ÓÃÊý¾Ý½âÎö³ÌÐò
 						
-						if(response==1)								//è¡¨ç¤ºè¦ç«‹å³å›žå¤
+						if(response==1)								//±íÊ¾ÒªÁ¢¼´»Ø¸´
 						{
-//							M_SetFlag(SL_TX);						//ç½®å‘é€ä»»åŠ¡æ ‡å¿—ä½
+//							M_SetFlag(SL_TX);						//ÖÃ·¢ËÍÈÎÎñ±êÖ¾Î»
 							M_ClrFlag(SL_RX);
 							
-							Sci485_TxInit();						//485å‘é€åˆå§‹åŒ–
+							Sci485_TxInit();						//485·¢ËÍ³õÊ¼»¯
 							
 							if(length485<=16)
 							{
@@ -1523,53 +1521,53 @@ void Sci485Ctrl(void)
 
 								M_SetFlag(SL_TXLONGDATA);							
 							}																					
-							M_SetFlag(SL_TX);						//ç½®å‘é€ä»»åŠ¡æ ‡å¿—ä½120625
+							M_SetFlag(SL_TX);						//ÖÃ·¢ËÍÈÎÎñ±êÖ¾Î»120625
 						}
-						else if(response==0)						//ä¸éœ€è¦å›žå¤
+						else if(response==0)						//²»ÐèÒª»Ø¸´
 						{
 							M_ClrFlag(SL_RX);
-							Sci485_RxInit();						//485æŽ¥æ”¶åˆå§‹åŒ–
+							Sci485_RxInit();						//485½ÓÊÕ³õÊ¼»¯
 						}
 					}
 				}
 			}
 		}
-		else if((ScibRegs.SCIFFRX.bit.RXFFST >= 1)&&(M_ChkFlag(SL_HEADOK)==0))	//å¼€å§‹æŽ¥æ”¶ä¸”è¿˜æ²¡æœ‰æ”¶åˆ°æŠ¥å¤´?
+		else if((ScibRegs.SCIFFRX.bit.RXFFST >= 1)&&(M_ChkFlag(SL_HEADOK)==0))	//¿ªÊ¼½ÓÊÕÇÒ»¹Ã»ÓÐÊÕµ½±¨Í·?
 		{
 			SCI.rxb[0]=ScibRegs.SCIRXBUF.all&0x00FF;
 			if(SCI.rxb[0]==_SCIB_ADDR)								//different!!! 
 				M_SetFlag(SL_HEADOK);
 			else
-				Sci485_RxInit();									//485æŽ¥æ”¶åˆå§‹åŒ–
+				Sci485_RxInit();									//485½ÓÊÕ³õÊ¼»¯
 		}
-		else if(ScibRegs.SCIFFRX.bit.RXFFST >= SCI485NUM_RX-1)		//changeæŽ¥æ”¶å®Œæˆ?SCIFFRX.bit.RXFFSTï¼šReceive FIFO has x words
+		else if(ScibRegs.SCIFFRX.bit.RXFFST >= SCI485NUM_RX-1)		//change½ÓÊÕÍê³É?SCIFFRX.bit.RXFFST£ºReceive FIFO has x words
 		{
-			SCI.cnt_sciover=0;										//æ¸…é™¤å‘é€/æŽ¥æ”¶è¶…æ—¶å®šæ—¶å™¨
+			SCI.cnt_sciover=0;										//Çå³ý·¢ËÍ/½ÓÊÕ³¬Ê±¶¨Ê±Æ÷
 			M_DisTxRxb();
 			M_ClrRxFifoOvr();
 			
-			for(i=1;i<SCI485NUM_RX;i++)								//è¯»å‡ºæŽ¥æ”¶ç¼“å­˜(ä¸åŒ…æ‹¬æŠ¥å¤´) 9ä½æ•°æ®
+			for(i=1;i<SCI485NUM_RX;i++)								//¶Á³ö½ÓÊÕ»º´æ(²»°üÀ¨±¨Í·) 9Î»Êý¾Ý
 				SCI.rxb[i]=ScibRegs.SCIRXBUF.all&0x00FF;
 			
 			M_ClrFlag(SL_HEADOK);
-			M_SetFlag(SL_RX);										//ç½®æŽ¥æ”¶å®Œæˆæ ‡å¿—ä½
-			SCI.cnt_scispace=0;										//æ¸…é™¤æŽ¥æ”¶åˆ°å‘é€é—´éš”å®šæ—¶å™¨
+			M_SetFlag(SL_RX);										//ÖÃ½ÓÊÕÍê³É±êÖ¾Î»
+			SCI.cnt_scispace=0;										//Çå³ý½ÓÊÕµ½·¢ËÍ¼ä¸ô¶¨Ê±Æ÷
 		}
 	}
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Sci_canopenrx
-** åŠŸèƒ½æè¿°: sci_CANOPENåˆå§‹åŒ–
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Sci_canopenrx
+** ¹¦ÄÜÃèÊö: sci_CANOPEN³õÊ¼»¯
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Scicanopen_Init(void)
@@ -1592,24 +1590,24 @@ void Scicanopen_Init(void)
 //-----------------------------------------------------------------------------
 }  
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Sci_canopenrx
-** åŠŸèƒ½æè¿°: å¯¹sci_CANOPENçš„æŽ¥æ”¶å‘é€è¿›è¡Œç»¼åˆæŽ§åˆ¶
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Sci_canopenrx
+** ¹¦ÄÜÃèÊö: ¶Ôsci_CANOPENµÄ½ÓÊÕ·¢ËÍ½øÐÐ×ÛºÏ¿ØÖÆ
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Sci_canopenrx(void)
 {
 	Uint16 i,heartbeat,xor_data,temp;
 	
-	if(M_ChkCounter(SCI_canopen.cnt_sciover,DELAY_SCICANOPENOVER)>=0)				//æŽ¥æ”¶è¶…æ—¶?
+	if(M_ChkCounter(SCI_canopen.cnt_sciover,DELAY_SCICANOPENOVER)>=0)				//½ÓÊÕ³¬Ê±?
 	{
 		SCI_canopen.cnt_sciover=0;
 		Scicanopen_Init();
@@ -1618,7 +1616,7 @@ void Sci_canopenrx(void)
 	}
 	else
 	{
-/*120507		if((SciaRegs.SCIFFRX.bit.RXFFST >= 1)&&(M_ChkFlag(SL_CANOPENHEADOK)==0))	//å¼€å§‹æŽ¥æ”¶ä¸”è¿˜æ²¡æœ‰æ”¶åˆ°æŠ¥å¤´?
+/*120507		if((SciaRegs.SCIFFRX.bit.RXFFST >= 1)&&(M_ChkFlag(SL_CANOPENHEADOK)==0))	//¿ªÊ¼½ÓÊÕÇÒ»¹Ã»ÓÐÊÕµ½±¨Í·?
 		{
 			SCI_canopen.cnt_sciover=0;
 
@@ -1631,11 +1629,11 @@ void Sci_canopenrx(void)
 				SciaRegs.SCIFFRX.bit.RXFFOVRCLR=1;
 			}
 		}
-		else if(SciaRegs.SCIFFRX.bit.RXFFST >= SCICANOPENRXNUM-1)			//æŽ¥æ”¶å®Œæˆ?
+		else if(SciaRegs.SCIFFRX.bit.RXFFST >= SCICANOPENRXNUM-1)			//½ÓÊÕÍê³É?
 		{
 			
 			//	SciaRegs.SCICTL1.bit.RXENA =0;
-				for(i=1;i<SCICANOPENRXNUM;i++)								//è¯»å‡ºæŽ¥æ”¶ç¼“å­˜(ä¸åŒ…æ‹¬æŠ¥å¤´)
+				for(i=1;i<SCICANOPENRXNUM;i++)								//¶Á³ö½ÓÊÕ»º´æ(²»°üÀ¨±¨Í·)
 					SCI_canopen.rxb[i]=SciaRegs.SCIRXBUF.all&0x00FF;
 				M_ClrFlag(SL_CANOPENHEADOK);
 				
@@ -1645,15 +1643,15 @@ void Sci_canopenrx(void)
 				
 				SCI_canopen.heartbeat = heartbeat;
 
-				xor_data=SCI_canopen.rxb[0];								//å¼‚æˆ–æ ¡éªŒ
+				xor_data=SCI_canopen.rxb[0];								//Òì»òÐ£Ñé
 				for(i=1;i<(SCICANOPENRXNUM-1);i++)
 					xor_data ^= SCI_canopen.rxb[i];
 			
-				if(xor_data == SCI_canopen.rxb[SCICANOPENRXNUM-1])							//å¼‚æˆ–æ ¡éªŒç¬¦åˆ?
+				if(xor_data == SCI_canopen.rxb[SCICANOPENRXNUM-1])							//Òì»òÐ£Ñé·ûºÏ?
 				{
-					if((SCI_canopen.rxb[1]|SCI_canopen.rxb[2]|SCI_canopen.rxb[3]|SCI_canopen.rxb[4]|SCI_canopen.rxb[5]|SCI_canopen.rxb[6]|SCI_canopen.rxb[7]|SCI_canopen.rxb[8])!=0) //å‰”å‡ºæ•°æ®éƒ½ç­‰äºŽ0çš„ååŒ…20090817
+					if((SCI_canopen.rxb[1]|SCI_canopen.rxb[2]|SCI_canopen.rxb[3]|SCI_canopen.rxb[4]|SCI_canopen.rxb[5]|SCI_canopen.rxb[6]|SCI_canopen.rxb[7]|SCI_canopen.rxb[8])!=0) //ÌÞ³öÊý¾Ý¶¼µÈÓÚ0µÄ»µ°ü20090817
 					{			
-					//æ•°æ®è½¬å­˜
+					//Êý¾Ý×ª´æ
 					SCI_canopen.rx_controlword=(SCI_canopen.rxb[2]<<8)|SCI_canopen.rxb[1];							//controlword
 				
 					SCI_canopen.rx_torque=(SCI_canopen.rxb[4]<<8)|SCI_canopen.rxb[3];							//torque_ref
@@ -1669,15 +1667,15 @@ void Sci_canopenrx(void)
 
 		}
 */
-/*		if((SciaRegs.SCIFFRX.bit.RXFFST >= 2)&&(M_ChkFlag(SL_CANOPENHEADOK)==0))	//å¼€å§‹æŽ¥æ”¶ä¸”è¿˜æ²¡æœ‰æ”¶åˆ°æŠ¥å¤´?
+/*		if((SciaRegs.SCIFFRX.bit.RXFFST >= 2)&&(M_ChkFlag(SL_CANOPENHEADOK)==0))	//¿ªÊ¼½ÓÊÕÇÒ»¹Ã»ÓÐÊÕµ½±¨Í·?
 		{
 			SCI_canopen.cnt_sciover=0;
 	
-			for(i=0;i<2;i++)								//æ ¡éªŒæŽ¥æ”¶åŒ…æ‹¬æŠ¥å¤´çš„å‰5ä½ä¿¡æ¯
+			for(i=0;i<2;i++)								//Ð£Ñé½ÓÊÕ°üÀ¨±¨Í·µÄÇ°5Î»ÐÅÏ¢
 				SCI_canopen.rxb[i]=SciaRegs.SCIRXBUF.all&0x00FF;
 			
 			if(SCI_canopen.rxb[0]==CANOPENCOM_HEAD && SCI_canopen.rxb[1]==0x11)
-				M_SetFlag(SL_CANOPENHEADOK);	//[0]=0x7E,[1]=å‘½ä»¤ç 0x11,[2]=æ•°æ®é•¿åº¦9ä¸ªå­—èŠ‚,[3]=ç‰¹å®šå‚æ•°0x11,[4]=åœ°å€åç§»0x00
+				M_SetFlag(SL_CANOPENHEADOK);	//[0]=0x7E,[1]=ÃüÁîÂë0x11,[2]=Êý¾Ý³¤¶È9¸ö×Ö½Ú,[3]=ÌØ¶¨²ÎÊý0x11,[4]=µØÖ·Æ«ÒÆ0x00
 
 			else
 			{	
@@ -1687,7 +1685,7 @@ void Sci_canopenrx(void)
 		}
 */
 //---------20130801----------
-		if((SciaRegs.SCIFFRX.bit.RXFFST >= 1)&&(M_ChkFlag(SL_CANOPENHEADOK)==0))	//å¼€å§‹æŽ¥æ”¶ä¸”è¿˜æ²¡æœ‰æ”¶åˆ°æŠ¥å¤´?	20121215
+		if((SciaRegs.SCIFFRX.bit.RXFFST >= 1)&&(M_ChkFlag(SL_CANOPENHEADOK)==0))	//¿ªÊ¼½ÓÊÕÇÒ»¹Ã»ÓÐÊÕµ½±¨Í·?	20121215
 		{
 			SCI_canopen.cnt_sciover=0;
 
@@ -1703,7 +1701,7 @@ void Sci_canopenrx(void)
 					SciaRegs.SCIFFRX.bit.RXFFOVRCLR=1;
 
 					temp = SciaRegs.SCIFFRX.bit.RXFFST;
-					for(i=0;i<temp;i++)								//æ ¡éªŒæŽ¥æ”¶åŒ…æ‹¬æŠ¥å¤´çš„å‰5ä½ä¿¡æ¯
+					for(i=0;i<temp;i++)								//Ð£Ñé½ÓÊÕ°üÀ¨±¨Í·µÄÇ°5Î»ÐÅÏ¢
 						SCI_canopen.rxb[0]=SciaRegs.SCIRXBUF.all&0x00FF;
 					
 				}
@@ -1721,41 +1719,41 @@ void Sci_canopenrx(void)
 					M_ClrFlag(SL_CANOPENHEAD);
 
 					temp = SciaRegs.SCIFFRX.bit.RXFFST;
-					for(i=0;i<temp;i++)								//æ ¡éªŒæŽ¥æ”¶åŒ…æ‹¬æŠ¥å¤´çš„å‰5ä½ä¿¡æ¯
+					for(i=0;i<temp;i++)								//Ð£Ñé½ÓÊÕ°üÀ¨±¨Í·µÄÇ°5Î»ÐÅÏ¢
 						SCI_canopen.rxb[0]=SciaRegs.SCIRXBUF.all&0x00FF;
 				}
 				
 			}
 		}
 //---------20130801----------
-		else if(SciaRegs.SCIFFRX.bit.RXFFST >= SCICANOPENRXNUM-2)			//æŽ¥æ”¶å®Œæˆ?
+		else if(SciaRegs.SCIFFRX.bit.RXFFST >= SCICANOPENRXNUM-2)			//½ÓÊÕÍê³É?
 		{
-//				M_NotFlag(SL_PHASEA);            							//2014-05-06ä¸´æ—¶æµ‹è¯•CANopen
+//				M_NotFlag(SL_PHASEA);            							//2014-05-06ÁÙÊ±²âÊÔCANopen
 //				*OUT3_ADDR = _OUT3_DATA;
 			
-				for(i=2;i<SCICANOPENRXNUM;i++)								//è¯»å‡ºæŽ¥æ”¶ç¼“å­˜(ä¸åŒ…æ‹¬æŠ¥å¤´)
-					SCI_canopen.rxb[i]=SciaRegs.SCIRXBUF.all&0x00FF;	//[5]-[12]æ˜¯4ä¸ªå­—çš„æŒ‡ä»¤æ•°æ®,[13]æ˜¯æ ¡éªŒä½
+				for(i=2;i<SCICANOPENRXNUM;i++)								//¶Á³ö½ÓÊÕ»º´æ(²»°üÀ¨±¨Í·)
+					SCI_canopen.rxb[i]=SciaRegs.SCIRXBUF.all&0x00FF;	//[5]-[12]ÊÇ4¸ö×ÖµÄÖ¸ÁîÊý¾Ý,[13]ÊÇÐ£ÑéÎ»
 				M_ClrFlag(SL_CANOPENHEADOK);
 				M_ClrFlag(SL_CANOPENHEAD);
 				
-				heartbeat= SCI_canopen.rxb[6] & ONEBYTE[0];  //201105CPC å¸¸ç‰µé€šè®¯"å¿ƒè·³ä½"æ˜¯Bit15
+				heartbeat= SCI_canopen.rxb[6] & ONEBYTE[0];  //201105CPC ³£Ç£Í¨Ñ¶"ÐÄÌøÎ»"ÊÇBit15
 				if(heartbeat!=SCI_canopen.heartbeat)
 				{
 					SCI_canopen.cnt_heartbeat=0;
-//    				M_NotFlag(SL_PHASEB);								//2014-05-06ä¸´æ—¶æµ‹è¯•CANopen
+//    				M_NotFlag(SL_PHASEB);								//2014-05-06ÁÙÊ±²âÊÔCANopen
 //    				*OUT3_ADDR = _OUT3_DATA;
 				}
 				SCI_canopen.heartbeat = heartbeat;
 
-				xor_data=SCI_canopen.rxb[0];								//å¼‚æˆ–æ ¡éªŒ
+				xor_data=SCI_canopen.rxb[0];								//Òì»òÐ£Ñé
 				for(i=1;i<(SCICANOPENRXNUM-1);i++)
 					xor_data ^= SCI_canopen.rxb[i];
 			
-				if(xor_data == SCI_canopen.rxb[SCICANOPENRXNUM-1])							//å¼‚æˆ–æ ¡éªŒç¬¦åˆ?
+				if(xor_data == SCI_canopen.rxb[SCICANOPENRXNUM-1])							//Òì»òÐ£Ñé·ûºÏ?
 				{
-//					if((SCI_canopen.rxb[5]|SCI_canopen.rxb[6]|SCI_canopen.rxb[7]|SCI_canopen.rxb[8]|SCI_canopen.rxb[9]|SCI_canopen.rxb[10]|SCI_canopen.rxb[11]|SCI_canopen.rxb[12])!=0) //å‰”å‡ºæ•°æ®éƒ½ç­‰äºŽ0çš„ååŒ…20090817
+//					if((SCI_canopen.rxb[5]|SCI_canopen.rxb[6]|SCI_canopen.rxb[7]|SCI_canopen.rxb[8]|SCI_canopen.rxb[9]|SCI_canopen.rxb[10]|SCI_canopen.rxb[11]|SCI_canopen.rxb[12])!=0) //ÌÞ³öÊý¾Ý¶¼µÈÓÚ0µÄ»µ°ü20090817
 //					{			
-					//æ•°æ®è½¬å­˜
+					//Êý¾Ý×ª´æ
 					SCI_canopen.rx_controlword=(SCI_canopen.rxb[6]<<8)|SCI_canopen.rxb[5];						//controlword
 				
 					SCI_canopen.rx_torque=(SCI_canopen.rxb[8]<<8)|SCI_canopen.rxb[7];							//torque_ref
@@ -1784,31 +1782,31 @@ void Sci_canopenrx(void)
 	}
 } 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Sci_canopentx_read
-** åŠŸèƒ½æè¿°: å¯¹G-Gateç½‘å…³ä¸‹å‘è¯»å–æ•°æ®æŒ‡ä»¤
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Sci_canopentx_read
+** ¹¦ÄÜÃèÊö: ¶ÔG-GateÍø¹ØÏÂ·¢¶ÁÈ¡Êý¾ÝÖ¸Áî
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:120507
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:120507
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Sci_canopentx_read(void)
 {
 	Uint16 i,xor_data;
 
-	SCI_canopen.txb[0]= CANOPENCOM_HEAD;						//æŠ¥å¤´
-	SCI_canopen.txb[1]= 0x0011;									//è¯»å‘½ä»¤å­—
-	SCI_canopen.txb[2]= 0x0002;									//å‘½ä»¤ä¿¡æ¯é•¿åº¦=åœ°å€åç§»é‡+æ•°æ®å­—èŠ‚æ•°é‡
-	SCI_canopen.txb[3]= 0x0011;									//ç‰¹å®šå‚æ•° æ’ä¸º0x11
-	SCI_canopen.txb[4]= 0x0000;									//åœ°å€åç§»é‡ è®¾ä¸º0
-	SCI_canopen.txb[5]=	0x0008;									//æ•°æ®é‡8ä¸ªå­—èŠ‚
+	SCI_canopen.txb[0]= CANOPENCOM_HEAD;						//±¨Í·
+	SCI_canopen.txb[1]= 0x0011;									//¶ÁÃüÁî×Ö
+	SCI_canopen.txb[2]= 0x0002;									//ÃüÁîÐÅÏ¢³¤¶È=µØÖ·Æ«ÒÆÁ¿+Êý¾Ý×Ö½ÚÊýÁ¿
+	SCI_canopen.txb[3]= 0x0011;									//ÌØ¶¨²ÎÊý ºãÎª0x11
+	SCI_canopen.txb[4]= 0x0000;									//µØÖ·Æ«ÒÆÁ¿ ÉèÎª0
+	SCI_canopen.txb[5]=	0x0008;									//Êý¾ÝÁ¿8¸ö×Ö½Ú
 
-	xor_data=SCI_canopen.txb[0];								//å¼‚æˆ–æ ¡éªŒ
+	xor_data=SCI_canopen.txb[0];								//Òì»òÐ£Ñé
 	for(i=1;i<SCICANOPENREADNUM-1;i++)
 		xor_data ^= SCI_canopen.txb[i];
 				
@@ -1820,17 +1818,17 @@ void Sci_canopentx_read(void)
 }  
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Sci_canopentx
-** åŠŸèƒ½æè¿°: å¯¹sci_CANOPENçš„æŽ¥æ”¶å‘é€è¿›è¡Œç»¼åˆæŽ§åˆ¶
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Sci_canopentx
+** ¹¦ÄÜÃèÊö: ¶Ôsci_CANOPENµÄ½ÓÊÕ·¢ËÍ½øÐÐ×ÛºÏ¿ØÖÆ
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Sci_canopentx(void)
@@ -1859,7 +1857,7 @@ void Sci_canopentx(void)
 		SCI_canopen.txb[15]=SCI_canopen.tx_demand&0x00FF;
 		SCI_canopen.txb[16]=(SCI_canopen.tx_demand&0xFF00)>>8;
 
-		xor_data=SCI_canopen.txb[0];									//å¼‚æˆ–æ ¡éªŒ
+		xor_data=SCI_canopen.txb[0];									//Òì»òÐ£Ñé
 		for(i=1;i<SCICANOPENTXNUM-1;i++)
 			xor_data ^= SCI_canopen.txb[i];
 				
@@ -1868,12 +1866,12 @@ void Sci_canopentx(void)
 		for(i=0;i<SCICANOPENTXNUM-2;i++)
 			SciaRegs.SCITXBUF=SCI_canopen.txb[i];
 */		
-//CPCé€šè®¯åè®®120507
-		SCI_canopen.txb[0]= CANOPENCOM_HEAD;						//æŠ¥å¤´
-		SCI_canopen.txb[1]= 0x0010;									//å†™å‘½ä»¤å­—
-		SCI_canopen.txb[2]= 17;										//å‘½ä»¤ä¿¡æ¯é•¿åº¦=åœ°å€åç§»é‡+æ•°æ®å­—èŠ‚æ•°é‡
-		SCI_canopen.txb[3]= 0x0011;									//ç‰¹å®šå‚æ•° æ’ä¸º0x11
-		SCI_canopen.txb[4]= 0x0000;									//åœ°å€åç§»é‡ è®¾ä¸º0
+//CPCÍ¨Ñ¶Ð­Òé120507	
+		SCI_canopen.txb[0]= CANOPENCOM_HEAD;						//±¨Í·
+		SCI_canopen.txb[1]= 0x0010;									//Ð´ÃüÁî×Ö
+		SCI_canopen.txb[2]= 17;										//ÃüÁîÐÅÏ¢³¤¶È=µØÖ·Æ«ÒÆÁ¿+Êý¾Ý×Ö½ÚÊýÁ¿
+		SCI_canopen.txb[3]= 0x0011;									//ÌØ¶¨²ÎÊý ºãÎª0x11
+		SCI_canopen.txb[4]= 0x0000;									//µØÖ·Æ«ÒÆÁ¿ ÉèÎª0
 
 		SCI_canopen.txb[5]=SCI_canopen.tx_torque&0x00FF;
 		SCI_canopen.txb[6]=(SCI_canopen.tx_torque&0xFF00)>>8;
@@ -1892,7 +1890,7 @@ void Sci_canopentx(void)
 		SCI_canopen.txb[19]=SCI_canopen.tx_demand&0x00FF;
 		SCI_canopen.txb[20]=(SCI_canopen.tx_demand&0xFF00)>>8;
 
-		xor_data=SCI_canopen.txb[0];								//å¼‚æˆ–æ ¡éªŒ
+		xor_data=SCI_canopen.txb[0];								//Òì»òÐ£Ñé
 		for(i=1;i<SCICANOPENTXNUM-1;i++)
 			xor_data ^= SCI_canopen.txb[i];
 				
@@ -1902,19 +1900,19 @@ void Sci_canopentx(void)
 			SciaRegs.SCITXBUF=SCI_canopen.txb[i];
 } 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: DataFilter
-** åŠŸèƒ½æè¿°: æ•°æ®æ»¤æ³¢
-** è¾“ã€€å…¥: 	Y(k-1)ä¸ºä¸Šæ¬¡æ»¤æ³¢ç»“æžœç—(k)î€¯è™è£³î‹‡æ€ ï¼ï¿½
-** è¾“ã€€å‡º: ï¼šY(k)ä¸ºæœ¬æ¬¡æ»¤æ³¢ç»“æžœã€‚
-** æ³¨  é‡Š: 	 æ»¤æ³¢å…¬å¼ä¸ºï¼šY(k)=cY(k-1)+(1-c)X(k),å…¶ä¸­ï¼Œc=1/(1+2*PAI*fh/fs),fhä¸ºä½Žé€šæ»¤æ³¢å™¨çš„æˆªæ­¢é¢‘çŽ‡ï¼Œfsä¸ºé‡‡æ ·é¢‘çŽ‡.
-			åœ¨ä¸€é˜¶ä½Žé€šæ»¤ã„–æ ¡ç—(k)æ¬¡çŒ‹(k)ã€‚
-			ç›´æµé‡è¯¯å·®1ï¼…ä¸ºç¨³å®šæ—¶é—´ã€‚
+** º¯ÊýÃû³Æ: DataFilter
+** ¹¦ÄÜÃèÊö: Êý¾ÝÂË²¨
+** Êä¡¡Èë: 	Y(k-1)ÎªÉÏ´ÎÂË²¨½á¹û¬X(k)ªÐÂ²ÉÑùÖµ¡£¡£
+** Êä¡¡³ö: £ºY(k)Îª±¾´ÎÂË²¨½á¹û¡£  
+** ×¢  ÊÍ: 	 ÂË²¨¹«Ê½Îª£ºY(k)=cY(k-1)+(1-c)X(k),ÆäÖÐ£¬c=1/(1+2*PAI*fh/fs),fhÎªµÍÍ¨ÂË²¨Æ÷µÄ½ØÖ¹ÆµÂÊ£¬fsÎª²ÉÑùÆµÂÊ.
+			ÔÚÒ»½×µÍÍ¨ÂË¨ÖÐ£¬X(k)´ÎªY(k)¡£
+			Ö±Á÷Á¿Îó²î1£¥ÎªÎÈ¶¨Ê±¼ä¡£
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void DataFilter( float c,float *out,float in)
@@ -1923,23 +1921,23 @@ void DataFilter( float c,float *out,float in)
 } 
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Bandstop filter
-** åŠŸèƒ½æè¿°: é™·æ³¢å™¨
-** è¾“ã€€å…¥:   w0 ä¸­å¿ƒé¢‘çŽ‡
-			 wb åŠä¸ªå¸¦é˜»é¢‘çŽ‡
+** º¯ÊýÃû³Æ: Bandstop filter 
+** ¹¦ÄÜÃèÊö: ÏÝ²¨Æ÷
+** Êä¡¡Èë:   w0 ÖÐÐÄÆµÂÊ
+			 wb °ë¸ö´ø×èÆµÂÊ
 			 Ts=2e-4
 			 
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 201110bjtu
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 201110bjtu
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥æœŸ:   201110 BJTULVRT201204
+** ÐÞ¸ÄÈË:
+** ÈÕÆÚ:   201110 BJTULVRT201204
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
-void BS_Loop(struct BS_DATA *var,struct BS_PARA BS_var)
+/*void BS_Loop(struct BS_DATA *var,struct BS_PARA BS_var)
 {
 
 	float outtemp,w0,wb,w2,W;
@@ -1948,13 +1946,13 @@ void BS_Loop(struct BS_DATA *var,struct BS_PARA BS_var)
 //test
 	w0 = BS_var.f0 * TWOPAI;
 	wb = BS_var.fb * TWOPAI;
-	w2 = 4 * tan(0.0001 * w0) * tan(0.0001 * w0);                   //w0^2ä¸­å¿ƒé¢‘çŽ‡å¹³æ–¹
-	W  = 4 * (tan(0.0001 * (w0 + wb)) - tan(0.0001 * (w0 - wb)));   //Wå¸¦å®½
+	w2 = 4 * tan(0.0001 * w0) * tan(0.0001 * w0);                   //w0^2ÖÐÐÄÆµÂÊÆ½·½
+	W  = 4 * (tan(0.0001 * (w0 + wb)) - tan(0.0001 * (w0 - wb)));   //W´ø¿í
     	
-    outtemp = ((4+w2) * var->in + (2* w2-8) * var->inp + (4+w2) * var->infp - (2* w2-8) * var->outp - (4-W+w2) * var->outfp) /(4+W+w2);     //è¾“å‡ºå‡½æ•°ï¼Œç”±ï¼ˆ5ï¼‰å¼å¾—ã€‚
+    outtemp = ((4+w2) * var->in + (2* w2-8) * var->inp + (4+w2) * var->infp - (2* w2-8) * var->outp - (4-W+w2) * var->outfp) /(4+W+w2);     //Êä³öº¯Êý£¬ÓÉ£¨5£©Ê½µÃ¡£
 
-	if     (outtemp >  BS_var.outmax)  outtemp =  BS_var.outmax;		//è¾“å‡ºé™å¹…
-	else if(outtemp < -BS_var.outmax)  outtemp = -BS_var.outmax;		//è¾“å‡ºé™å¹…
+	if     (outtemp >  BS_var.outmax)  outtemp =  BS_var.outmax;		//Êä³öÏÞ·ù
+	else if(outtemp < -BS_var.outmax)  outtemp = -BS_var.outmax;		//Êä³öÏÞ·ù
 
 	var->out  = outtemp;		
 
@@ -1964,21 +1962,21 @@ void BS_Loop(struct BS_DATA *var,struct BS_PARA BS_var)
 	var->outp  = var->out;      //out(k)-->out(k-1)				
 } 
 
-/***************************************************************
-** å‡½æ•°åç§°: Bandstop filter without pre-warped
-** åŠŸèƒ½æè¿°: é™·æ³¢å™¨-æ— é¢„ç•¸å˜
-** è¾“ã€€å…¥:   w0 ä¸­å¿ƒé¢‘çŽ‡
-			 wb åŠä¸ªå¸¦é˜»é¢‘çŽ‡
+/*********************************************************************************************************
+** º¯ÊýÃû³Æ: Bandstop filter without pre-warped
+** ¹¦ÄÜÃèÊö: ÏÝ²¨Æ÷-ÎÞÔ¤»û±ä
+** Êä¡¡Èë:   w0 ÖÐÐÄÆµÂÊ
+			 wb °ë¸ö´ø×èÆµÂÊ
 			 Ts=2e-4
 			 
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 201110bjtu
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 201110bjtu
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥æœŸ:   201110 BJTULVRT201204
+** ÐÞ¸ÄÈË:
+** ÈÕÆÚ:   201110 BJTULVRT201204
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void BS_Loop_S(struct BS_DATA *var,struct BS_PARA BS_var)
@@ -1988,13 +1986,13 @@ void BS_Loop_S(struct BS_DATA *var,struct BS_PARA BS_var)
 
 	w0 = BS_var.f0 * TWOPAI;
 	wb = BS_var.fb * TWOPAI;
-	w2 = 4e-8 * w0 * w0;            //w0^2ä¸­å¿ƒé¢‘çŽ‡å¹³æ–¹ æ— é¢„ç•¸å˜
-	W  = 8e-4  * wb;   				//Wå¸¦å®½
+	w2 = 4e-8 * w0 * w0;            //w0^2ÖÐÐÄÆµÂÊÆ½·½ ÎÞÔ¤»û±ä
+	W  = 8e-4  * wb;   				//W´ø¿í
     	
-    outtemp = ((4+w2) * var->in + (2* w2-8) * var->inp + (4+w2) * var->infp - (2* w2-8) * var->outp - (4-W+w2) * var->outfp) /(4+W+w2);     //è¾“å‡ºå‡½æ•°ï¼Œç”±ï¼ˆ5ï¼‰å¼å¾—ã€‚
+    outtemp = ((4+w2) * var->in + (2* w2-8) * var->inp + (4+w2) * var->infp - (2* w2-8) * var->outp - (4-W+w2) * var->outfp) /(4+W+w2);     //Êä³öº¯Êý£¬ÓÉ£¨5£©Ê½µÃ¡£
 
-	if     (outtemp >  BS_var.outmax)  outtemp =  BS_var.outmax;		//è¾“å‡ºé™å¹…
-	else if(outtemp < -BS_var.outmax)  outtemp = -BS_var.outmax;		//è¾“å‡ºé™å¹…
+	if     (outtemp >  BS_var.outmax)  outtemp =  BS_var.outmax;		//Êä³öÏÞ·ù
+	else if(outtemp < -BS_var.outmax)  outtemp = -BS_var.outmax;		//Êä³öÏÞ·ù
 
 	var->out  = outtemp;		
 
@@ -2005,30 +2003,30 @@ void BS_Loop_S(struct BS_DATA *var,struct BS_PARA BS_var)
 } 
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: 100Hz Bandstop filter
-** åŠŸèƒ½æè¿°: é™·æ³¢å™¨
-** è¾“ã€€å…¥:   w0=100 ä¸­å¿ƒé¢‘çŽ‡
-			 wb=+-50Hz åŠä¸ªå¸¦é˜»é¢‘çŽ‡
+** º¯ÊýÃû³Æ: 100Hz Bandstop filter 
+** ¹¦ÄÜÃèÊö: ÏÝ²¨Æ÷
+** Êä¡¡Èë:   w0=100 ÖÐÐÄÆµÂÊ
+			 wb=+-50Hz °ë¸ö´ø×èÆµÂÊ
 			 Ts=2e-4
 			 
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 201110bjtu
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 201110bjtu
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥æœŸ:   201110 BJTULVRT201204
+** ÐÞ¸ÄÈË:
+** ÈÕÆÚ:   201110 BJTULVRT201204
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void BS_Loop100(struct BS_DATA *var,struct BS_PARA BS_var)
 {
 	float outtemp;
     	
-    outtemp = 0.9409 * var->in - 1.8669 * var->inp + 0.9409 * var->infp + 1.8669 * var->outp - 0.8817 * var->outfp;     //è¾“å‡ºå‡½æ•°ï¼Œç”±ï¼ˆ5ï¼‰å¼å¾—ã€‚
+    outtemp = 0.9409 * var->in - 1.8669 * var->inp + 0.9409 * var->infp + 1.8669 * var->outp - 0.8817 * var->outfp;     //Êä³öº¯Êý£¬ÓÉ£¨5£©Ê½µÃ¡£
 
-	if     (outtemp >  BS_var.outmax)  outtemp =  BS_var.outmax;		//è¾“å‡ºé™å¹…
-	else if(outtemp < -BS_var.outmax)  outtemp = -BS_var.outmax;		//è¾“å‡ºé™å¹…
+	if     (outtemp >  BS_var.outmax)  outtemp =  BS_var.outmax;		//Êä³öÏÞ·ù
+	else if(outtemp < -BS_var.outmax)  outtemp = -BS_var.outmax;		//Êä³öÏÞ·ù
 
 	var->out  = outtemp;		
 
@@ -2040,88 +2038,88 @@ void BS_Loop100(struct BS_DATA *var,struct BS_PARA BS_var)
 
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Ad8364Ctrl
-** åŠŸèƒ½æè¿°: è¯»å–å¹¶å¤„ç†å‰ä¸€è”šæ·–î€šå”¤å³îîƒ¨îƒ¥é€¼èˆ³îˆ„ä¹±æ·®èœ›Dè½¬æ¢
-** æ´¹âˆªï¿½
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 	 æ¯æ¬¡éƒ½è¿è¡Œ
+** º¯ÊýÃû³Æ: Ad8364Ctrl
+** ¹¦ÄÜÃèÊö: ¶ÁÈ¡²¢´¦ÀíÇ°Ò»ÎµÄ×ª»»½á¹û£¬Í¬Ê±Æô¶¯ÏÂÒ»´ÎAD×ª»»
+** ä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 Ã¿´Î¶¼ÔËÐÐ
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Ad8364Ctrl(void)
 {
 	float tempa,tempb,tempc,temp;
 
-//------------------------------æ•°æ®è¯»å–(å…±18è·¯)---------------------------------
-//è¯¥ç»„ADæ•°æ®æ˜¯100usä¹‹å‰çš„ç»“æžœ
-	AD.dat[0] = *AD_ASTART;	       // STA.Ubc ç”µæœºå®šå­ä¾§ç”µåŽ‹Ubc
-	AD.dat[1] = *(AD_ASTART+1);    // AMUXï¼Œæ…¢é€Ÿä¿¡å·ï¼Œ16é€‰1è¿‡æ¥çš„ä¿¡å·
-//	AD.dat[2] = *(AD_ASTART+2);    // GRD.Ubc ä¸»æ–­å‰Ubc
-	AD.dat[2] = *(AD_ASTART+2);    // chopperç”µæµidc	20130805
-//	AD.dat[3] = *(AD_ASTART+3);    // Ic å¤‡ç”¨SKIIPç”µæµåé¦ˆ
-//	AD.dat[4] = *(AD_ASTART+4);    // GRD.Uab ä¸»æ–­å‰Uab
-	AD.dat[5] = *(AD_ASTART+5);    // MPR.ic, æœºä¾§å˜æµå™¨MPRçš„ç”µæµ
+//------------------------------Êý¾Ý¶ÁÈ¡(¹²18Â·)---------------------------------
+//¸Ã×éADÊý¾ÝÊÇ100usÖ®Ç°µÄ½á¹û
+	AD.dat[0] = *AD_ASTART;	       // STA.Ubc µç»ú¶¨×Ó²àµçÑ¹Ubc
+	AD.dat[1] = *(AD_ASTART+1);    // AMUX£¬ÂýËÙÐÅºÅ£¬16Ñ¡1¹ýÀ´µÄÐÅºÅ
+//	AD.dat[2] = *(AD_ASTART+2);    // GRD.Ubc Ö÷¶ÏÇ°Ubc
+	AD.dat[2] = *(AD_ASTART+2);    // chopperµçÁ÷idc	20130805
+//	AD.dat[3] = *(AD_ASTART+3);    // Ic ±¸ÓÃSKIIPµçÁ÷·´À¡
+//	AD.dat[4] = *(AD_ASTART+4);    // GRD.Uab Ö÷¶ÏÇ°Uab
+	AD.dat[5] = *(AD_ASTART+5);    // MPR.ic, »ú²à±äÁ÷Æ÷MPRµÄµçÁ÷
 
-	AD.dat[6]  = *AD_BSTART;       // NGS.Uab ç½‘ä¾§ç”µåŽ‹Ubcå¤§æ»¤æ³¢é€šé“
-	AD.dat[7]  = *(AD_BSTART+1);   // MPR.ibï¼Œæœºä¾§å˜æµå™¨NPR
-	AD.dat[8]  = *(AD_BSTART+2);   // NGS.Ubc ç½‘ä¾§ç”µåŽ‹Ubcå¤§æ»¤æ³¢é€šé“
-	AD.dat[9]  = *(AD_BSTART+3);   // MPR.iaï¼Œæœºä¾§å˜æµå™¨NPRçš„ç”µæµ
-	AD.dat[10] = *(AD_BSTART+4);   // Udc ä¸­é—´ç›´æµç”µåŽ‹
-	AD.dat[11] = *(AD_BSTART+5);   // NPR.icï¼Œç½‘ä¾§å˜æµå™¨NPRçš„ç”µæµ
+	AD.dat[6]  = *AD_BSTART;       // NGS.Uab Íø²àµçÑ¹Ubc´óÂË²¨Í¨µÀ
+	AD.dat[7]  = *(AD_BSTART+1);   // MPR.ib£¬»ú²à±äÁ÷Æ÷NPR
+	AD.dat[8]  = *(AD_BSTART+2);   // NGS.Ubc Íø²àµçÑ¹Ubc´óÂË²¨Í¨µÀ 
+	AD.dat[9]  = *(AD_BSTART+3);   // MPR.ia£¬»ú²à±äÁ÷Æ÷NPRµÄµçÁ÷ 
+	AD.dat[10] = *(AD_BSTART+4);   // Udc ÖÐ¼äÖ±Á÷µçÑ¹ 
+	AD.dat[11] = *(AD_BSTART+5);   // NPR.ic£¬Íø²à±äÁ÷Æ÷NPRµÄµçÁ÷
 
 //	AD.dat[12] = *AD_CSTART;       // Vdc2 
-	AD.dat[13] = *(AD_CSTART+1);   // NPR.ibï¼Œç½‘ä¾§å˜æµå™¨NPRçš„ç”µæµ
-	AD.dat[14] = *(AD_CSTART+2);   // NGS.Uab ç½‘ä¾§ç”µåŽ‹Uab
-	AD.dat[15] = *(AD_CSTART+3);   // NPR.iaï¼Œç½‘ä¾§å˜æµå™¨NPRçš„ç”µæµ
-	AD.dat[16] = *(AD_CSTART+4);   // STA.Uab ç”µæœºå®šå­ä¾§ç”µåŽ‹Uab
-	AD.dat[17] = *(AD_CSTART+5);   // NGS.Ubc ç½‘ä¾§ç”µåŽ‹Ubc
+	AD.dat[13] = *(AD_CSTART+1);   // NPR.ib£¬Íø²à±äÁ÷Æ÷NPRµÄµçÁ÷
+	AD.dat[14] = *(AD_CSTART+2);   // NGS.Uab Íø²àµçÑ¹Uab
+	AD.dat[15] = *(AD_CSTART+3);   // NPR.ia£¬Íø²à±äÁ÷Æ÷NPRµÄµçÁ÷
+	AD.dat[16] = *(AD_CSTART+4);   // STA.Uab µç»ú¶¨×Ó²àµçÑ¹Uab
+	AD.dat[17] = *(AD_CSTART+5);   // NGS.Ubc Íø²àµçÑ¹Ubc
 
-//----------------------------æ•°æ®è¯»å–ç»“æŸ------------------------------
+//----------------------------Êý¾Ý¶ÁÈ¡½áÊø------------------------------
 	
-	ADFINAL.ia1  = AD.dat[15];		// NPR.iaï¼Œç½‘ä¾§å˜æµå™¨NPRçš„ç”µæµ
-	ADFINAL.ib1  = AD.dat[13];	    // NPR.ibï¼Œç½‘ä¾§å˜æµå™¨NPRçš„ç”µæµ
-	ADFINAL.ic1  = AD.dat[11];	    // NPR.icï¼Œç½‘ä¾§å˜æµå™¨NPRçš„ç”µæµ
+	ADFINAL.ia1  = AD.dat[15];		// NPR.ia£¬Íø²à±äÁ÷Æ÷NPRµÄµçÁ÷
+	ADFINAL.ib1  = AD.dat[13];	    // NPR.ib£¬Íø²à±äÁ÷Æ÷NPRµÄµçÁ÷
+	ADFINAL.ic1  = AD.dat[11];	    // NPR.ic£¬Íø²à±äÁ÷Æ÷NPRµÄµçÁ÷
 
-	ADFINAL.ia2  = AD.dat[9];	    // MPR.iaï¼Œæœºä¾§å˜æµå™¨MPRçš„ç”µæµ
-	ADFINAL.ib2  = AD.dat[7];		// MPR.ibï¼Œæœºä¾§å˜æµå™¨MPRçš„ç”µæµ
-	ADFINAL.ic2  = AD.dat[5];		// MPR.ic, æœºä¾§å˜æµå™¨MPRçš„ç”µæµ
+	ADFINAL.ia2  = AD.dat[9];	    // MPR.ia£¬»ú²à±äÁ÷Æ÷NPRµÄµçÁ÷
+	ADFINAL.ib2  = AD.dat[7];		// MPR.ib£¬»ú²à±äÁ÷Æ÷NPRµÄµçÁ÷	
+	ADFINAL.ic2  = AD.dat[5];		// MPR.ic, »ú²à±äÁ÷Æ÷MPRµÄµçÁ÷	
 
-//	ADFINAL.uab   = AD.dat[4];       // GRD.Uab ä¸»æ–­å‰Uab
-//	ADFINAL.ubc   = AD.dat[2];		 // GRD.Ubc ä¸»æ–­å‰Ubc
-//	ADFINAL.isa  = AD.dat[2];		// å®šå­ç”µæµAç›¸ ä»¥æµå‡ºç”µæœºä¸ºæ­£
-//	ADFINAL.isc  = AD.dat[4];	    // å®šå­ç”µæµCç›¸ BJTULVRT201204
-	ADFINAL.idc  = AD.dat[2];		//chopperç”µæµidc	20130805
+//	ADFINAL.uab   = AD.dat[4];       // GRD.Uab Ö÷¶ÏÇ°Uab
+//	ADFINAL.ubc   = AD.dat[2];		 // GRD.Ubc Ö÷¶ÏÇ°Ubc
+//	ADFINAL.isa  = AD.dat[2];		// ¶¨×ÓµçÁ÷AÏà ÒÔÁ÷³öµç»úÎªÕý
+//	ADFINAL.isc  = AD.dat[4];	    // ¶¨×ÓµçÁ÷CÏà BJTULVRT201204
+	ADFINAL.idc  = AD.dat[2];		//chopperµçÁ÷idc	20130805
 
-	ADFINAL.uab1 = AD.dat[14];		// Uab ç½‘ä¾§ç”µåŽ‹
-	ADFINAL.ubc1 = AD.dat[17];		// Ubc ç½‘ä¾§ç”µåŽ‹
+	ADFINAL.uab1 = AD.dat[14];		// Uab Íø²àµçÑ¹		
+	ADFINAL.ubc1 = AD.dat[17];		// Ubc Íø²àµçÑ¹
 	
-	ADFINAL.uab2 = AD.dat[16];		// Uab ç”µæœºå®šå­ä¾§ç”µåŽ‹
-	ADFINAL.ubc2 = AD.dat[0];		// Ubc ç”µæœºå®šå­ä¾§ç”µåŽ‹
+	ADFINAL.uab2 = AD.dat[16];		// Uab ç»ú¶¨×Ó²àµçÑ¹		
+	ADFINAL.ubc2 = AD.dat[0];		// Ubc µç»ú¶¨×Ó²àµçÑ¹
 
-	ADFINAL.uab3 = AD.dat[6];		// Uab ç½‘ä¾§ç”µåŽ‹ å¤§æ»¤æ³¢é€šé“
-	ADFINAL.ubc3 = AD.dat[8];		// Ubc ç½‘ä¾§ç”µåŽ‹ å¤§æ»¤æ³¢é€šé“
+	ADFINAL.uab3 = AD.dat[6];		// Uab Íø²àµçÑ¹	´óÂË²¨Í¨µÀ 	
+	ADFINAL.ubc3 = AD.dat[8];		// Ubc Íø²àµçÑ¹ ´óÂË²¨Í¨µÀ 
 
 
-	ADFINAL.udc  = AD.dat[10];		//ä¸­é—´ç›´æµç”µåŽ‹æ£€æµ‹
+	ADFINAL.udc  = AD.dat[10];		//ÖÐ¼äÖ±Á÷µçÑ¹¼ì²â
 
     if(ADFINAL.udc < 0) ADFINAL.udc=0;
 
-	ADFINAL.AMUX = AD.dat[1];       //æ…¢é€ŸADè¾“å…¥
+	ADFINAL.AMUX = AD.dat[1];       //ÂýËÙADÊäÈë
 
 //-----------------------------------------------------------	     
 	switch(_OUT4_DATA)
 	{
-		case(8): {AMUX.NPR_tempa=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//NPRçš„Aç›¸æ¸©åº¦ï¼ŒSkiipåé¦ˆ,=10V*10/(32768) +20
-		case(10):{AMUX.NPR_tempb=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//NPRçš„Bç›¸æ¸©åº¦ï¼ŒSkiipåé¦ˆ,=10V*10/(32768) +20
-		case(12):{AMUX.NPR_tempc=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//NPRçš„Cç›¸æ¸©åº¦ï¼ŒSkiipåé¦ˆ,=10V*10/(32768) +20
-		case(11):{AMUX.MPR_tempa=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//MPRçš„Aç›¸æ¸©åº¦ï¼ŒSkiipåé¦ˆ,=10V*10/(32768) +20
-		case(9): {AMUX.MPR_tempb=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//MPRçš„Bç›¸æ¸©åº¦ï¼ŒSkiipåé¦ˆ,=10V*10/(32768) +20
-		case(2): {AMUX.MPR_tempc=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//MPRçš„Cç›¸æ¸©åº¦ï¼ŒSkiipåé¦ˆ,=10V*10/(32768) +20
+		case(8): {AMUX.NPR_tempa=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//NPRµÄAÏàÎÂ¶È£¬Skiip·´À¡,=10V*10/(32768) +20 			   				
+		case(10):{AMUX.NPR_tempb=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//NPRµÄBÏàÎÂ¶È£¬Skiip·´À¡,=10V*10/(32768) +20		    
+		case(12):{AMUX.NPR_tempc=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//NPRµÄCÏàÎÂ¶È£¬Skiip·´À¡,=10V*10/(32768) +20			    
+		case(11):{AMUX.MPR_tempa=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//MPRµÄAÏàÎÂ¶È£¬Skiip·´À¡,=10V*10/(32768) +20			    
+		case(9): {AMUX.MPR_tempb=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//MPRµÄBÏàÎÂ¶È£¬Skiip·´À¡,=10V*10/(32768) +20	     
+		case(2): {AMUX.MPR_tempc=ADFINAL.AMUX   * 0.0030517 + 20;   break; }	//MPRµÄCÏàÎÂ¶È£¬Skiip·´À¡,=10V*10/(32768) +20
         case(1): {
                   AMUX.Lac_R=(ADFINAL.AMUX+49152) /(491.52- 0.001* ADFINAL.AMUX);//new PCB PT100(Rt=100R+0.39*T)
              	  AMUX.Lac_temp=2.5641 * (AMUX.Lac_R - 100);
@@ -2132,26 +2130,26 @@ void Ad8364Ctrl(void)
              	  AMUX.Ldudt_temp=2.5641 * (AMUX.Ldudt_R - 100);
              	  break; 
              	 }
-//---------------ä¸­é—´ç›´æµæ–©æ³¢å™¨-IGBTç”µæµBJTULVRT201204---------------------------
+//---------------ÖÐ¼äÖ±Á÷Õ¶²¨Æ÷-IGBTµçÁ÷BJTULVRT201204---------------------------
 /*		case(5): {
 					ADFINAL.idc = ADFINAL.AMUX ;
-					AD_OUT_DC_I.b = ADFINAL.idc * 7.6294e-2 * 1.0000000;  //20æ¬§é‡‡ç”¨ç”µé˜»,700Aå¯¹åº”140mA(1:5000) =10V*700A/(32768*20R*140mA)
+					AD_OUT_DC_I.b = ADFINAL.idc * 7.6294e-2 * 1.0000000;  //20Å·²ÉÓÃµç×è,700A¶ÔÓ¦140mA(1:5000) =10V*700A/(32768*20R*140mA)
 					break;
 				 }
-*///		case(5): {AD_OUT_STA_I.ac=ADFINAL.AMUX  * 0.0732422;		break; }	//ç”µæœºå®šå­ä¾§Aç›¸çº¿ç”µæµï¼Œäº’æ„Ÿå™¨1200A:1A,Rt=5R,=1200A*10V/(5R*1A*32768)
-//		case(4): {AD_OUT_STA_I.ba=ADFINAL.AMUX  * 0.0732422;		break; }	//ç”µæœºå®šå­ä¾§Bç›¸çº¿ç”µæµï¼Œäº’æ„Ÿå™¨
+*///		case(5): {AD_OUT_STA_I.ac=ADFINAL.AMUX  * 0.0732422;		break; }	//µç»ú¶¨×Ó²àAÏàÏßµçÁ÷£¬»¥¸ÐÆ÷1200A:1A,Rt=5R,=1200A*10V/(5R*1A*32768)			     
+//		case(4): {AD_OUT_STA_I.ba=ADFINAL.AMUX  * 0.0732422;		break; }	//µç»ú¶¨×Ó²àBÏàÏßµçÁ÷£¬»¥¸ÐÆ÷
 //20130805
-		case(5): {AD_OUT_STA_I.ac=ADFINAL.AMUX  * 0.0732422;		break; }	//ç”µæœºå®šå­ä¾§Aç›¸çº¿ç”µæµï¼Œäº’æ„Ÿå™¨1200A:1A,Rt=5R,=1200A*10V/(5R*1A*32768)
-		case(4): {AD_OUT_STA_I.ba=ADFINAL.AMUX  * 0.0732422;		break; }	//ç”µæœºå®šå­ä¾§Bç›¸çº¿ç”µæµï¼Œäº’æ„Ÿå™¨
+		case(5): {AD_OUT_STA_I.ac=ADFINAL.AMUX  * 0.0732422;		break; }	//µç»ú¶¨×Ó²àAÏàÏßµçÁ÷£¬»¥¸ÐÆ÷1200A:1A,Rt=5R,=1200A*10V/(5R*1A*32768)			     
+		case(4): {AD_OUT_STA_I.ba=ADFINAL.AMUX  * 0.0732422;		break; }	//µç»ú¶¨×Ó²àBÏàÏßµçÁ÷£¬»¥¸ÐÆ÷
 //--------
-		case(7): {AD_OUT_SCR_I.a =ADFINAL.AMUX  * 0.0305176;		break; }	//ActiveCROWBARä¸­Aç›¸SCRç”µæµï¼Œç”µæµLEM/ç”µåŽ‹åž‹åé¦ˆ4A--400V =10V*400A/(32768*4V)
-		case(6): {AD_OUT_SCR_I.b =ADFINAL.AMUX  * 0.0305176;		break; }	//ActiveCROWBARä¸­Bç›¸SCRç”µæµï¼Œç”µæµLEM/ç”µåŽ‹åž‹åé¦ˆ4A--400V =10V*400A/(32768*4V)
+		case(7): {AD_OUT_SCR_I.a =ADFINAL.AMUX  * 0.0305176;		break; }	//ActiveCROWBARÖÐAÏàSCRµçÁ÷£¬µçÁ÷LEM/µçÑ¹ÐÍ·´À¡4A--400V =10V*400A/(32768*4V)			     
+		case(6): {AD_OUT_SCR_I.b =ADFINAL.AMUX  * 0.0305176;		break; }	//ActiveCROWBARÖÐBÏàSCRµçÁ÷£¬µçÁ÷LEM/µçÑ¹ÐÍ·´À¡4A--400V =10V*400A/(32768*4V)
 		default: break; 			      
 	}
 
 	if(M_ChkCounter(MAIN_LOOP.cnt_AMUX,DELAY_AMUX)>=0)
 	{
-	    MAIN_LOOP.cnt_AMUX=0;                         							//5msè¯»ä¸€æ¬¡æ…¢é€ŸAD
+	    MAIN_LOOP.cnt_AMUX=0;                         							//5ms¶ÁÒ»´ÎÂýËÙAD	     
 	     _OUT_AMUX1++;
 		 if(_OUT_AMUX1 >= 12) _OUT_AMUX1=0;
 		 _OUT4_DATA = _OUT_AMUX1;
@@ -2167,17 +2165,17 @@ void Ad8364Ctrl(void)
 
 //----20130805----
 	AD_OUT_STA_I.cb = - AD_OUT_STA_I.ac - AD_OUT_STA_I.ba;
-	AD_OUT_DC_I.b = ADFINAL.idc * 7.6294e-2 * 1.0000000;  //20æ¬§é‡‡ç”¨ç”µé˜»,700Aå¯¹åº”140mA(1:5000) =10V*700A/(32768*20R*140mA)
+	AD_OUT_DC_I.b = ADFINAL.idc * 7.6294e-2 * 1.0000000;  //20Å·²ÉÓÃµç×è,700A¶ÔÓ¦140mA(1:5000) =10V*700A/(32768*20R*140mA)
 //----------------
 
-//-------------------å®šå­ç”µæµï¼ˆå•ä½Aï¼‰-------------------------------------------------------------
+//-------------------¶¨×ÓµçÁ÷£¨µ¥Î»A£©-------------------------------------------------------------
 /*	AD_OUT_STA_I.a  =  (AD_OUT_STA_I.ac - AD_OUT_STA_I.ba) * 0.3333333;
 	AD_OUT_STA_I.b  =   AD_OUT_STA_I.a  + AD_OUT_STA_I.ba;	
     AD_OUT_STA_I.c  = - AD_OUT_STA_I.a  - AD_OUT_STA_I.b; 
 */
-//-------------------å®šå­ç”µæµï¼ˆå•ä½Aï¼‰-BJTULVRT201204------------------------------------------------------------
-/*	AD_OUT_STA_I.ac =   ADFINAL.isa  * 0.114441;	//LEM2000Aç”µæœºå®šå­ä¾§Aç›¸çº¿ç”µæµï¼Œ1500A-4V;==(1500/4*10)/32768  20111128
-	AD_OUT_STA_I.cb =   ADFINAL.isc  * 0.114441;	//LEM2000Aç”µæœºå®šå­ä¾§Bç›¸çº¿ç”µæµï¼Œ200A-100mA;50.0ohmé‡‡æ ·,==10V*200A*D/(100mA*50R*32768*1) INA114åç›¸ 20111128
+//-------------------¶¨×ÓµçÁ÷£¨µ¥Î»A£©-BJTULVRT201204------------------------------------------------------------
+/*	AD_OUT_STA_I.ac =   ADFINAL.isa  * 0.114441;	//LEM2000Aµç»ú¶¨×Ó²àAÏàÏßµçÁ÷£¬1500A-4V;==(1500/4*10)/32768  20111128
+	AD_OUT_STA_I.cb =   ADFINAL.isc  * 0.114441;	//LEM2000Aµç»ú¶¨×Ó²àBÏàÏßµçÁ÷£¬200A-100mA;50.0ohm²ÉÑù,==10V*200A*D/(100mA*50R*32768*1) INA114·´Ïà 20111128
 	AD_OUT_STA_I.ba = - AD_OUT_STA_I.ac - AD_OUT_STA_I.cb;
 */
 	AD_OUT_STA_I.a  =  (AD_OUT_STA_I.ac - AD_OUT_STA_I.ba) * 0.3333333;	//201112fluxObs
@@ -2185,21 +2183,21 @@ void Ad8364Ctrl(void)
     AD_OUT_STA_I.c  = - AD_OUT_STA_I.a  - AD_OUT_STA_I.b;
 	tempa = abs(AD_OUT_STA_I.ac);
 	tempb = abs(AD_OUT_STA_I.cb);
-	DataFilter(0.9999,&MEAN_DATA.iac3,tempa); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.icb3,tempb); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.iac3,tempa); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.icb3,tempb); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
 
 	tempa = abs(AD_OUT_STA_I.a);
 	tempb = abs(AD_OUT_STA_I.b);
 	tempc = abs(AD_OUT_STA_I.c);
-	DataFilter(0.9999,&MEAN_DATA.ia3,tempa); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ib3,tempb); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ic3,tempc); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.ia3,tempa); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ib3,tempb); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ic3,tempc); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
 
-//------------------ç½‘ä¾§å˜æµå™¨ç”µæµ------------------------------------------------------------------
-    AD_OUT_NPR_I.a = - (ADFINAL.ia1 * 0.0572204);  // SKIIPåé¦ˆç”µæµ(æµå‡ºæ¡¥è‡‚ä¸ºæ­£),åº•æ¿æœ‰ä¸€ä¸ªåå‘ï¼Œ10V=1875A,=10V*1875A/(32768*10V)
-	AD_OUT_NPR_I.b = - (ADFINAL.ib1 * 0.0572204);  // SKIIPåé¦ˆç”µæµ(æµå‡ºæ¡¥è‡‚ä¸ºæ­£)ï¼ŒæŽ§åˆ¶ç®—æ³•ä»¥æµå‡ºSKIIPï¿½
-	AD_OUT_NPR_I.c = - (ADFINAL.ic1 * 0.0572204);  // SKIIPåé¦ˆç”µæµ(æµå‡ºæ¡¥è‡‚ä¸ºæ­£)
-//---20121103-----------------å¹¶ç½‘ç”µæµçž¬æ—¶å€¼ä¿æŠ¤-201011LVRT--------------------------
+//------------------Íø²à±äÁ÷Æ÷µçÁ÷------------------------------------------------------------------
+    AD_OUT_NPR_I.a = - (ADFINAL.ia1 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý),µ×°åÓÐÒ»¸ö·´Ïò£¬10V=1875A,=10V*1875A/(32768*10V)
+	AD_OUT_NPR_I.b = - (ADFINAL.ib1 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)£¬¿ØÖÆËã·¨ÒÔÁ÷³öSKIIPý
+	AD_OUT_NPR_I.c = - (ADFINAL.ic1 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)
+//---20121103-----------------²¢ÍøµçÁ÷Ë²Ê±Öµ±£»¤-201011LVRT--------------------------
 	if(abs(AD_OUT_NPR_I.a)>abs( AD_OUT_NPR_I.b))
 	{
 		if(abs( AD_OUT_NPR_I.a)>abs( AD_OUT_NPR_I.c))	temp=abs(AD_OUT_NPR_I.a);
@@ -2211,22 +2209,22 @@ void Ad8364Ctrl(void)
 		else										    temp=abs(AD_OUT_NPR_I.c);
 	}
 
-	PRO.NPR_iac = temp * 100 / NPR_IACN;			//å¹¶ç½‘ç”µæµçž¬æ—¶æœ€å¤§å€¼ï¼ŒåŸºå‡†ç”µæµçš„ç™¾åˆ†å€¼
+	PRO.NPR_iac = temp * 100 / NPR_IACN;			//²¢ÍøµçÁ÷Ë²Ê±×î´óÖµ£¬»ù×¼µçÁ÷µÄ°Ù·ÖÖµ
 
-//-------------------æœºä¾§å˜æµå™¨ç”µæµè½¬ä¸ºå®žé™…å€¼-201005atcpc-----------------------------------------------------
-	if(R_PHORDE==1)		//åç›¸åºæŽ§åˆ¶201005atcpc
+//-------------------»ú²à±äÁ÷Æ÷µçÁ÷×ªÎªÊµ¼ÊÖµ-201005atcpc-----------------------------------------------------
+	if(R_PHORDE==1)		//·´ÏàÐò¿ØÖÆ201005atcpc
 	{
-    	AD_OUT_MPR_I.b =  (ADFINAL.ia2 * 0.0572204);  // SKIIPåé¦ˆç”µæµ(æµå‡ºæ¡¥è‡‚ä¸ºæ­£),åº•æ¿æœ‰ä¸€ä¸ªåå‘ï¼Œ10V=1875A,=10V*1875A/(32768*10V)
-		AD_OUT_MPR_I.a =  (ADFINAL.ib2 * 0.0572204);  // SKIIPåé¦ˆç”µæµ(æµå‡ºæ¡¥è‡‚ä¸ºæ­£)ï¼ŒæŽ§åˆ¶ç®—æ³•ä»¥æµå‡ºSKIIPä¸ºï¿½
-		AD_OUT_MPR_I.c =  (ADFINAL.ic2 * 0.0572204);  // SKIIPåé¦ˆç”µæµ(æµå‡ºæ¡¥è‡‚ä¸ºæ­£)
+    	AD_OUT_MPR_I.b =  (ADFINAL.ia2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý),µ×°åÓÐÒ»¸ö·´Ïò£¬10V=1875A,=10V*1875A/(32768*10V)
+		AD_OUT_MPR_I.a =  (ADFINAL.ib2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)£¬¿ØÖÆËã·¨ÒÔÁ÷³öSKIIPÎªý
+		AD_OUT_MPR_I.c =  (ADFINAL.ic2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)
 	}
 	else
 	{
-	    AD_OUT_MPR_I.a =  (ADFINAL.ia2 * 0.0572204);  // SKIIPåé¦ˆç”µæµ(æµå‡ºæ¡¥è‡‚ä¸ºæ­£),åº•æ¿æœ‰ä¸€ä¸ªåå‘ï¼Œ10V=1875A,=10V*1875A/(32768*10V)
-		AD_OUT_MPR_I.b =  (ADFINAL.ib2 * 0.0572204);  // SKIIPåé¦ˆç”µæµ(æµå‡ºæ¡¥è‡‚ä¸ºæ­£)ï¼ŒæŽ§åˆ¶ç®—æ³•ä»¥æµå‡ºSKIIPä¸ºæ­£
-		AD_OUT_MPR_I.c =  (ADFINAL.ic2 * 0.0572204);  // SKIIPåé¦ˆç”µæµ(æµå‡ºæ¡¥è‡‚ä¸ºæ­£)
+	    AD_OUT_MPR_I.a =  (ADFINAL.ia2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý),µ×°åÓÐÒ»¸ö·´Ïò£¬10V=1875A,=10V*1875A/(32768*10V)
+		AD_OUT_MPR_I.b =  (ADFINAL.ib2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)£¬¿ØÖÆËã·¨ÒÔÁ÷³öSKIIPÎªÕý
+		AD_OUT_MPR_I.c =  (ADFINAL.ic2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)
 	}
-//----20121103----------------è½¬å­ç”µæµçž¬æ—¶å€¼ä¿æŠ¤-----201011LVRT----------------------
+//----20121103----------------×ª×ÓµçÁ÷Ë²Ê±Öµ±£»¤-----201011LVRT----------------------
 	if(abs(AD_OUT_MPR_I.a)>abs(AD_OUT_MPR_I.b))
 	{
 		if(abs(AD_OUT_MPR_I.a)>abs(AD_OUT_MPR_I.c))		temp=abs(AD_OUT_MPR_I.a);
@@ -2238,166 +2236,166 @@ void Ad8364Ctrl(void)
 		else											temp=abs(AD_OUT_MPR_I.c);
 	}
 
-	PRO.MPR_iac = temp * 100 / MPR_IACN;		//è½¬å­ç”µéž”ç¬¾æ‹…îƒ–î‹ˆå«‰çªçš„ç™¾åˆ†å€¼
+	PRO.MPR_iac = temp * 100 / MPR_IACN;		//×ª×Óµç÷´óÖµ£¬»ù×¼µç÷µÄ°Ù·ÖÖµ
 
-//---------------------ç›´æµç”µåŽ‹----------------------------------------------------------------------
+//---------------------Ö±Á÷µçÑ¹----------------------------------------------------------------------
     AD_OUT_UDC      = ADFINAL.udc * 0.0448788;   // LEM(40mA=1500V),Rt=255R,=10V*1500V/(32768*255R*40mA)
-	DataFilter(0.44,&MEAN_DATA.udc,AD_OUT_UDC);  //Vdcç›´æµæ»¤æ³¢ï¼Œfh=1kHz
-//	DataFilter(0.7,&MEAN_DATA.udc,AD_OUT_UDC);   //Vdcç›´æµæ»¤æ³¢ï¼Œfh=340Hz 201005atcpc
+	DataFilter(0.44,&MEAN_DATA.udc,AD_OUT_UDC);  //VdcÖ±Á÷ÂË²¨£¬fh=1kHz
+//	DataFilter(0.7,&MEAN_DATA.udc,AD_OUT_UDC);   //VdcÖ±Á÷ÂË²¨£¬fh=340Hz 201005atcpc
     AD_OUT_UDC      = MEAN_DATA.udc;
 //    AD_OUT_UDC      = 1100;	//controltest
-//----20121103------------ä¸­é—´ç›´æµç”µåŽ‹ä¿æŠ¤å€¼è®¡ç®—-201011LVRT----------------------------
+//----20121103------------ÖÐ¼äÖ±Á÷µçÑ¹±£»¤Öµ¼ÆËã-201011LVRT----------------------------
 
-	PRO.udc  = AD_OUT_UDC;	                                 //å•ä½V
+	PRO.udc  = AD_OUT_UDC;	                                 //µ¥Î»V
 						
-//---------------------ä¸»æ–­å‰ç”µç½‘ç”µåŽ‹---------------------------------------------------------------------
+//---------------------Ö÷¶ÏÇ°µçÍøµçÑ¹---------------------------------------------------------------------
 //	AD_OUT_GRD_U.ab = ADFINAL.uab * 0.0448788;   // LEM(40mA=1500V),Rt=255R,=10V*1500V/(32768*255R*40mA)
 //	AD_OUT_GRD_U.bc = ADFINAL.ubc * 0.0448788;   // LEM(40mA=1500V),Rt=255R,=10V*1500V/(32768*255R*40mA) 
 
-//---------------------ä¸»æ–­åŽç”µç½‘ç”µåŽ‹---------------------------------------------------------------------
+//---------------------Ö÷¶ÏºóµçÍøµçÑ¹---------------------------------------------------------------------
 	AD_OUT_NGS_U.ab = ADFINAL.uab1 * 0.0448788;   // LEM(40mA=1500V),Rt=255R,=10V*1500V/(32768*255R*40mA)
 	AD_OUT_NGS_U.bc = ADFINAL.ubc1 * 0.0448788;   // LEM(40mA=1500V),Rt=255R,=10V*1500V/(32768*255R*40mA)
 
-//-------------------ç”µæœºå®šå­ä¾§çº¿ç”µåŽ‹---------------------------------------------
+//-------------------µç»ú¶¨×Ó²àÏßµçÑ¹---------------------------------------------
 	AD_OUT_STA_U.ab  = ADFINAL.uab2 * 0.0448788;  // LEM(40mA=1500V),Rt=255R,=10V*1500V/(32768*255R*40mA)
 	AD_OUT_STA_U.bc  = ADFINAL.ubc2 * 0.0448788;  // LEM(40mA=1500V),Rt=255R,=10V*1500V/(32768*255R*40mA)
 
-//-------------------ä¸»æ–­åŽç”µç½‘ç”µåŽ‹,å¤§æ»¤æ³¢é€šé“---------------------------------------------
+//-------------------Ö÷¶ÏºóµçÍøµçÑ¹,´óÂË²¨Í¨µÀ---------------------------------------------
 	AD_OUT_NGF_U.ab  = ADFINAL.uab3 * 0.0448788;  // LEM(40mA=1500V),Rt=255R,=10V*1500V/(32768*255R*40mA)
 	AD_OUT_NGF_U.bc  = ADFINAL.ubc3 * 0.0448788;  // LEM(40mA=1500V),Rt=255R,=10V*1500V/(32768*255R*40mA)
 /* 
-//---------------------é›¶æ¼‚æ»¤æ³¢201005atcpc-------------------------------------------------------------------
-	DataFilter(0.999985,&MEAN_DATA.zfia1,AD_OUT_NPR_I.a); //ç½‘ä¾§ç”µæµä¼ æ„Ÿå™¨	é›¶æ¼‚æ»¤æ³¢60S
-	DataFilter(0.999985,&MEAN_DATA.zfib1,AD_OUT_NPR_I.b); //ç½‘ä¾§ç”µæµä¼ æ„Ÿå™¨	é›¶æ¼‚æ»¤æ³¢60S
-	DataFilter(0.999985,&MEAN_DATA.zfic1,AD_OUT_NPR_I.c); //ç½‘ä¾§ç”µæµä¼ æ„Ÿå™¨	é›¶æ¼‚æ»¤æ³¢60S
+//---------------------ÁãÆ¯ÂË²¨201005atcpc-------------------------------------------------------------------	
+	DataFilter(0.999985,&MEAN_DATA.zfia1,AD_OUT_NPR_I.a); //Íø²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
+	DataFilter(0.999985,&MEAN_DATA.zfib1,AD_OUT_NPR_I.b); //Íø²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
+	DataFilter(0.999985,&MEAN_DATA.zfic1,AD_OUT_NPR_I.c); //Íø²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
 
-	DataFilter(0.999985,&MEAN_DATA.zfia3,AD_OUT_STA_I.a); //å®šå­ä¾§ç”µæµä¼ æ„Ÿå™¨	é›¶æ¼‚æ»¤æ³¢60S
-	DataFilter(0.999985,&MEAN_DATA.zfib3,AD_OUT_STA_I.b); //å®šå­ä¾§ç”µæµä¼ æ„Ÿå™¨	é›¶æ¼‚çž¬ï¿½0S
-	DataFilter(0.999985,&MEAN_DATA.zfic3,AD_OUT_STA_I.c); //å®šå­ä¾§ç”µæµä¼ æ„Ÿå™¨	é›¶æ¼‚æ»¤æ³¢60S
+	DataFilter(0.999985,&MEAN_DATA.zfia3,AD_OUT_STA_I.a); //¶¨×Ó²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
+	DataFilter(0.999985,&MEAN_DATA.zfib3,AD_OUT_STA_I.b); //¶¨×Ó²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯Ë²¨60S
+	DataFilter(0.999985,&MEAN_DATA.zfic3,AD_OUT_STA_I.c); //¶¨×Ó²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
 
-	DataFilter(0.999985,&MEAN_DATA.zfuab,AD_OUT_GRD_U.ab); //ä¸»æ–­å‰ç½‘åŽ‹ç”µåŽ‹ä¼ æ„Ÿå™¨	é›¶æ¼‚æ»¤æ³¢60S
-	DataFilter(0.999985,&MEAN_DATA.zfubc,AD_OUT_GRD_U.bc); //ä¸»æ–­å‰ç½‘åŽ‹ç”µåŽ‹ä¼ æ„Ÿå™¨	é›¶æ¼‚æ»¤æ³¢60S
+	DataFilter(0.999985,&MEAN_DATA.zfuab,AD_OUT_GRD_U.ab); //Ö÷¶ÏÇ°ÍøÑ¹µçÑ¹´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
+	DataFilter(0.999985,&MEAN_DATA.zfubc,AD_OUT_GRD_U.bc); //Ö÷¶ÏÇ°ÍøÑ¹µçÑ¹´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S 
 
-	DataFilter(0.999985,&MEAN_DATA.zfuab1,AD_OUT_NGS_U.ab); //ç½‘åŽ‹ç”µåŽ‹ä¼ æ„Ÿå™¨	é›¶æ¼‚æ»¤æ³¢60S
-	DataFilter(0.999985,&MEAN_DATA.zfubc1,AD_OUT_NGS_U.bc); //ç½‘åŽ‹ç”µåŽ‹ä¼ æ„Ÿå™¨	é›¶æ¼‚æ»¤æ³¢60S
+	DataFilter(0.999985,&MEAN_DATA.zfuab1,AD_OUT_NGS_U.ab); //ÍøÑ¹µçÑ¹´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
+	DataFilter(0.999985,&MEAN_DATA.zfubc1,AD_OUT_NGS_U.bc); //ÍøÑ¹µçÑ¹´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
 
 
-//------------------é™¤ãƒæ¼‚--ç”µæœºè¯•éªŒä¸å…è®¸å¯¹æœºä¾§ç”µæµè¿›è¡Œé›¶æ¼‚æ»¤æ³¢ï¼201005atcpc-------------------------------------------------------------------
+//------------------³ý¥ÁÆ¯--µç»úÊÔÑé²»ÔÊÐí¶Ô»ú²àµçÁ÷½øÐÐÁãÆ¯ÂË²¨£¡201005atcpc-------------------------------------------------------------------
 	if(M_ChkFlag(SL_SENSZFSTDY)!=0)
 	{
-		AD_OUT_NPR_I.a = AD_OUT_NPR_I.a - MEAN_DATA.zfia1;  //ç½‘ä¾§ç”µæµ
+		AD_OUT_NPR_I.a = AD_OUT_NPR_I.a - MEAN_DATA.zfia1;  //Íø²àµçÁ÷
 		AD_OUT_NPR_I.b = AD_OUT_NPR_I.b - MEAN_DATA.zfib1;
 		AD_OUT_NPR_I.c = AD_OUT_NPR_I.c - MEAN_DATA.zfic1;
 
-		AD_OUT_STA_I.a = AD_OUT_STA_I.a - MEAN_DATA.zfia3;  //å®šå­ä¾§ç”µæµ
+		AD_OUT_STA_I.a = AD_OUT_STA_I.a - MEAN_DATA.zfia3;  //¶¨×Ó²àµçÁ÷
 		AD_OUT_STA_I.b = AD_OUT_STA_I.b - MEAN_DATA.zfib3; 
 		AD_OUT_STA_I.c = AD_OUT_STA_I.c - MEAN_DATA.zfic3; 
 
-		AD_OUT_GRD_U.ab = AD_OUT_GRD_U.ab - MEAN_DATA.zfuab; //ä¸»æ–­å‰ç½‘åŽ‹ç”µåŽ‹
+		AD_OUT_GRD_U.ab = AD_OUT_GRD_U.ab - MEAN_DATA.zfuab; //Ö÷¶ÏÇ°ÍøÑ¹µçÑ¹
 		AD_OUT_GRD_U.bc = AD_OUT_GRD_U.bc - MEAN_DATA.zfubc; 
 
-		AD_OUT_NGS_U.ab = AD_OUT_NGS_U.ab - MEAN_DATA.zfuab1; //ç½‘åŽ‹ç”µåŽ‹
+		AD_OUT_NGS_U.ab = AD_OUT_NGS_U.ab - MEAN_DATA.zfuab1; //ÍøÑ¹µçÑ¹
 		AD_OUT_NGS_U.bc = AD_OUT_NGS_U.bc - MEAN_DATA.zfubc1;	
 	}
 */
-//-------------------ä¸»æ–­å‰ç”µç½‘ç”µåŽ‹ï¼Œç”±å“æ£ºî€­î€®å˜Œï¿½-----------------------------------------------------
+//-------------------Ö÷¶ÏÇ°µçÍøµçÑ¹£¬ÓÉßÑ¹×ªÎªÏàÑ¹------------------------------------------------------
 //	AD_OUT_GRD_U.b  = (AD_OUT_GRD_U.bc - AD_OUT_GRD_U.ab) * 0.3333333;
 //	AD_OUT_GRD_U.a  = AD_OUT_GRD_U.b + AD_OUT_GRD_U.ab;	
 //	AD_OUT_GRD_U.c  = - AD_OUT_GRD_U.a - AD_OUT_GRD_U.b; 
 
-//-------------------ç”µç½‘ç”µåŽ‹ï¼Œç”±çº¿åŽ‹è½¬ä¸ºç›¸åŽ‹------------------------------------------------------
+//-------------------µçÍøµçÑ¹£¬ÓÉÏßÑ¹×ªÎªÏàÑ¹------------------------------------------------------
 	AD_OUT_NGS_U.b  = (AD_OUT_NGS_U.bc - AD_OUT_NGS_U.ab) * 0.3333333;
 	AD_OUT_NGS_U.a  = AD_OUT_NGS_U.b + AD_OUT_NGS_U.ab;	
 	AD_OUT_NGS_U.c  = - AD_OUT_NGS_U.a - AD_OUT_NGS_U.b;
 
-//-------------------ç”µæœºã„—ç¡¬å—Ÿç¼ªæ¢—îƒ®ä¸Šå“é¡¾é˜†å˜Œï¿½-----------------------------------------------------
+//-------------------µç»ú¨×Ó²àµçÑ¹£¬ÓÉÏßÑ¹ËãÏàÑ¹------------------------------------------------------
 	AD_OUT_STA_U.b  = (AD_OUT_STA_U.bc - AD_OUT_STA_U.ab) * 0.3333333;
 	AD_OUT_STA_U.a  = AD_OUT_STA_U.b + AD_OUT_STA_U.ab;	
     AD_OUT_STA_U.c  = - AD_OUT_STA_U.a - AD_OUT_STA_U.b;
 
-//---------------------å¹³å‡å€¼æ»¤æ³¢------------------------------------------------------------------
+//---------------------Æ½¾ùÖµÂË²¨------------------------------------------------------------------	
 	tempa = abs(AD_OUT_NPR_I.a);
 	tempb = abs(AD_OUT_NPR_I.b);
 	tempc = abs(AD_OUT_NPR_I.c);
-	DataFilter(0.9999,&MEAN_DATA.ia1,tempa); //ç½‘ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ib1,tempb); //ç½‘ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ic1,tempc); //ç½‘ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.ia1,tempa); //Íø²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ib1,tempb); //Íø²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ic1,tempc); //Íø²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
 
 	tempa = abs(AD_OUT_MPR_I.a);
 	tempb = abs(AD_OUT_MPR_I.b);
 	tempc = abs(AD_OUT_MPR_I.c);
-	DataFilter(0.9999,&MEAN_DATA.ia2,tempa); //æœºä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ib2,tempb); //æœºä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ic2,tempc); //æœºä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.ia2,tempa); //»ú²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ib2,tempb); //»ú²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ic2,tempc); //»ú²àµçÁ÷	Æ½¾ùÖµÂË²¨10S	
 
 //	tempa = abs(AD_OUT_GRD_U.ab);
 //	tempb = abs(AD_OUT_GRD_U.bc);
-//	DataFilter(0.9999,&MEAN_DATA.uab,tempa); //ä¸»æ–­å‰ç½‘ä¾§ç”µåŽ‹	å¹³å‡å€¼æ»¤æ³¢10S
-//	DataFilter(0.9999,&MEAN_DATA.ubc,tempb); //ä¸»æ–­å‰ç½‘ä¾§ç”µåŽ‹	å¹³å‡å€¼æ»¤æ³¢10S
+//	DataFilter(0.9999,&MEAN_DATA.uab,tempa); //Ö÷¶ÏÇ°Íø²àµçÑ¹	Æ½¾ùÖµÂË²¨10S
+//	DataFilter(0.9999,&MEAN_DATA.ubc,tempb); //Ö÷¶ÏÇ°Íø²àµçÑ¹	Æ½¾ùÖµÂË²¨10S 
 
 	tempa = abs(AD_OUT_NGS_U.ab);
 	tempb = abs(AD_OUT_NGS_U.bc);
-	DataFilter(0.9999,&MEAN_DATA.uab1,tempa); //ç½‘ä¾§ç”µåŽ‹	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ubc1,tempb); //ç½‘ä¾§ç”µåŽ‹	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.uab1,tempa); //Íø²àµçÑ¹	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ubc1,tempb); //Íø²àµçÑ¹	Æ½¾ùÖµÂË²¨10S
 
 	tempa = abs(AD_OUT_STA_U.ab);
 	tempb = abs(AD_OUT_STA_U.bc);
-	DataFilter(0.9999,&MEAN_DATA.uab2,tempa); //å®šå­ä¾§ç”µåŽ‹	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ubc2,tempb); //å®šå­ä¾§ç”µåŽ‹	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.uab2,tempa); //¶¨×Ó²àµçÑ¹	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ubc2,tempb); //¶¨×Ó²àµçÑ¹	Æ½¾ùÖµÂË²¨10S
 
 
 	tempa = abs(AD_OUT_NGS_U.a);
 	tempb = abs(AD_OUT_NGS_U.b);
 	tempc = abs(AD_OUT_NGS_U.c);
-	DataFilter(0.9999,&MEAN_DATA.ua1,tempa); //ç½‘ä¾§ç”µåŽ‹	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ub1,tempb); //ç½‘ä¾§ç”µåŽ‹	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.uc1,tempc); //ç½‘ä¾§ç”µåŽ‹	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.ua1,tempa); //Íø²àµçÑ¹	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ub1,tempb); //Íø²àµçÑ¹	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.uc1,tempc); //Íø²àµçÑ¹	Æ½¾ùÖµÂË²¨10S
 
 	tempa = abs(AD_OUT_NGF_U.ab);			  //MagnetCurve2013-12-13
 	tempb = abs(AD_OUT_NGF_U.bc);
-	DataFilter(0.9999,&MEAN_DATA.uab3,tempa); //ä¸»æ–­åŽç”µç½‘ç”µåŽ‹,å¤§æ»¤æ³¢é€šé“	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ubc3,tempb); //ä¸»æ–­åŽç”µç½‘ç”µåŽ‹,å¤§æ»¤æ³¢é€šé“	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.uab3,tempa); //Ö÷¶ÏºóµçÍøµçÑ¹,´óÂË²¨Í¨µÀ	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ubc3,tempb); //Ö÷¶ÏºóµçÍøµçÑ¹,´óÂË²¨Í¨µÀ	Æ½¾ùÖµÂË²¨10S
 
 //	tempa = abs(AD_OUT_NGF_U.ab);			  //MagnetCurve200909
 //	tempb = abs(AD_OUT_NGF_U.bc);
-//	DataFilter(0.9999,&MEAN_DATA.uab3,tempa); //ä¸»æ–­åŽç”µç½‘ç”µåŽ‹,å¤§æ»¤æ³¢é€šé“	å¹³å‡å€¼æ»¤æ³¢10S
-//	DataFilter(0.9999,&MEAN_DATA.ubc3,tempb); //ä¸»æ–­åŽç”µç½‘ç”µåŽ‹,å¤§æ»¤æ³¢é€šé“	å¹³å‡å€¼æ»¤æ³¢10S
+//	DataFilter(0.9999,&MEAN_DATA.uab3,tempa); //Ö÷¶ÏºóµçÍøµçÑ¹,´óÂË²¨Í¨µÀ	Æ½¾ùÖµÂË²¨10S
+//	DataFilter(0.9999,&MEAN_DATA.ubc3,tempb); //Ö÷¶ÏºóµçÍøµçÑ¹,´óÂË²¨Í¨µÀ	Æ½¾ùÖµÂË²¨10S
 
-//--------------æ±‚ç½‘åŽ‹å’Œå®šå­ç”µåŽ‹å·®å€¼å¹³å‡å€¼------------------------------------------
+//--------------ÇóÍøÑ¹ºÍ¶¨×ÓµçÑ¹²îÖµÆ½¾ùÖµ------------------------------------------
     AD_OUT_STAD_U.ab = AD_OUT_NGF_U.ab - AD_OUT_STA_U.ab;
     AD_OUT_STAD_U.bc = AD_OUT_NGF_U.bc - AD_OUT_STA_U.bc;
 
 	tempa = abs(AD_OUT_STAD_U.ab);
 	tempb = abs(AD_OUT_STAD_U.bc);
-	DataFilter(0.9999,&MEAN_DATA.uab_d,tempa);  //å·®å€¼å¹³å‡å€¼    å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ubc_d,tempb);  //å·®å€¼å¹³å‡å€¼	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.997,&MEAN_DATA.ubc_t,tempb);  //å·®å€¼å¹³å‡å€¼	å¹³å‡å€¼æ»¤æ³¢1S	//20130801
+	DataFilter(0.9999,&MEAN_DATA.uab_d,tempa);  //²îÖµÆ½¾ùÖµ    Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ubc_d,tempb);  //²îÖµÆ½¾ùÖµ	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.997,&MEAN_DATA.ubc_t,tempb);  //²îÖµÆ½¾ùÖµ	Æ½¾ùÖµÂË²¨1S	//20130801
 //----------------------------------------------------------------------------------
 /*	//201204
 	tempa = abs(AD_OUT_STA_I.ac);
 	tempb = abs(AD_OUT_STA_I.ba);
-	DataFilter(0.9999,&MEAN_DATA.iac3,tempa); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.iba3,tempb); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.iac3,tempa); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.iba3,tempb); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
 
 	tempa = abs(AD_OUT_STA_I.a);
 	tempb = abs(AD_OUT_STA_I.b);
 	tempc = abs(AD_OUT_STA_I.c);
-	DataFilter(0.9999,&MEAN_DATA.ia3,tempa); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ib3,tempb); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.ic3,tempc); //å®šå­ä¾§ç”µæµ	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.ia3,tempa); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ib3,tempb); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.ic3,tempc); //¶¨×Ó²àµçÁ÷	Æ½¾ùÖµÂË²¨10S
 */
 
 //--------------------------------------------------------------------------------------------------
-//----------------------ç½‘ä¾§å’Œæœºä¾§ç”µæ„Ÿæ¸©åº¦æ»¤æ³¢---------------------------------------------------------------------
+//----------------------Íø²àºÍ»ú²àµç¸ÐÎÂ¶ÈÂË²¨---------------------------------------------------------------------
 	tempa = abs(AMUX.Lac_temp);
 	tempb = abs(AMUX.Ldudt_temp);
-	DataFilter(0.9999,&MEAN_DATA.Lac_temp,tempa); 	//ç½‘ä¾§ç”µæ„Ÿæ¸©åº¦	å¹³å‡å€¼æ»¤æ³¢10S
-	DataFilter(0.9999,&MEAN_DATA.Ldudt_temp,tempb); //æœºä¾§ç”µæ„Ÿæ¸©åº¦	å¹³å‡å€¼æ»¤æ³¢10S
+	DataFilter(0.9999,&MEAN_DATA.Lac_temp,tempa); 	//Íø²àµç¸ÐÎÂ¶È	Æ½¾ùÖµÂË²¨10S
+	DataFilter(0.9999,&MEAN_DATA.Ldudt_temp,tempb); //»ú²àµç¸ÐÎÂ¶È	Æ½¾ùÖµÂË²¨10S
 
-//--------------------åŠ±ç£å‚æ•°è¾¨è¯†MagnetCurve2013-12-13--ZZJ--------------------------------------------------------------
-//BJTULVRT201204è®¡ç®—æ¯”çŽ‡Uns_ftç§»åˆ°inputé‡ŒèŠ‚çº¦T0èµ„æº
-//	Uns_ft = 0.5 * ((MEAN_DATA.uab3/MEAN_DATA.uab1)+(MEAN_DATA.ubc3/MEAN_DATA.ubc1));//å¤§æ»¤æ³¢å¹…å€¼è¡°å‡æ¯”ä¾‹
-//	Uns_ft = 0.848;		//R=20k,C=0.1uF,fh=80Hz,ç†è®ºè¡°å‡æ¯”ä¾‹Avh=0.848,å®žé™…é‡‡ç”¨ä¸Šå¼æµ‹é‡è®¡ç®—å€¼ä¸º0.83å·¦å³ï¼2010-10-2
+//--------------------Àø´Å²ÎÊý±æÊ¶MagnetCurve2013-12-13--ZZJ--------------------------------------------------------------
+//BJTULVRT201204¼ÆËã±ÈÂÊUns_ftÒÆµ½inputÀï½ÚÔ¼T0×ÊÔ´		
+//	Uns_ft = 0.5 * ((MEAN_DATA.uab3/MEAN_DATA.uab1)+(MEAN_DATA.ubc3/MEAN_DATA.ubc1));//´óÂË²¨·ùÖµË¥¼õ±ÈÀý
+//	Uns_ft = 0.848;		//R=20k,C=0.1uF,fh=80Hz,ÀíÂÛË¥¼õ±ÈÀýAvh=0.848,Êµ¼Ê²ÉÓÃÉÏÊ½²âÁ¿¼ÆËãÖµÎª0.83×óÓÒ£¡2010-10-2
 
 //--------20121011--------
 
@@ -2441,7 +2439,7 @@ void Ad8364Ctrl(void)
 		MC_F_cnt = 0;
 		MC_N_test= 0;
 	}
-	else if(_SC_MSTDBY==99)//ç¡®å®šåŠ±ç£å‚æ•°è¾¨è¯†å®Œæˆ
+	else if(_SC_MSTDBY==99)//È·¶¨Àø´Å²ÎÊý±æÊ¶Íê³É
 	{
 		if(M_ChkFlag(SL_MC_FAIL)!=0)
 		{
@@ -2481,7 +2479,7 @@ void Ad8364Ctrl(void)
 					}					
 				}
 			}		
-			else if(MC_F_cnt > 5e4)		//è¶…æ—¶è¾¾åˆ°10s,è®¤ä¸ºåŠ±ç£æ›²çº¿æµ‹ç»˜å¤±è´¥,éœ€è¦é‡æ–°æµ‹é‡
+			else if(MC_F_cnt > 5e4)		//³¬Ê±´ïµ½10s,ÈÏÎªÀø´ÅÇúÏß²â»æÊ§°Ü,ÐèÒªÖØÐÂ²âÁ¿
 			{
 				M_SetFlag(SL_MC_FAIL);
 				MC_F_cnt = 0;
@@ -2496,7 +2494,7 @@ void Ad8364Ctrl(void)
 		}
 					
 	}
-	else if(_SC_MSTDBY==100)		//ç”¨æˆ·è¦æ±‚é‡æ–°æµ‹ç»˜åŠ±ç£æ›²çº¿
+	else if(_SC_MSTDBY==100)		//ÓÃ»§ÒªÇóÖØÐÂ²â»æÀø´ÅÇúÏß
 	{
 		M_ClrFlag(SL_MC_OK);
 		M_ClrFlag(SL_MC_FAIL);
@@ -2515,24 +2513,24 @@ void Ad8364Ctrl(void)
 //---------2013-12-13---ZZJ--------
 
 //-------------------------------------------------------------------------------------------------
-	*AD_DA_CTRL     = AD8364_CONVERT;	               	  	//å¯åŠ¨ä¸‹ç±„Dè½¬æ¢
-    CAP4.adsmptsctr = ECap4Regs.TSCTR;						//ä¿å­˜ç½‘åŽ‹å®šå‘æ—¶é—´
-	QEPDATA.adsmposcnt=EQep2Regs.QPOSCNT;					//ä¿å­˜ç¼–ç å™¨ä½ç½®ä¿¡æ¯
+	*AD_DA_CTRL     = AD8364_CONVERT;	               	  	//Æô¶¯ÏÂ»AD×ª»»
+    CAP4.adsmptsctr = ECap4Regs.TSCTR;						//±£´æÍøÑ¹¶¨ÏòÊ±¼ä
+	QEPDATA.adsmposcnt=EQep2Regs.QPOSCNT;					//±£´æ±àÂëÆ÷Î»ÖÃÐÅÏ¢  
 
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Da5344Manage
-** åŠŸèƒ½æè¿°ï¼šThe value of 4 da channels are chosen.
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š: 	The da output is used to help debug or display
+** º¯ÊýÃû³Æ: Da5344Manage
+** ¹¦ÄÜÃèÊö£ºThe value of 4 da channels are chosen. 
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	The da output is used to help debug or display
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:2012.4
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:2012.4
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Da5344Manage(void)
@@ -2563,21 +2561,21 @@ void Da5344Manage(void)
 			case 8: {if(M_ChkFlag(SL_ERROR)==0)			zys[i] = 2048;
 					 else   							zys[i] = 4095;	break;}  
 //			case 9: {if(M_ChkFlag(SL_LV_PHICON)==0)		zys[i] = 2048;
-//				     else   							zys[i] = 4095;	break;}  //=1LVæœºä¾§åŠ¨æ€ç£é“¾æŽ§åˆ¶æ ‡å¿—ä½
+//				     else   							zys[i] = 4095;	break;}  //=1LV»ú²à¶¯Ì¬´ÅÁ´¿ØÖÆ±êÖ¾Î» 
 			case 10:{if(M_ChkFlag(SL_LV_SYNCON)==0)		zys[i] = 2048;				
-				     else   							zys[i] = 4095;	break;}  //=1LVæœºä¾§åŠ¨æ€è°ƒèŠ‚æ ‡å¿—ä½
+				     else   							zys[i] = 4095;	break;}  //=1LV»ú²à¶¯Ì¬µ÷½Ú±êÖ¾Î»
 			case 11: {if(M_ChkFlag(SL_QCAPSPDIN)==0)			zys[i] = 2048;
 					 else   							zys[i] = 4095;	break;}  
 			case 12: {if(M_ChkFlag(SL_QCAPDISTURB)==0)		zys[i] = 2048;
-				     else   							zys[i] = 4095;	break;}  //=1LVæœºä¾§åŠ¨æ€ç£é“¾æŽ§åˆ¶æ ‡å¿—ä½
+				     else   							zys[i] = 4095;	break;}  //=1LV»ú²à¶¯Ì¬´ÅÁ´¿ØÖÆ±êÖ¾Î» 
 			case 13:{if(M_ChkFlag(SL_QEPPCO)==0)		zys[i] = 2048;				
-				     else   							zys[i] = 4095;	break;}  //=1LVæœºä¾§åŠ¨æ€è°ƒèŠ‚æ ‡å¿—ä½
+				     else   							zys[i] = 4095;	break;}  //=1LV»ú²à¶¯Ì¬µ÷½Ú±êÖ¾Î»
 //			case 14:{if(M_ChkFlag(SL_QEPPHE)==0)		zys[i] = 2048;				
-//				     else   							zys[i] = 4095;	break;}  //=1LVæœºä¾§åŠ¨æ€è°ƒèŠ‚æ ‡å¿—ä½
+//				     else   							zys[i] = 4095;	break;}  //=1LV»ú²à¶¯Ì¬µ÷½Ú±êÖ¾Î»
 			case 15:{if(M_ChkFlag(SL_IN1_CBSTS)==0)		zys[i] = 2048;				
-				     else   							zys[i] = 4095;	break;}  //=1LVæœºä¾§åŠ¨æ€è°ƒèŠ‚æ ‡å¿—ä½
+				     else   							zys[i] = 4095;	break;}  //=1LV»ú²à¶¯Ì¬µ÷½Ú±êÖ¾Î»
 			case 16:{if(M_ChkFlag(SL_GRDFQE)==0)		zys[i] = 2048;				
-				     else   							zys[i] = 4095;	break;}  //=1LVæœºä¾§åŠ¨æ€è°ƒèŠ‚æ ‡å¿—ä½
+				     else   							zys[i] = 4095;	break;}  //=1LV»ú²à¶¯Ì¬µ÷½Ú±êÖ¾Î»
 			case 17:{if(M_ChkFlag(SL_HIDCOV)==0)		zys[i] = 2048;				
 				     else   							zys[i] = 4095;	break;}  //=1
 			case 18:{if(M_ChkFlag(SL_IDCOV)==0)			zys[i] = 2048;				
@@ -2586,7 +2584,7 @@ void Da5344Manage(void)
 				     else   							zys[i] = 4095;	break;}  //=1
 
 
-//------------------------------------------------------------------/æ”¾å¤§å€æ•° magnify times----------------------
+//------------------------------------------------------------------/·Å´ó±¶Êý magnify times----------------------
  			//----------------------AD OUT variables---------------------------------------------------
  			case 20:	{zys[i] = (int16)((AD_OUT_NGF_U.bc			* 0.005) * 204.8) + 2048; 	break;}//AD OUT variables 
  			case 21:	{zys[i] = (int16)((AD_OUT_STA_U.ab			* 0.005) * 204.8) + 2048;	break;}  
@@ -2729,8 +2727,8 @@ void Da5344Manage(void)
 			case 120:	{zys[i] = (int16)((1				*    1) * 204.8) + 2048;break;}
 			case 121:	{zys[i] = (int16)((1				*    1) * 204.8) + 2048;break;}
 
-//-------------------20111208ç£é“¾è§‚æµ‹------------------------------------------
-//-----------theta Phisdq è¡¥å¿idq
+//-------------------20111208´ÅÁ´¹Û²â------------------------------------------		
+//-----------theta Phisdq ²¹³¥idq
 /*			case 122:	{zys[i] = (int16)((PHI_DATA_M.theta				*    1) * 204.8) + 2048;break;}
 
 			case 123:	{zys[i] = (int16)((PHI_DATA_M.PHId				*    1) * 204.8) + 2048;break;}
@@ -2842,7 +2840,7 @@ void Da5344Manage(void)
 			case 222:	{zys[i] = (int16)((NGS_Udq_pflt				*  0.01) * 204.8) + 2048;break;}
 
 
-//------------ä¸å¹³è¡¡ é™·æ³¢å™¨
+//------------²»Æ½ºâ ÏÝ²¨Æ÷
 /*			case 200:	{zys[i] = (int16)((TRS_NGS_U.dflt			    *      0.01) * 204.8) + 2048;break;}
 			case 201:	{zys[i] = (int16)((TRS_NGS_U.qflt			    *      0.01) * 204.8) + 2048;break;}
 			case 202:	{zys[i] = (int16)((TRS_NGS_U.dnflt			    *      0.01) * 204.8) + 2048;break;}
@@ -2886,27 +2884,27 @@ void Da5344Manage(void)
 
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Output
-** åŠŸèƒ½æï¿½ 10è·¯ä¿¡å·è¾“å‡º; 8è·¯LEDæ˜¾ç¤ºè¾“å‡º
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Output
+** ¹¦ÄÜÃèö: 10Â·ÐÅºÅÊä³ö; 8Â·LEDÏÔÊ¾Êä³ö
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®ï¿½
-** æ—¥ã€€æœŸ:
+** ÐÞË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Output(void)
 {
-//------------------------------æ•°æ®è¾“å‡º-----------------------------------
+//------------------------------Êý¾ÝÊä³ö-----------------------------------
 
    *OUT1_ADDR = _OUT1_DATA;
    *OUT2_ADDR = _OUT2_DATA;
 
-//-----------------------------å¯åŠ¨å¼€å…³æ„å¤–åŠ¨ä½œæ£€æµ‹110818-------------------------
+//-----------------------------Æô¶¯¿ª¹ØÒâÍâ¶¯×÷¼ì²â110818-------------------------
 
 	if(state_n==0)
 	{
@@ -2921,28 +2919,28 @@ void Output(void)
 
 	if(action1 != action2)
 	{
-		M_ClrFlag(SL_SWITCHDETECT);									//å¤„äºŽæ­£å¸¸åŠ¨ä½œæ£€æµ‹
+		M_ClrFlag(SL_SWITCHDETECT);									//´¦ÓÚÕý³£¶¯×÷¼ì²â
 		state_m=0;
 		MAIN_LOOP.cnt_detectdelay = 0;
 	}
 
 	if(state_m==0)
 	{
- 	    if(M_ChkCounter(MAIN_LOOP.cnt_detectdelay,DELAY_DETECT)>=0)		//ä»Žæ­£å¸¸æ£€æµ‹è½¬æ¢è‡³æ„å¤–æ£€æµ‹ä¹‹é—´å»¶æ—¶_STDBY4 ms
+ 	    if(M_ChkCounter(MAIN_LOOP.cnt_detectdelay,DELAY_DETECT)>=0)		//´ÓÕý³£¼ì²â×ª»»ÖÁÒâÍâ¼ì²âÖ®¼äÑÓÊ±_STDBY4 ms
  	    {
  	    	state_m=1;
 
-			MAIN_LOOP.cnt_cberror=0;								//æ¸…å®šæ—¶å™¨
-			MAIN_LOOP.cnt_mainkerror=0;								//æ¸…å®šæ—¶å™¨
-			MAIN_LOOP.cnt_mainferror=0;								//æ¸…å®šæ—¶å™¨
-			MAIN_LOOP.cnt_stacerror=0;								//æ¸…å®šæ—¶å™¨
+			MAIN_LOOP.cnt_cberror=0;								//Çå¶¨Ê±Æ÷
+			MAIN_LOOP.cnt_mainkerror=0;								//Çå¶¨Ê±Æ÷
+			MAIN_LOOP.cnt_mainferror=0;								//Çå¶¨Ê±Æ÷
+			MAIN_LOOP.cnt_stacerror=0;								//Çå¶¨Ê±Æ÷
 		}
 
 	}
 
 	else if((action1 == action2) && (state_m==1))
 	{
-	    M_SetFlag(SL_SWITCHDETECT);									//å¤„äºŽæ„å¤–åŠ¨ä½œæ£€æµ‹
+	    M_SetFlag(SL_SWITCHDETECT);									//´¦ÓÚÒâÍâ¶¯×÷¼ì²â
 
 	}
 
@@ -2951,23 +2949,23 @@ void Output(void)
 
 //---------20121107----------testCL_ZKLVRT--------
 
-//-----------------------------åŠŸçŽ‡æ•£çƒ­é£ŽæœºæŽ§åˆ¶----------------------------------
+//-----------------------------¹¦ÂÊÉ¢ÈÈ·ç»ú¿ØÖÆ----------------------------------
 	if(M_ChkFlag(SL_FAN_WORK)!=0) 	M_SetFlag(CL_FANWORK);
 	else							M_ClrFlag(CL_FANWORK); 
 /*
-//-----------------------------åŠŸçŽ‡æ•£çƒ­é£ŽæœºæŽ§åˆ¶--20100429systest--------------------------------
+//-----------------------------¹¦ÂÊÉ¢ÈÈ·ç»ú¿ØÖÆ--20100429systest--------------------------------
 	if(M_ChkFlag(SL_FAN_WORK)!=0) 	
 	{
-		if(AMUX.skiiptempmax>35.0)	 	M_SetFlag(CL_FANWORK);          //å¯åŠ¨åŠŸçŽ‡ç»„ä»¶é£Žæœº
-		else if(AMUX.skiiptempmax<15.0)	M_ClrFlag(CL_FANWORK);          //å…³é—­åŠŸçŽ‡ç»„ä»¶é£Žæœº
+		if(AMUX.skiiptempmax>35.0)	 	M_SetFlag(CL_FANWORK);          //Æô¶¯¹¦ÂÊ×é¼þ·ç»ú
+		else if(AMUX.skiiptempmax<15.0)	M_ClrFlag(CL_FANWORK);          //¹Ø±Õ¹¦ÂÊ×é¼þ·ç»ú
 	}
 	else
 	{
-//		if(AMUX.skiiptempmax<50.0)	 M_ClrFlag(CL_FANWORK);          	//å…³é—­åŠŸçŽ‡ç»„ä»¶é£Žæœº
+//		if(AMUX.skiiptempmax<50.0)	 M_ClrFlag(CL_FANWORK);          	//¹Ø±Õ¹¦ÂÊ×é¼þ·ç»ú
 		M_ClrFlag(CL_FANWORK); 
 	}							
 */
-//---------------------CANOPENåé¦ˆä¸»æŽ§çš„çŠ¶æ€å˜é‡---------------------------------------------------
+//---------------------CANOPEN·´À¡Ö÷¿ØµÄ×´Ì¬±äÁ¿---------------------------------------------------
 //-----------------------------------tx_state1----------------------------------------	
 	if(M_ChkFlag(SL_CBCLOSED)!=0)	  		SCI_canopen.tx_state1 |= COM_NPRREADY;
 	else									SCI_canopen.tx_state1 &= COM_NPRREADY_NOT;
@@ -3066,7 +3064,7 @@ void Output(void)
 
 
 
-//-----------------------------æ˜¾ç¤ºç¯è¾“å‡º----------------------------------
+//-----------------------------ÏÔÊ¾µÆÊä³ö----------------------------------
 	if(M_ChkFlag(SL_DISPLAY0)!=0) 	GpioDataRegs.GPBCLEAR.bit.GPIO56 = 1;
 	else							GpioDataRegs.GPBSET.bit.GPIO56 = 1;
 
@@ -3093,42 +3091,42 @@ void Output(void)
 
 } 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Input
-** åŠŸèƒ½æè¿°: 16è·¯ä¿¡å·è¾“å…¥;
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Input
+** ¹¦ÄÜÃèÊö: 16Â·ÐÅºÅÊäÈë; 
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Input(void)
 {
 	Uint16 tempa,tempb,tempc,tempda,tempdb,tempdc;
 	float temp_Usn,temp_Uro;
-//--------------------------------æ•°æ®è¾“å…¥----------------------------------
+//--------------------------------Êý¾ÝÊäÈë----------------------------------
 	tempa = *IN1_ADDR; 
 	tempb = *IN2_ADDR;
 	tempc = *IN3_ADDR;
 
-	DELAY_US(100L);        //100uså»¶æ—¶ï¼ŒIOè¾“å…¥é˜²æŠ–
+	DELAY_US(100L);        //100usÑÓÊ±£¬IOÊäÈë·À¶¶
 
 	tempda = *IN1_ADDR;    
 	tempdb = *IN2_ADDR;
 	tempdc = *IN3_ADDR;
 
-//--------------------------------æ•°æ®è¾“å…¥----------------------------------
+//--------------------------------Êý¾ÝÊäÈë----------------------------------	
 	if((tempa==tempda)&&(tempb==tempdb))	
 		_IN12_DATA = (tempa & 0x00FF) | ((tempb<<8) & 0xFF00);
 
 	if(tempc==tempdc)		
 		_IN34_DATA = (tempc & 0x00FF);
 
-//---------------------CANOPENæŒ‡ä»¤æŽ§åˆ¶------------------------------------------------------
+//---------------------CANOPENÖ¸Áî¿ØÖÆ------------------------------------------------------
 
 if(M_ChkFlag(SL_ENPCOPER)==0)
 { 
@@ -3149,7 +3147,7 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
 		if(M_ChkCounter(MAIN_LOOP.cnt_ocsein1,DELAY_OCSEIN1)>0)		
 		{
 			M_SetFlag(SL_OCS_EIN);		//20090817 250ms
-			M_SetFlag(SL_OCS_SYSRUN);	//20110707ç¬¦åˆåŽåˆ›é€šè®¯,åŽŸ2ä¸ªæŒ‡ä»¤åˆäºŒä¸ºä¸€
+			M_SetFlag(SL_OCS_SYSRUN);	//20110707·ûºÏ»ª´´Í¨Ñ¶,Ô­2¸öÖ¸ÁîºÏ¶þÎªÒ»
 		}
 		MAIN_LOOP.cnt_ocsein2=0;	
 	}
@@ -3164,19 +3162,19 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
 		if(M_ChkCounter(MAIN_LOOP.cnt_ocsein2,DELAY_OCSEIN2)>0)		
 		{
 			M_ClrFlag(SL_OCS_EIN);		//20090817 250ms 
-			M_ClrFlag(SL_OCS_SYSRUN); 	//20110707ç¬¦åˆåŽåˆ›é€šè®¯,åŽŸ2ä¸ªæŒ‡ä»¤åˆî’•î€±ï¿½
+			M_ClrFlag(SL_OCS_SYSRUN); 	//20110707·ûºÏ»ª´´Í¨Ñ¶,Ô­2¸öÖ¸ÁîºÏþÎªÒ»
 		}
 		MAIN_LOOP.cnt_ocsein1=0;
 	}
 //-----------------------------
 */
 
-//---------------------ä¸Šä½æœºè¦æ±‚å¤ä½æ•…éšœ------------------------------------------------------
+//---------------------ÉÏÎ»»úÒªÇó¸´Î»¹ÊÕÏ------------------------------------------------------
 	if((SCI_canopen.rx_controlword & COM_OCSRESET)==COM_OCSRESET)	M_SetFlag(SL_OCS_RESET);									
 	else 	   														M_ClrFlag(SL_OCS_RESET);													
 
 /*	
-//---------------------ä¸Šä½æœºè¦æ±‚å˜æµå™¨å¯åŠ¨------------------------------------------------------
+//---------------------ÉÏÎ»»úÒªÇó±äÁ÷Æ÷Æô¶¯------------------------------------------------------
 	if((SCI_canopen.rx_controlword & COM_SYSRUN)==COM_SYSRUN)
 	{
 		if(M_ChkCounter(MAIN_LOOP.cnt_ocssysrun1,DELAY_OCSSYSRUN1)>0)	M_SetFlag(SL_OCS_SYSRUN);	//20090817 250ms
@@ -3188,7 +3186,7 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
 		MAIN_LOOP.cnt_ocssysrun1=0;
 	}
 */
-//---------------------ä¸Šä½æœºè¦æ±‚å˜æµå™¨å¯åŠ¨-------20121206---------------------------------------
+//---------------------ÉÏÎ»»úÒªÇó±äÁ÷Æ÷Æô¶¯-------20121206---------------------------------------
 	if(((SCI_canopen.rx_controlword & COM_SYSRUN)==COM_SYSRUN) && (M_ChkFlag(SL_SYSOFF)==0) && (PRO.speedflt>950))
 	{
 		if(M_ChkCounter(MAIN_LOOP.cnt_ocssysrun1,DELAY_OCSSYSRUN1)>0)	M_SetFlag(SL_OCS_SYSRUN);	//20090817 250ms
@@ -3215,168 +3213,168 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
 	}
 //-------------------------
 
-//---------------------ä¸Šä½æœºè¦æ±‚ç½‘ä¾§å˜æµå™¨å•æ¶è¯µå½¢è–°Î£â‘¼ï¿½-----------------------------------------------------
-//	if((SCI_canopen.rx_controlword & COM_NPREIN)==COM_NPREIN)	M_SetFlag(SL_OCS_NPREIN);  //æš‚æ—¶å±è”½
+//---------------------ÉÏÎ»»úÒªÇóÍø²à±äÁ÷Æ÷µ¥ÀÔËÐÐÎÞ¹¦²¢Íø------------------------------------------------------
+//	if((SCI_canopen.rx_controlword & COM_NPREIN)==COM_NPREIN)	M_SetFlag(SL_OCS_NPREIN);  //ÔÝÊ±ÆÁ±Î										
 //	else 		  												M_ClrFlag(SL_OCS_NPREIN); 
 }	 
-//---------------------------æŽ¥æ”¶æ“ä½œå™¨æ¥çš„PIçŽ¯å‚æ•°-------------------------------------------------
-	PI_PARA_NPRU.kp           = _NPR_U_Kp/100.00;			//DOT2å±žæ€§
-    PI_PARA_NPRU.ki           = _NPR_U_Ki/10.00;			//DOT1å±žæ€§
-//	PI_PARA_NPRU.kd           = _NPR_U_Kd/1000.00;			//DOT3å±žæ€§
+//---------------------------½ÓÊÕ²Ù×÷Æ÷À´µÄPI»·²ÎÊý-------------------------------------------------
+	PI_PARA_NPRU.kp           = _NPR_U_Kp/100.00;			//DOT2ÊôÐÔ
+    PI_PARA_NPRU.ki           = _NPR_U_Ki/10.00;			//DOT1ÊôÐÔ
+//	PI_PARA_NPRU.kd           = _NPR_U_Kd/1000.00;			//DOT3ÊôÐÔ
 	PI_PARA_NPRU.outmax       = _NPR_U_outmax;
-	PI_PARA_NPRU.errmax       = _NPR_U_errmax/10.00;		//DOT1ç²œï¿½	//NPRç”µåŽ‹çŽ¯å‚æ•°
-	PI_PARA_NPRU.errmin       = _NPR_U_errmin/1000.00;	    //DOT3å±žæ€§
-	PI_PARA_NPRU.incrementmax = _NPR_U_incrementmax/10.00;  //DOT1å±žæ€§
+	PI_PARA_NPRU.errmax       = _NPR_U_errmax/10.00;		//DOT1ôÐÔ		//NPRµçÑ¹»·²ÎÊý
+	PI_PARA_NPRU.errmin       = _NPR_U_errmin/1000.00;	    //DOT3ÊôÐÔ
+	PI_PARA_NPRU.incrementmax = _NPR_U_incrementmax/10.00;  //DOT1ÊôÐÔ
 /*
-	PI_PARA_NPRID.kp           = _NPR_ID_Kp/100.00;			//DOT2å±žæ€§
-    PI_PARA_NPRID.ki           = _NPR_ID_Ki/10.00;			//DOT1å±žæ€§
-//    PI_PARA_NPRID.kd           = _NPR_ID_Kd/1000.00;			//DOT3å±žæ€§
-	PI_PARA_NPRID.outmax       = _NPR_ID_outmax;		 					    //NPRç”µæµçŽ¯å‚æ•°
-	PI_PARA_NPRID.errmax       = _NPR_ID_errmax/10.00;		//DOT1å±žæ€§
-	PI_PARA_NPRID.errmin       = _NPR_ID_errmin/1000.00;		//DOT3å±žæ€§
-	PI_PARA_NPRID.incrementmax = _NPR_ID_incrementmax/10.00;	//DOT1å±žæ€§
+	PI_PARA_NPRID.kp           = _NPR_ID_Kp/100.00;			//DOT2ÊôÐÔ
+    PI_PARA_NPRID.ki           = _NPR_ID_Ki/10.00;			//DOT1ÊôÐÔ
+//    PI_PARA_NPRID.kd           = _NPR_ID_Kd/1000.00;			//DOT3ÊôÐÔ
+	PI_PARA_NPRID.outmax       = _NPR_ID_outmax;		 					    //NPRµçÁ÷»·²ÎÊý
+	PI_PARA_NPRID.errmax       = _NPR_ID_errmax/10.00;		//DOT1ÊôÐÔ
+	PI_PARA_NPRID.errmin       = _NPR_ID_errmin/1000.00;		//DOT3ÊôÐÔ
+	PI_PARA_NPRID.incrementmax = _NPR_ID_incrementmax/10.00;	//DOT1ÊôÐÔ
 */
 //--------20121210--------
-	lv_ctrl1           = _NPR_ID_Kp/100.00;			//DOT2å±žæ€§
-    lv_ctrl2           = _NPR_ID_Ki/10.00;			//DOT1å±žæ€§
-	lv_ctrl3	       = _NPR_ID_outmax;		 					    //NPRç”µæµçŽ¯å‚æ•°
-	lv_ctrl4 			= _NPR_ID_errmax/10.00;		//DOT1å±žæ€§
-	lv_ctrl5			= _NPR_ID_errmin/1000.00;		//DOT3å±žæ€§
-	lv_ctrl6			= _NPR_ID_incrementmax/10.00;	//DOT1å±žæ€§
+	lv_ctrl1           = _NPR_ID_Kp/100.00;			//DOT2ÊôÐÔ
+    lv_ctrl2           = _NPR_ID_Ki/10.00;			//DOT1ÊôÐÔ
+	lv_ctrl3	       = _NPR_ID_outmax;		 					    //NPRµçÁ÷»·²ÎÊý
+	lv_ctrl4 			= _NPR_ID_errmax/10.00;		//DOT1ÊôÐÔ
+	lv_ctrl5			= _NPR_ID_errmin/1000.00;		//DOT3ÊôÐÔ
+	lv_ctrl6			= _NPR_ID_incrementmax/10.00;	//DOT1ÊôÐÔ
 
-	PI_PARA_NPRID.kp           = 0.4;			//DOT2å±žæ€§
-    PI_PARA_NPRID.ki           = 167;			//DOT1å±žæ€§
-	PI_PARA_NPRID.outmax       = 200;		    //NPRç”µæµçŽ¯å‚æ•°
-	PI_PARA_NPRID.errmax       = 50;			//DOT1å±žæ€§
-	PI_PARA_NPRID.errmin       = 0;				//DOT3å±žæ€§
-	PI_PARA_NPRID.incrementmax = 55;			//DOT1å±žæ€§
+	PI_PARA_NPRID.kp           = 0.4;			//DOT2ÊôÐÔ
+    PI_PARA_NPRID.ki           = 167;			//DOT1ÊôÐÔ
+	PI_PARA_NPRID.outmax       = 200;		    //NPRµçÁ÷»·²ÎÊý
+	PI_PARA_NPRID.errmax       = 50;			//DOT1ÊôÐÔ
+	PI_PARA_NPRID.errmin       = 0;				//DOT3ÊôÐÔ
+	PI_PARA_NPRID.incrementmax = 55;			//DOT1ÊôÐÔ
 //--------20121210--------
 
-	PI_PARA_NPRIQ.kp           = _NPR_IQ_Kp/100.00;			//DOT2å±žæ€§
-    PI_PARA_NPRIQ.ki           = _NPR_IQ_Ki/10.00;			//DOT1å±žæ€§
-//    PI_PARA_NPRIQ.kd           = _NPR_IQ_Kd/1000.00;			//DOT3å±žæ€§
-	PI_PARA_NPRIQ.outmax       = _NPR_IQ_outmax;		 					    //NPRç”µæµçŽ¯å‚æ•°
-	PI_PARA_NPRIQ.errmax       = _NPR_IQ_errmax/10.00;		//DOT1å±žæ€§
-	PI_PARA_NPRIQ.errmin       = _NPR_IQ_errmin/1000.00;		//DOT3å±žæ€§
-	PI_PARA_NPRIQ.incrementmax = _NPR_IQ_incrementmax/10.00;	//DOT1å±žæ€§
+	PI_PARA_NPRIQ.kp           = _NPR_IQ_Kp/100.00;			//DOT2ÊôÐÔ
+    PI_PARA_NPRIQ.ki           = _NPR_IQ_Ki/10.00;			//DOT1ÊôÐÔ
+//    PI_PARA_NPRIQ.kd           = _NPR_IQ_Kd/1000.00;			//DOT3ÊôÐÔ
+	PI_PARA_NPRIQ.outmax       = _NPR_IQ_outmax;		 					    //NPRµçÁ÷»·²ÎÊý
+	PI_PARA_NPRIQ.errmax       = _NPR_IQ_errmax/10.00;		//DOT1ÊôÐÔ
+	PI_PARA_NPRIQ.errmin       = _NPR_IQ_errmin/1000.00;		//DOT3ÊôÐÔ
+	PI_PARA_NPRIQ.incrementmax = _NPR_IQ_incrementmax/10.00;	//DOT1ÊôÐÔ
 
-	PI_PARA_MPRID.kp           = _MPR_ID_Kp/100.00;			//DOT2å±žæ€§
-    PI_PARA_MPRID.ki           = _MPR_ID_Ki/10.00;			//DOT1å±žæ€§
- //   PI_PARA_MPRID.kd           = _MPR_ID_Kd/1000.00;			//DOT3å±žæ€§
-	PI_PARA_MPRID.outmax       = _MPR_ID_outmax;   							//MPRç”µæµçŽ¯å‚æ•°
-	PI_PARA_MPRID.errmax       = _MPR_ID_errmax/10.00;		//DOT1å±žæ€§
-	PI_PARA_MPRID.errmin       = _MPR_ID_errmin/1000.00;		//DOT3å±žæ€§
-	PI_PARA_MPRID.incrementmax = _MPR_ID_incrementmax/10.00;	//DOT1å±žæ€§
+	PI_PARA_MPRID.kp           = _MPR_ID_Kp/100.00;			//DOT2ÊôÐÔ
+    PI_PARA_MPRID.ki           = _MPR_ID_Ki/10.00;			//DOT1ÊôÐÔ
+ //   PI_PARA_MPRID.kd           = _MPR_ID_Kd/1000.00;			//DOT3ÊôÐÔ
+	PI_PARA_MPRID.outmax       = _MPR_ID_outmax;   							//MPRµçÁ÷»·²ÎÊý
+	PI_PARA_MPRID.errmax       = _MPR_ID_errmax/10.00;		//DOT1ÊôÐÔ
+	PI_PARA_MPRID.errmin       = _MPR_ID_errmin/1000.00;		//DOT3ÊôÐÔ
+	PI_PARA_MPRID.incrementmax = _MPR_ID_incrementmax/10.00;	//DOT1ÊôÐÔ
 
-	PI_PARA_MPRIQ.kp           = _MPR_IQ_Kp/100.00;			//DOT2å±žæ€§
-    PI_PARA_MPRIQ.ki           = _MPR_IQ_Ki/10.00;			//DOT1å±žæ€§
-//    PI_PARA_MPRIQ.kd           = _MPR_IQ_Kd/1000.00;			//DOT3å±žæ€§
-	PI_PARA_MPRIQ.outmax       = _MPR_IQ_outmax;   							//MPRç”µæµçŽ¯å‚æ•°
-	PI_PARA_MPRIQ.errmax       = _MPR_IQ_errmax/10.00;		//DOT1å±žï¿½
-	PI_PARA_MPRIQ.errmin       = _MPR_IQ_errmin/1000.00;		//DOT3å±žæ€§
-	PI_PARA_MPRIQ.incrementmax = _MPR_IQ_incrementmax/10.00;	//DOT1å±žæ€§
+	PI_PARA_MPRIQ.kp           = _MPR_IQ_Kp/100.00;			//DOT2ÊôÐÔ
+    PI_PARA_MPRIQ.ki           = _MPR_IQ_Ki/10.00;			//DOT1ÊôÐÔ
+//    PI_PARA_MPRIQ.kd           = _MPR_IQ_Kd/1000.00;			//DOT3ÊôÐÔ
+	PI_PARA_MPRIQ.outmax       = _MPR_IQ_outmax;   							//MPRµçÁ÷»·²ÎÊý
+	PI_PARA_MPRIQ.errmax       = _MPR_IQ_errmax/10.00;		//DOT1ÊôÔ
+	PI_PARA_MPRIQ.errmin       = _MPR_IQ_errmin/1000.00;		//DOT3ÊôÐÔ
+	PI_PARA_MPRIQ.incrementmax = _MPR_IQ_incrementmax/10.00;	//DOT1ÊôÐÔ
 /*
-	PI_PARA_MPRU.kp           = _MPR_U_Kp/100.00;			//DOT2å±žæ€§
-    PI_PARA_MPRU.ki           = _MPR_U_Ki/10.00;			//DOT1å±žæ€§
-    PI_PARA_MPRU.kd           = _MPR_U_Kd/1000.00;			//DOT3å±žæ€§
-	PI_PARA_MPRU.outmax       = _MPR_U_outmax;   							//MPRç”µåŽ‹çŽ¯å‚æ•°
-	PI_PARA_MPRU.errmax       = _MPR_U_errmax/10.00;		//DOT1å±žæ€§
-	PI_PARA_MPRU.errmin       = _MPR_U_errmin/1000.00;		//DOT3å±žæ€§
-	PI_PARA_MPRU.incrementmax = _MPR_U_incrementmax/10.00;  //DOT1å±žæ€§
+	PI_PARA_MPRU.kp           = _MPR_U_Kp/100.00;			//DOT2ÊôÐÔ
+    PI_PARA_MPRU.ki           = _MPR_U_Ki/10.00;			//DOT1ÊôÐÔ
+    PI_PARA_MPRU.kd           = _MPR_U_Kd/1000.00;			//DOT3ÊôÐÔ
+	PI_PARA_MPRU.outmax       = _MPR_U_outmax;   							//MPRµçÑ¹»·²ÎÊý
+	PI_PARA_MPRU.errmax       = _MPR_U_errmax/10.00;		//DOT1ÊôÐÔ
+	PI_PARA_MPRU.errmin       = _MPR_U_errmin/1000.00;		//DOT3ÊôÐÔ
+	PI_PARA_MPRU.incrementmax = _MPR_U_incrementmax/10.00;  //DOT1ÊôÐÔ
 
-	PI_PARA_DYNU.kp           = _DYN_U_Kp/100.00;			//DOT2å±žæ€§
-    PI_PARA_DYNU.ki           = _DYN_U_Ki/10.00;			//DOT1å±žæ€§
-    PI_PARA_DYNU.kd           = _DYN_U_Kd/1000.00;			//DOT3å±žæ€§
-	PI_PARA_DYNU.outmax       = _DYN_U_outmax;   							//åŠ¨æ€ç”µåŽ‹çŽ¯å‚æ•°
-	PI_PARA_DYNU.errmax       = _DYN_U_errmax/10.00;		//DOT1å±žæ€§
-	PI_PARA_DYNU.errmin       = _DYN_U_errmin/1000.00;		//DOT3å±žæ€§
-	PI_PARA_DYNU.incrementmax = _DYN_U_incrementmax/10.00;  //DOT1å±žæ€§
+	PI_PARA_DYNU.kp           = _DYN_U_Kp/100.00;			//DOT2ÊôÐÔ
+    PI_PARA_DYNU.ki           = _DYN_U_Ki/10.00;			//DOT1ÊôÐÔ
+    PI_PARA_DYNU.kd           = _DYN_U_Kd/1000.00;			//DOT3ÊôÐÔ
+	PI_PARA_DYNU.outmax       = _DYN_U_outmax;   							//¶¯Ì¬µçÑ¹»·²ÎÊý
+	PI_PARA_DYNU.errmax       = _DYN_U_errmax/10.00;		//DOT1ÊôÐÔ
+	PI_PARA_DYNU.errmin       = _DYN_U_errmin/1000.00;		//DOT3ÊôÐÔ
+	PI_PARA_DYNU.incrementmax = _DYN_U_incrementmax/10.00;  //DOT1ÊôÐÔ
 */
-//----ç½‘ä¾§ç”µåŽ‹çŽ¯å¯åŠ¨åŠ¨æ€PIç»™å›ºå®šå€¼BJTULVRT201204
-	PI_PARA_DYNU.kp           = 0.15;						//DOT2å±žæ€§
-    PI_PARA_DYNU.ki           = 3;							//DOT1å±žæ€§
-    PI_PARA_DYNU.kd           = 0;							//DOT3å±žæ€§
-	PI_PARA_DYNU.outmax       = 600;   						//åŠ¨æ€ç”µåŽ‹çŽ¯å‚æ•°
-	PI_PARA_DYNU.errmax       = 100;						//DOT1å±žæ€§
-	PI_PARA_DYNU.errmin       = 0;							//DOT3å±žæ€§
-	PI_PARA_DYNU.incrementmax = 100;  						//DOT1å±žæ€§
-//-----æœºä¾§åŠ¨æ€PIå‚æ•°BJTULVRT201204	_MPR_U_Kpåœ¨è°ƒè¯•ç•Œé¢é‡Œæ²¡æœ‰ æš‚æ—¶ä¸ç”¨,é¦–é€‰PR
-	PI_PARA_DYMI.kp           = _DYN_U_Kp/100.00;			//DOT2å±žæ€§
-    PI_PARA_DYMI.ki           = _DYN_U_Ki/10.00;			//DOT1å±žæ€§
-    PI_PARA_DYMI.kd           = _DYN_U_Kd/1000.00;			//DOT3å±žæ€§
-	PI_PARA_DYMI.outmax       = _DYN_U_outmax;   							//MPRç”µåŽ‹çŽ¯å‚æ•°
-	PI_PARA_DYMI.errmax       = _DYN_U_errmax/10.00;		//DOT1å±žæ€§
-	PI_PARA_DYMI.errmin       = _DYN_U_errmin/1000.00;		//DOT3å±žæ€§
-	PI_PARA_DYMI.incrementmax = _DYN_U_incrementmax/10.00;  //DOT1å±žæ€§
-//----åŒæ—¶ç”¨ä½œåŠ¨æ€PIå’ŒPRå‚æ•°è®¾å®š
+//----Íø²àµçÑ¹»·Æô¶¯¶¯Ì¬PI¸ø¹Ì¶¨ÖµBJTULVRT201204
+	PI_PARA_DYNU.kp           = 0.15;						//DOT2ÊôÐÔ
+    PI_PARA_DYNU.ki           = 3;							//DOT1ÊôÐÔ
+    PI_PARA_DYNU.kd           = 0;							//DOT3ÊôÐÔ
+	PI_PARA_DYNU.outmax       = 600;   						//¶¯Ì¬µçÑ¹»·²ÎÊý
+	PI_PARA_DYNU.errmax       = 100;						//DOT1ÊôÐÔ
+	PI_PARA_DYNU.errmin       = 0;							//DOT3ÊôÐÔ
+	PI_PARA_DYNU.incrementmax = 100;  						//DOT1ÊôÐÔ
+//-----»ú²à¶¯Ì¬PI²ÎÊýBJTULVRT201204	_MPR_U_KpÔÚµ÷ÊÔ½çÃæÀïÃ»ÓÐ ÔÝÊ±²»ÓÃ,Ê×Ñ¡PR
+	PI_PARA_DYMI.kp           = _DYN_U_Kp/100.00;			//DOT2ÊôÐÔ
+    PI_PARA_DYMI.ki           = _DYN_U_Ki/10.00;			//DOT1ÊôÐÔ
+    PI_PARA_DYMI.kd           = _DYN_U_Kd/1000.00;			//DOT3ÊôÐÔ
+	PI_PARA_DYMI.outmax       = _DYN_U_outmax;   							//MPRµçÑ¹»·²ÎÊý
+	PI_PARA_DYMI.errmax       = _DYN_U_errmax/10.00;		//DOT1ÊôÐÔ
+	PI_PARA_DYMI.errmin       = _DYN_U_errmin/1000.00;		//DOT3ÊôÐÔ
+	PI_PARA_DYMI.incrementmax = _DYN_U_incrementmax/10.00;  //DOT1ÊôÐÔ
+//----Í¬Ê±ÓÃ×÷¶¯Ì¬PIºÍPR²ÎÊýÉè¶¨
 
 	_eidco   = _EIDCO/1000.00;
 	_encodpos= _ENCODPOS/1000.00;
 	_sc_freq1= _SC_FREQ1/10.00;
 	_sc_freq2= _SC_FREQ2/10.00;
-	_stdby01 = _STDBY1/1000.00;								//å¤‡ç”¨ç»è¿‡å°æ•°æ„¦îœ¬ç —ç¬¾ï¿½
-	_stdby02 = _STDBY2/100.00;								//å¤‡ç”¨ç»è¿‡å°æ•°ç‚¹å¤„ç†åŽå€¼
-	_stdby03 = _STDBY3/10.00;								//å¤‡ç”¨ç»è¿‡å°æ•°ç‚¹å¤„ç†åŽå€¼
-    _stdby04 = _STDBY4;			        					//å¤‡ç”¨
-	_stdby05 = _STDBY5;			        					//å¤‡ç”¨
-    _stdby06 = _STDBY6;			        					//å¤‡ç”¨
-	_stdby07 = _STDBY7;			        					//å¤‡ç”¨
-//    _stdby08 = _STDBY8;			        					//å¤‡ç”¨
-//è®¡ç®—å®šå­ç”µåŽ‹ADå¤§æ»¤æ³¢æ¯”çŽ‡2013-12-13--ZZJ
-	Uns_ft = 0.5 * ((MEAN_DATA.uab3/MEAN_DATA.uab1)+(MEAN_DATA.ubc3/MEAN_DATA.ubc1));//å¤§æ»¤æ³¢å¹…å€¼è¡°å‡æ¯”ä¾‹
+	_stdby01 = _STDBY1/1000.00;								//±¸ÓÃ¾­¹ýÐ¡Êýã´¦ÀíºóÖµ
+	_stdby02 = _STDBY2/100.00;								//±¸ÓÃ¾­¹ýÐ¡Êýµã´¦ÀíºóÖµ
+	_stdby03 = _STDBY3/10.00;								//±¸ÓÃ¾­¹ýÐ¡Êýµã´¦ÀíºóÖµ
+    _stdby04 = _STDBY4;			        					//±¸ÓÃ
+	_stdby05 = _STDBY5;			        					//±¸ÓÃ
+    _stdby06 = _STDBY6;			        					//±¸ÓÃ
+	_stdby07 = _STDBY7;			        					//±¸ÓÃ
+//    _stdby08 = _STDBY8;			        					//±¸ÓÃ
+//¼ÆËã¶¨×ÓµçÑ¹AD´óÂË²¨±ÈÂÊ2013-12-13--ZZJ
+	Uns_ft = 0.5 * ((MEAN_DATA.uab3/MEAN_DATA.uab1)+(MEAN_DATA.ubc3/MEAN_DATA.ubc1));//´óÂË²¨·ùÖµË¥¼õ±ÈÀý
 
 	daindex[0] = (Uint16)_NPR_U_Kd;	//da output select BJTULVRT201204
 	daindex[1] = (Uint16)_NPR_ID_Kd;
 	daindex[2] = (Uint16)_NPR_IQ_Kd;
 	daindex[3] = (Uint16)_MPR_ID_Kd;
 
-//è½¬å­ç”µæµå¸¦é˜»æ»¤æ³¢å‚æ•° BJTULVRT201204
+//×ª×ÓµçÁ÷´ø×èÂË²¨²ÎÊý BJTULVRT201204
 	BS_PARA_MPRI.f0 = 300;
 	BS_PARA_MPRI.fb = 50;
 	BS_PARA_MPRI.outmax = 1800;//201205LVRTatZB
-//å®šå­ç”µæµå¸¦é˜»æ»¤æ³¢å‚æ•° BJTULVRT201204
+//¶¨×ÓµçÁ÷´ø×èÂË²¨²ÎÊý BJTULVRT201204
 	BS_PARA_STAI.f0 = 50;
 	BS_PARA_STAI.fb = 40;
 	BS_PARA_STAI.outmax = 8000; //201205LVRTatZB
 
-//ç”µæœºå‚æ•°è®¾å®š201005atcpc
+//µç»ú²ÎÊýÉè¶¨201005atcpc
 
-	MPR_Ls = (_SC_Lls * 1e-6)+(_SC_Lm * 1e-6);				//å®šå­è‡ªæ„Ÿ	--å•ä½H
-	MPR_Lr = (_SC_Llr * 1e-6)+(_SC_Lm * 1e-6);				//è½¬å­è‡ªæ„Ÿ	--å•ä½H
-	MPR_Lm = _SC_Lm * 1e-6;									//å®šè½¬å­äº’æ„Ÿ--å•ä½H
-	MPR_Rs = _SC_Rs * 1e-6;									//å®šå­ç”µé˜»	--å•ä½ohm
-	MPR_Rr = _SC_Rr * 1e-6;									//è½¬å­ç”µé˜»	--å•ä½ohm
+	MPR_Ls = (_SC_Lls * 1e-6)+(_SC_Lm * 1e-6);				//¶¨×Ó×Ô¸Ð	--µ¥Î»H
+	MPR_Lr = (_SC_Llr * 1e-6)+(_SC_Lm * 1e-6);				//×ª×Ó×Ô¸Ð	--µ¥Î»H	
+	MPR_Lm = _SC_Lm * 1e-6;									//¶¨×ª×Ó»¥¸Ð--µ¥Î»H
+	MPR_Rs = _SC_Rs * 1e-6;									//¶¨×Óµç×è	--µ¥Î»ohm
+	MPR_Rr = _SC_Rr * 1e-6;									//×ª×Óµç×è	--µ¥Î»ohm
 	SIGMA  = 1- (MPR_Lm * MPR_Lm /(MPR_Ls * MPR_Lr));		//(1-MPR_Lm*MPR_Lm/(MPR_Ls*MPR_Lr))	
 	
-	temp_Usn  = (float)_SC_Usn;								//å®šå­é¢å®šç”µåŽ‹(V)
-	temp_Uro  = (float)_SC_Uro;								//è½¬å­å¼€è·¯ç”µåŽ‹(V)
-	STAROTRTO = temp_Usn * SQRT3 / temp_Uro;				//å®šè½¬å­å˜æ¯” åªé€‚ç”¨å®šå­è§’æŽ¥è½¬å­æ˜ŸæŽ¥çš„ç”µæœº
-	STAROTRTO2= STAROTRTO * STAROTRTO;						//å®šè½¬å­å˜æ¯”çš„å¹³æ–¹
-	POLEPAIRES= (float)_SC_POLES;							//æžå¯¹æ•°
+	temp_Usn  = (float)_SC_Usn;								//¶¨×Ó¶î¶¨µçÑ¹(V)
+	temp_Uro  = (float)_SC_Uro;								//×ª×Ó¿ªÂ·µçÑ¹(V)
+	STAROTRTO = temp_Usn * SQRT3 / temp_Uro;				//¶¨×ª×Ó±ä±È Ö»ÊÊÓÃ¶¨×Ó½Ç½Ó×ª×ÓÐÇ½ÓµÄµç»ú
+	STAROTRTO2= STAROTRTO * STAROTRTO;						//¶¨×ª×Ó±ä±ÈµÄÆ½·½
+	POLEPAIRES= (float)_SC_POLES;							//¼«¶ÔÊý
 
- 	if(_SC_PLSPRVL != 2048)									//201007BJTULVRT å¦‚æžœä¸æ˜¯ç¼ºçœå€¼2048,åˆ™é‡æ–°èµ‹å€¼
+ 	if(_SC_PLSPRVL != 2048)									//201007BJTULVRT Èç¹û²»ÊÇÈ±Ê¡Öµ2048,ÔòÖØÐÂ¸³Öµ
 	{
 		if(EQep2Regs.QPOSMAX != (4 * _SC_PLSPRVL))
 		{
 			EALLOW;			
- 			EQep2Regs.QPOSMAX   = 4 * _SC_PLSPRVL;			// ä½ç½®è®¡æ•°å™¨æœ€å¤§å€¼
+ 			EQep2Regs.QPOSMAX   = 4 * _SC_PLSPRVL;			// Î»ÖÃ¼ÆÊýÆ÷×î´óÖµ
 			EDIS;	
 		}
 	}
    
 } 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Disepwmio_NPR
-** åŠŸèƒ½æè¿°:
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Disepwmio_NPR
+** ¹¦ÄÜÃèÊö: 
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€ï¿½
-** æ—¥ã€€æœŸ:
+** ×÷¡¡ß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Disepwmio_NPR(void)
@@ -3397,17 +3395,17 @@ void Disepwmio_NPR(void)
 	EDIS;
 }  
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Disepwmio_MPR
-** åŠŸèƒ½æè¿°:
-** è¾“âˆª?
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Disepwmio_MPR
+** ¹¦ÄÜÃèÊö: 
+** Êä¡È? 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Disepwmio_MPR(void)
@@ -3428,17 +3426,17 @@ void Disepwmio_MPR(void)
 	EDIS;
 }  
 /*********************************************************************************************************
-** å‡½æ•°åç§°ï¼š DisPwm
-** åŠŸèƒ½æè¿°ï¼šè„‰å†²ç¦æ­¢
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ£º DisPwm
+** ¹¦ÄÜÃèÊö£ºÂö³å½ûÖ¹
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void DisPwm(void)
@@ -3449,17 +3447,17 @@ void DisPwm(void)
 
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: Enepwmio_NPR
-** åŠŸèƒ½æè¿°:
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: Enepwmio_NPR
+** ¹¦ÄÜÃèÊö: 
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥âˆ‘?
+** ÐÞ¸ÄÈË:
+** ÈÕ¡Æ?
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Enepwmio_NPR(void)
@@ -3476,17 +3474,17 @@ void Enepwmio_NPR(void)
 	EDIS;
 }  
 /*********************************************************************************************************
-** å‡½æ•°åç§°ï¼šEnepwmio_MPR
-** åŠŸèƒ½æè¿°:
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ£ºEnepwmio_MPR
+** ¹¦ÄÜÃèÊö: 
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void Enepwmio_MPR(void)
@@ -3503,17 +3501,17 @@ void Enepwmio_MPR(void)
 	EDIS;
 }    
 /*********************************************************************************************************
-** å‡½æ•°åç§°: ConfigPwm
-** åŠŸèƒ½æè¿°: è¿›è¡ŒPWMå¼€å…³é¢‘çŽ‡å’Œæ­»åŒºæ—¶é—´çš„è®¾ç½®
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: ConfigPwm
+** ¹¦ÄÜÃèÊö: ½øÐÐPWM¿ª¹ØÆµÂÊºÍËÀÇøÊ±¼äµÄÉèÖÃ
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void ConfigPwm(void)						
@@ -3521,20 +3519,20 @@ void ConfigPwm(void)
 	Disepwmio_NPR();
 	Disepwmio_MPR();
 	EALLOW;
-//----------NPRçš„PWM1-PWM6è®¾ç½®---------------//
-    EPwm1Regs.TBPRD = 3750000/_SW_FR;           // å¼€å…³é¢‘çŽ‡ä¸ºä½œç»™ï¿½_SW_FR=200å¯¹åº”2kHz
-    EPwm2Regs.TBPRD = 3750000/_SW_FR;           // PWMæ—¶é’Ÿä¸º75MHz
+//----------NPRµÄPWM1-PWM6ÉèÖÃ---------------//
+    EPwm1Regs.TBPRD = 3750000/_SW_FR;           // ¿ª¹ØÆµÂÊÎª×÷¸ø¨,_SW_FR=200¶ÔÓ¦2kHz
+    EPwm2Regs.TBPRD = 3750000/_SW_FR;           // PWMÊ±ÖÓÎª75MHz
 	EPwm3Regs.TBPRD = 3750000/_SW_FR;           // TBPRD = Time-base Period Register
     SW_NPR=3750000.0/_SW_FR;
 
-    EPwm1Regs.DBRED = 75 * _DEADTIME;              //æ­»åŒºï¼Œ_DEADTIMEå•ä½ä¸ºus
+    EPwm1Regs.DBRED = 75 * _DEADTIME;              //ËÀÇø£¬_DEADTIMEµ¥Î»Îªus 
     EPwm1Regs.DBFED = 75 * _DEADTIME;              //
     EPwm2Regs.DBRED = 75 * _DEADTIME;              //DBRED = Dead-Band Generator Rising Edge Delay Count Register
     EPwm2Regs.DBFED = 75 * _DEADTIME;              //DBFED = Dead-Band Generator Falling Edge Delay Count Register
     EPwm3Regs.DBRED = 75 * _DEADTIME;
     EPwm3Regs.DBFED = 75 * _DEADTIME;   
 
-//----------MPRçš„PWM7-PWM12è®¾ç½®---------------//
+//----------MPRµÄPWM7-PWM12ÉèÖÃ---------------//
 	EPwm4Regs.TBPRD = 3750000/_SW_FR;           // 
     EPwm5Regs.TBPRD = 3750000/_SW_FR;           // 
     EPwm6Regs.TBPRD = 3750000/_SW_FR;           // 
@@ -3564,17 +3562,17 @@ void ConfigPwm(void)
 }
 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: EnPdpint
-** åŠŸèƒ½æè¿°:
-** è¾“ã€€å…¥:
-** è¾“ã€€å‡º:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: EnPdpint
+** ¹¦ÄÜÃèÊö: 
+** Êä¡¡Èë: 	 
+** Êä¡¡³ö:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€?
+** ×÷¡¡Õß: 
+** ÈÕ¡¡? 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void EnPdpint(void)
@@ -3592,17 +3590,17 @@ void EnPdpint(void)
 	EDIS;
 }
 /*********************************************************************************************************
-** å‡½æ•°åç§°: DisPdpint
-** åŠŸèƒ½æè¿°:
-** è¾“ã€€å…¥:
-** è¾“ã€€:
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: DisPdpint
+** ¹¦ÄÜÃèÊö: 
+** Êä¡¡Èë: 	 
+** Êä¡¡:   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** é³Œâ‰Œï¿½
-** æ—¥ã€€æœŸ:
+** ÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void DisPdpint(void)
@@ -3620,17 +3618,17 @@ void DisPdpint(void)
 	EDIS;
 } 
 /*********************************************************************************************************
-** å‡½æ•°åç§°: ClrPdpint
-** åŠŸèƒ½æè¿°:
-** è¾“ã€€å…¥:
-** è¾“ã€•?
-** æ³¨  é‡Š:
+** º¯ÊýÃû³Æ: ClrPdpint
+** ¹¦ÄÜÃèÊö: 
+** Êä¡¡Èë: 	 
+** Êä¡³?   
+** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ä½œã€€è€…:
-** æ—¥ã€€æœŸ:
+** ×÷¡¡Õß: 
+** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ä¿®æ”¹äºº:
-** æ—¥ã€€æœŸ:
+** ÐÞ¸ÄÈË:
+** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
 void ClrPdpint(void)

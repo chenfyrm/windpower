@@ -64,6 +64,7 @@ extern "C" {
 #define	M_ChkT1Direction()	(EPwm1Regs.TBSTS.all&BIT0)
 #define	M_ChkT3Direction()	(EPwm4Regs.TBSTS.all&BIT0)
 
+//#define	M_ClrCnt(x)			(*timer_cnt[x] =0)
 /*********************************************************************************************************
 ** 函数名称: M_TimerDelay
 ** 功能描述: 计时器值加1
