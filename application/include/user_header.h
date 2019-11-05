@@ -47,7 +47,7 @@ extern "C" {
 //#define	ON					1				          //¿ª
 //#define	OFF					0				          //¹Ø
 //#define	DEBUG_OPER			OFF			              //1=²»´ø²Ù×÷Æ÷2009.6.24
-Uint16 DEBUG_OPER;                                        //20100401at27
+
 
 //------------------------µç»ú×ª×Ó·´Ğò¿ØÖÆÑ¡Ôñ-201005atcpc-----------------------------------------
 #define	R_PHORDE			1				          //¿ª
@@ -92,16 +92,7 @@ Uint16 DEBUG_OPER;                                        //20100401at27
 #define	STAROTRTO2	0.35070084       	//¶¨×ª×Ó±ä±ÈµÄÆ½·½
 #define	POLEPAIRES	2       			//µç»ú¼«¶ÔÊı  
 */
-//µç»ú²ÎÊıÉè¶¨2010atcpc
-float  	MPR_Ls;	 	    				//¶¨×Ó×Ô¸Ğ	--µ¥Î»H 
-float	MPR_Lr;	 	    				//×ª×Ó×Ô¸Ğ	--µ¥Î»H	
-float 	MPR_Lm;	 	    				//¶¨×ª×Ó»¥¸Ğ--µ¥Î»H
-float 	MPR_Rs;	     					//¶¨×Óµç×è	--µ¥Î»ohm
-float 	MPR_Rr;	    					//×ª×Óµç×è	--µ¥Î»ohm
-float 	SIGMA;							//(1-MPR_Lm*MPR_Lm/(MPR_Ls*MPR_Lr))	        
-float	STAROTRTO;       				//¶¨×ª×Ó±ä±È
-float	STAROTRTO2;       				//¶¨×ª×Ó±ä±ÈµÄÆ½·½
-float	POLEPAIRES;       				//µç»ú¼«¶ÔÊı  
+
 ///-------------³£ÓÃ³£Á¿ºê¶¨Òå-------------------------//
 #define	SQRT3		1.73205081			//sqrt(3)
 #define	SQRT3_2		0.8660254           //sqrt(3)/2
@@ -191,8 +182,8 @@ float	POLEPAIRES;       				//µç»ú¼«¶ÔÊı
 #define	DELAY_CLOSTACMD	    1000  	 //ÔÊĞíºÏ¶¨×Ó½Ó´¥Æ÷£¬·ÀÖ¹Îó²Ù×÷ 1s
 #define	DELAY_NPRCMD	    1000  	 //ÉÏÎ»»úÔÊĞíNPR·¢Âö³å£¬·ÀÖ¹Îó²Ù×÷ 1s
 #define	DELAY_MPRCMD	    1000  	 //ÉÏÎ»»úÔÊĞíMPR·¢Âö³å£¬·ÀÖ¹Îó²Ù×÷ 1s
-#define	DELAY_EIN	    	1000  	 //ÏÎ»»ú¿ØÖÆÖ÷¶Ï£¬·ÀÖ¹Îó²Ù×÷ 1s
-#define	DELAY_SYSRUN	    1000  	 //ÉÏÎ»»ú¿ØÖÆÏµÍ³ÔËĞĞ/µç»úÊÔÑé£¬·ÀÖ¹Îó²Ù÷ 1s
+#define	DELAY_EIN	    	1000  	 //ÏÎ»»ú¿ØÖÆÖ÷¶Ï£¬·ÀÖ¹Îó²Ù×1s
+#define	DELAY_SYSRUN	    1000  	 //ÉÏÎ»»ú¿ØÖÆÏµÍ³ÔËĞĞ/µç»úÊÔÑé£¬·ÀÖ¹Îó²Ù1s
 #define	DELAY_PREC	     	1000  	 //ÉÏÎ»»ú¿ØÖÆÔ¤³äµç£¬·ÀÖ¹Îó²Ù×÷ 1s
 
 #define	DELAY_QCAPSPDIN     120    	//×ª×ÓËÙ¶È²âÕı³£120ms   20090817
@@ -337,7 +328,7 @@ float	POLEPAIRES;       				//µç»ú¼«¶ÔÊı
 //#define	AD1544_CONVERT		2										//1544¿ªÊ¼×ª»»
 //#define	DA7614_CONVERT		4										//7614¿ªÊ¼×ª»»
 //ad
-#define AD_ASTART		    ((Uint16 *)0x100000)						//Æ¬ÍâADµÄÊıİ¶ÁÈ¡Ê×µØÖ·
+#define AD_ASTART		    ((Uint16 *)0x100000)						//Æ¬ÍâADµÄÊıİ¶ÁÈ¡Ê×µØÖ
 #define AD_BSTART		    ((Uint16 *)0x110000)						//Æ¬ÍâADµÄÊı¾İ¶ÁÈ¡Ê×µØÖ·
 #define AD_CSTART		    ((Uint16 *)0x120000)						//Æ¬ÍâADµÄÊı¾İ¶ÁÈ¡Ê×µØÖ·
 #define AD_DA_CTRL		    ((Uint16 *)0x130000)						//Æ¬ÍâAD,DAµÄ¿ØÖÆ×Ö½ÚµØÖ·
@@ -353,8 +344,6 @@ float	POLEPAIRES;       				//µç»ú¼«¶ÔÊı
 #define ERROR_RAMSTART		((Uint16 *)0x21FBD0)						//Æ¬ÍâRAMÊ×µØÖ·XINTF zone 7 start at 130000
 #define ERROR_RAMEND		((Uint16 *)0x23E418)						//Æ¬ÍâRAMÎ²µØÖ·XINTF zone 7 end at 255000
 #define RAM_BIAS			5000										//=2s/(0.4ms/point)=5000points/variable
-Uint16  BANK_RAMDATA_POS;						    					//´æ´¢±äÁ¿µÄ´æ´¢µãÎ»ÖÃ[0,4999]
-Uint16  ERROR_RAMDATA_POS;						    					//´æ´¢±äÁ¿µÄ´æ´¢µãÎ»ÖÃ[0,4999]
 #define RAM_SEGMENT			1000											//Ã¿¸ö²¨ĞÎÃ¿´Î·¢ËÍ·Ö¶Î´ò°ü³¤¶È
 
 
@@ -431,7 +420,7 @@ Uint16  ERROR_RAMDATA_POS;						    					//´æ´¢±äÁ¿µÄ´æ´¢µãÎ»ÖÃ[0,4999]
 #define SL_ERROR_MAINF   	0x28         	//=1Ö÷ÂË²¨Æ÷¹ÊÕÏ
 #define SL_ERROR_MAINK     	0x29         	//=1Ö÷½Ó´¥Æ÷¹ÊÕÏ
 #define SL_ERROR_STAC		0x2A         	//=1¶¨×Ó½Ó´¥Æ÷¹ÊÕÏ
-#define SL_ERROR_PRE       	0x2B         	//=1Ô¤³äµçÊÕÏ 
+#define SL_ERROR_PRE       	0x2B         	//=1Ô¤³äµçÊÕ
 #define SL_MSPOUT        	0x2C         	//=1×ªËÙ³¬³ö·¶Î§¹ÊÕÏ 
 #define SL_SYNFAIL        	0x2D         	//=1¶¨×ÓÍ¬²½²¢ÍøÊ§°Ü¹ÊÕÏ 
 #define SL_STEADYGV			0x2E			//=1Vdc¸ø¶¨ÎÈ¶¨
@@ -497,12 +486,12 @@ Uint16  ERROR_RAMDATA_POS;						    					//´æ´¢±äÁ¿µÄ´æ´¢µãÎ»ÖÃ[0,4999]
 #define	SL_NPR_START		0x62			//Íø²à±äÁ÷Æ÷ÔËĞĞÖ¸Áî 1=ÔËĞĞ
 #define	SL_MPR_START		0x63			//»ú²à±äÁ÷Æ÷ÔËĞĞÖ¸Áî 1=ÔËĞĞ
 #define	SL_NPR_RUN			0x64			//=1Íø²à±äÁ÷Æ÷¹¤×÷ÔÊĞí
-#define	SL_MPR_RUN			0x65			//=1»ú²à±äÁ÷Æ÷¹¤×÷ÊĞí 
-#define	SL_NPR_RUNING		0x66			//=1Íø²à±äÁ÷Æ÷ÕıÔÚ¹¤÷
+#define	SL_MPR_RUN			0x65			//=1»ú²à±äÁ÷Æ÷¹¤×÷ÊĞ
+#define	SL_NPR_RUNING		0x66			//=1Íø²à±äÁ÷Æ÷ÕıÔÚ¹¤
 #define	SL_MPR_RUNING		0x67			//=1»ú²à±äÁ÷Æ÷ÕıÔÚ¹¤×÷
 #define SL_NPR_PWMOUT       0x68            //=1Íø²àÂö³åÒÑ¾­Ê¹ÄÜ±êÖ¾Î»,²¢ÇÒ±£Ö¤Enepwmio_NPR()Ö»ÄÜÔËĞĞÒ»´Î
 #define SL_MPR_PWMOUT       0x69            //=1»ú²àÂö³åÒÑ¾­Ê¹ÄÜ±êÖ¾Î»,²¢ÇÒ±£Ö¤Enepwmio_MPR()Ö»ÄÜÔËĞĞÒ»´Î
-#define SL_RUN				0x6A			//=1ÏµÍ³ËĞĞ
+#define SL_RUN				0x6A			//=1ÏµÍ³ËĞ
 #define SL_CONFIGPWM		0x6B			//=1PWMÂö³åÅäÖÃÍê³É±êÖ¾Î»,¤ConfigPwm()Ö»ÄÜÔËĞĞÒ»´Î
 #define SL_FAN_WORK         0x6C			//=1ÒªÇó¹¦ÂÊ·çÉÈ¿ªÊ¼¹¤×÷
 #define SL_CHARGEOK			0x6D			//=1Ô¤³äµçÍê³É
@@ -527,12 +516,11 @@ Uint16  ERROR_RAMDATA_POS;						    					//´æ´¢±äÁ¿µÄ´æ´¢µãÎ»ÖÃ[0,4999]
 #define CL_RELAY8      		0x80			//±¸ÓÃ
 #define CL_CHOPTEST        	0x81			//Õ¶²¨²âÊÔ 2013-12-6ZZJ 
 #define SL_WATCHDOG			0x82            //DSPÈí¼ş¿´ÃÅ¹· 20100401at27
-//#define SL_SWITCHDETECT    	0x84         	//=1¼ì²âÒââ¶¯×÷ 		110818
+//#define SL_SWITCHDETECT    	0x84         	//=1¼ì²âÒââ¶¯×		110818
 #define CL_CHOPEN			0x83			//enable chopper
-
-//--------ÒÔÏÂ±ê¾Î»·ÇÊä³ö£¬ÄÚ²¿±êÖ¾--------------------------------------------
+//--------ÒÔÏÂ±ê¾Î»·ÇÊä³ö£¬ÄÚ²¿±êÖ-------------------------------------------
 #define SL_ERRSTOP_S1		0x84            //Ò»°ã¹ÊÕÏ²½Öè±êÖ¾Î»20110829
-#define SL_SWITCHDETECT    	0x85         	//=1¼ì²âÒââ¶¯×÷ 		110818
+#define SL_SWITCHDETECT    	0x85         	//=1¼ì²âÒââ¶¯×		110818
 #define SL_QEPPHE    		0x86         	//=1µç»ú·´×ª»òAB·´½Ó¹ÊÕÏ 20110829HC
 #define SL_SYSOFF    		0x87         	//=1·ç»úÕı³£Í£»úÊ±×ªËÙ¹ıµÍ£¬²»ÔÙ½ÓÊÕÖ÷¿Ø×ª¾ØÖ¸Áî£¬×ÔĞĞÍ£»ú	20120321
 #define SL_IDCOV    		0x88         	//=1ÖĞ¼äÖ±Á÷Õ¶²¨Èí¼şµçÁ÷¹ıÁ÷ÅĞ¶Ï-BJTULVRT201204
@@ -544,36 +532,10 @@ Uint16  ERROR_RAMDATA_POS;						    					//´æ´¢±äÁ¿µÄ´æ´¢µãÎ»ÖÃ[0,4999]
 #define SL_LV_SCROFF1		0x8E			//=1 35%²»¶Ô³Æ¹ØSCR 20121210
 #define SL_LV_SCROFF2		0x8F			//=1 50%²»¶Ô³Æ¹ØSCR 20121210
 
-//flag[15]Êä³ö±ê4         0x1A0000          //ÂıËÙADµØÖ·Êä³ö
-#define _OUT3_DATA			flag[15]									
-#define SL_PHASEA			0xF0		     //					
-#define SL_PHASEB			0xF1             //
- 
-Uint16   _OUT4_DATA;		//¸Ã±êÖ¾Î»ÎŞÓÃ¸ÄÎªºê¶¨Òå20130222
-
-//flag[11]Êä³ö±ê4         0x1C0000          //ADÖ·Êä³ö
-/*#define _OUT4_DATA			flag[11]									
-#define SL_LSADA0			0xB0		     //A0						
-#define SL_LSADA1			0xB1             //A1
-#define SL_LSADA2			0xB2             //A2
-#define SL_LSADA3			0xB3	         //A3							
-*/
-//flag[11]LVRTÏà¹Ø±êÖ¾Î»	20130222
-#define SL_LV_RECMSTOP			0xB0			//=1»Ö¸´Ê±¿ÌÖ÷¶¯·âÂö³å	20130124
-#define SL_LV_ZDNSTOP			0xB1			//=1µøÂäÊ±¿ÌÍø²àÖ÷¶¯·âÂö³å	20130202
-//#define SL_LV_XNZKKZ			0xB2			//=1ĞéÄâ×è¿¹¿ØÖÆÆÚ¼ä	20130202
-#define SL_LV_STRICTLV			0xB2			//=1ÑÏ¸ñLVÇø¼ä	20130222
-#define SL_LV_RECNSTOP			0xB3			//=1»Ö¸´Ê±¿ÌÖ÷¶¯·âÂö³å	20130206
-#define SL_LV_ZDMSTOP			0xB4			//=1µøÂäÊ±¿Ì»ú²àÖ÷¶¯·âÂö³å	20130221
-#define SL_LV_SCRDONE			0xB5			//=1 Í¶ÈëscrÒ»´Î20130221
-#define SL_LV_CLRERRAM			0xB6			//=1 Çå³ıLVÎó´¥·¢²¨ĞÎ20130306
-#define SL_CANOPENHEAD			0xB7			//=1 ÊÕµ½±¨Í·	20130801
-#define SL_ENCODEPOS_OK			0xB8			//=1±àÂëÆ÷Î»ÖÃ¼ì²âÍê³É	20130801
-#define SL_ECPOSSEARCH			0xB9			//=1±àÂëÆ÷Î»ÖÃĞ£Ñé¹ı 	20130801
 
 
 //flag[9]ÊäÈë±ê12
-#define _IN12_DATA			flag[9]			//±äÁ÷Æ÷²¼ş×´Ì¬·´À¡
+#define _IN12_DATA			flag[9]			//±äÁ÷Æ÷²¼ş×´Ì¬·´À
 //---------------------0x140000----------------------------------------------------------------------------	
 #define SL_IN1_CBSTS 			0x90			//=1 Ö÷¶Ï´¦ÓÚ±ÕºÏ×´Ì¬¬¬P4.1
 #define SL_IN1_CBRESET			0x91			//=1 ¼ì²âµ½÷¿ØÒªÇóÖ÷¶ÏRESETÖ¸Áî(ĞèÒªÑÓÊ±Ò»¶ÎÊ±¼äºó²ÅÄÜºÏÖ÷¶Ï)£¬P4.2
@@ -581,8 +543,8 @@ Uint16   _OUT4_DATA;		//¸Ã±êÖ¾Î»ÎŞÓÃ¸ÄÎªºê¶¨Òå20130222
 #define SL_IN1_MIANK   			0x93			//=1 Ö÷½Ó´¥Æ÷´¦ÓÚºÏÕ¢×´¬£¬P4.4
 #define SL_IN1_MIANFILTER		0x94			//=1 Ö÷ÂË²¨Æ÷´¦ÓÚºÏÕ¢×´Ì¬£¬P4.5
 #define SL_IN1_EXFAULTOK	   	0x95			//=1 Íâ²¿¹ÊÕÏÁ´Õı³££¬0=¹ÊÕÏ·¢Éú	P4.6¬£		
-#define SL_IN1_MIANFAN	    	0x96	        //=1 ¹¦ç»úÕı³££¬0=³¬ÎÂÕÏ   P4.7 
-#define SL_IN1_EXESTOP	        0x97			//=1 Íâ²¿¼±Í£¹ÊÕÏ  ±äÁ÷Æ÷¹ñÉÏ½ô¼±Í£ú°´Å¥°´ÏÂ=1 P4.8	090815				
+#define SL_IN1_MIANFAN	    	0x96	        //=1 ¹¦ç»úÕı³££=³¬ÎÂÕÏ   P4.7
+#define SL_IN1_EXESTOP	        0x97			//=1 Íâ²¿¼±Í£¹ÊÕÏ  ±äÁ÷Æ÷¹ñÉÏ½ô¼±Í£ú°´Å¥°´Ï 1 P4.8	090815
 //---------------------0x150000---------------------------------------------------------------------------	
 #define SL_IN2_IOVA1			0x98			//=1 Íø²àAÏà SKiiP¹ÊÕÏ(¹ıÁ÷»òÕß³¬ÎÂ)
 #define SL_IN2_IOVB1			0x99			//=1 Íø²àBÏà SKiiP¹ÊÕÏ(¹ıÁ÷»òÕß³¬ÎÂ)
@@ -606,6 +568,31 @@ Uint16   _OUT4_DATA;		//¸Ã±êÖ¾Î»ÎŞÓÃ¸ÄÎªºê¶¨Òå20130222
 //#define SL_IN3_OCS_MPRSTART		0xA5			//=1 ÉÏÎ»»úÔÊĞí·¢»ú²àÂö³å  ²Ù×÷°åĞÅºÅ£¬·ç³¡Ã»ÓÃ
 #define SL_IN3_IOVDC			0xA6			//=1 dc-link chopper errror 20120228atbjtu	BJTULVRT201204
 //×¢Òâ£ºÓÃ¸ß8Î»Ê±£¬ÊäÈë¸³Öµ»áÇåÁã20130222atzb
+
+
+
+
+
+//flag[11]Êä³ö±ê4         0x1C0000          //ADÖ·Êä³ö
+/*#define _OUT4_DATA			flag[11]
+#define SL_LSADA0			0xB0		     //A0
+#define SL_LSADA1			0xB1             //A1
+#define SL_LSADA2			0xB2             //A2
+#define SL_LSADA3			0xB3	         //A3
+*/
+//flag[11]LVRTÏà¹Ø±êÖ¾Î»	20130222
+#define SL_LV_RECMSTOP			0xB0			//=1»Ö¸´Ê±¿ÌÖ÷¶¯·âÂö³å	20130124
+#define SL_LV_ZDNSTOP			0xB1			//=1µøÂäÊ±¿ÌÍø²àÖ÷¶¯·âÂö³å	20130202
+//#define SL_LV_XNZKKZ			0xB2			//=1ĞéÄâ×è¿¹¿ØÖÆÆÚ¼ä	20130202
+#define SL_LV_STRICTLV			0xB2			//=1ÑÏ¸ñLVÇø¼ä	20130222
+#define SL_LV_RECNSTOP			0xB3			//=1»Ö¸´Ê±¿ÌÖ÷¶¯·âÂö³å	20130206
+#define SL_LV_ZDMSTOP			0xB4			//=1µøÂäÊ±¿Ì»ú²àÖ÷¶¯·âÂö³å	20130221
+#define SL_LV_SCRDONE			0xB5			//=1 Í¶ÈëscrÒ»´Î20130221
+#define SL_LV_CLRERRAM			0xB6			//=1 Çå³ıLVÎó´¥·¢²¨ĞÎ20130306
+#define SL_CANOPENHEAD			0xB7			//=1 ÊÕµ½±¨Í·	20130801
+#define SL_ENCODEPOS_OK			0xB8			//=1±àÂëÆ÷Î»ÖÃ¼ì²âÍê³É	20130801
+#define SL_ECPOSSEARCH			0xB9			//=1±àÂëÆ÷Î»ÖÃĞ£Ñé¹ı 	20130801
+
 
 //flag[12]Ö÷¿ØÍ¨Ñ¶¼°PCÖ¸Áî±êÖ¾Î»
 #define SL_OCS_NPREIN       0xC0            //=1Ö÷¿ØÒªÇó±äÁ÷Æ÷Íø²àµ¥¶ÀÎŞ¹¦²¢ÍøÔËĞĞ				
@@ -663,98 +650,31 @@ Uint16   _OUT4_DATA;		//¸Ã±êÖ¾Î»ÎŞÓÃ¸ÄÎªºê¶¨Òå20130222
 #define SL_CBON_FH       	0xEC            //=1CBON²½Öè±êÖ¾Î»
 #define SL_SERSTOP_FH       0xED            //=1SERSTOP²½Öè±êÖ¾Î»
 #define SL_HIDCOV         	0xEE			//=1ÖĞ¼äÖ±Á÷Õ¶²¨IGBTÓ²¼ş¹ÊÕÏ20120228atbjtu_chopper	BJTULVRT201204
-#define SL_SYN_FH         	0xEF   			//SYN²½Öè±êÖ¾Î»    		    
+#define SL_SYN_FH         	0xEF   			//SYN²½Öè±êÖ¾Î»
 
-
-//------------------------------------const¶¨Òå--------------------------------------------
-
-//eepromÎ»²Ù×÷
-const  Uint16 ONEBYTE[8]={0x0080,0x0040,0x0020,0x0010,0x0008,0x0004,0x0002,0x0001};
-
-//AD1544Í¨µÀÑ¡Ôñ
-const  Uint16 AD1544[4]={0x0000,0x2000,0x4000,0x6000};		
-//--------------------------------------±äÁ¿¶¨Òå-------------------------------------------
-Uint16	flag[16];													//±êÖ¾Î»±äÁ¿
-//Uint16	disp[15];													//±êÖ¾±äÁ¿
+//flag[15]Êä³ö±ê4         0x1A0000          //ÂıËÙADµØÖ·Êä³ö
+#define _OUT3_DATA			flag[15]
+#define SL_PHASEA			0xF0		     //
+#define SL_PHASEB			0xF1             //
 
 //---2013-12-13--ZZJÔö¼Óµç»úÀø´Å
 //------------------------µç»úÀø´Å²ÎÊıÊ¶±ğMagnetCurve200909------------------------------------
-struct	MC_DATA{
+struct	MC_DATA
+{
 	float   x[6];
 	float   y[6];
 	float   temp[6];
 	float   k;
 	float   in;
-}MC_DATA;
-float   MC_y_test;
-float   MC_U_test; 
-float	Uns_ft;
-Uint16	MC_N_test;
-Uint32	MC_F_cnt;
+};
 //---2013-12-13--ZZJÔö¼Óµç»úÀø´Å
 
-Uint32	QEP_CNT1;
-Uint32	QEP_CNT2;
-int16	QEPPHE_N;
-
-
-float   pll_theta; 				//201011PLL
-float   ptheta;
-float   ntheta; 
-float temp_pd;
-float temp_pq;
-float temp_nd;
-float temp_nq; 
-float   NGS_Udq_lv;
-
-float   NGS_Udq_p;
-float   NGS_Udq_n;
-float   NGS_Udq_epsilon;
-float   NGS_Udq_p_ex;		//20130206
-float   NGS_Udq_epsilon_lv;	//20130301
-float   NGS_Udq_pflt;		//20130301
-
-float   LV_A1;				//201011LVRT
-float   LV_A2;
-float   LV_T1;
-float   LV_T2;
-
-float   lv_flag_flt;		//2013-12-6 LVRT±êÖ¾Î»ÑÓÊ±¼ÆÊıÆ÷
-
-//ModbusRS485
-Uint16  length485;													//modbus
-Uint16  longtx_num;													//modbus
-
-float   RUN_mpridrf_exi;
-Uint16  RUN_mpriq;
-Uint16  _OUT3_TEST;
-Uint16  _NQEPPCO;
-Uint16  R_SCOUT;
-float   Ud_lv;
-float   temp_ud;
-
-//float   NGS_Udq_p;
-//float   NGS_Udq_epsilon;
-float   NGS_Udq;
-float   PHAI_d;
-float   PHAI_q;
-float   PHAI_dq;
-
-int32   ET_SUM1;
-int32   ET_SUM2;
-
-/*ÏÂÃæµÄÓÃ×÷SVPWM¼ÆËã*/
-Uint16 SW_NPR,SW_MPR; 
-float   vdc;	 
-float   m=0.0;
-float   ua_m=0,ub_m=0,uc_m=0;  //µ÷ÖÆ²¨
-float   u_alfa_NPR=0,u_beta_NPR=0;
-float   u_alfa_MPR=0,u_beta_MPR=0;
 
 
 //¸ø¶¨Öµ¼Ä´æÆ÷
-struct	GIVE{
-	float   urf;					   //Íø²àÖĞ¼äÖ±Á÷µçÑ¹¸ø¨Öµ
+struct	GIVE
+{
+	float   urf;					   //Íø²àÖĞ¼äÖ±Á÷µçÑ¹¸ø¨Ö
 	float   npriqrf;                   //Íø²àÎŞ¹¦µçÁ÷¸ø¶¨Öµ(½öÍø²àÎŞ¹¦ÔËĞĞÊ±Ê¹ÓÃ)
 	float   toqrf;                      //»ú²à×ª¾Ø¸ø¶¨Öµ(ÓĞ¹¦)
 	float   anglerf;                    //»ú²à¹¦ÂÊÒòÊı½Ç¶È¸ø¶¨Öµ(ÎŞ¹¦) ½Ç¶È
@@ -763,11 +683,12 @@ struct	GIVE{
 	float   toqrfflt;                   //»ú²à×ª¾Ø¸ø¶¨Öµ(1s´óÂË²¨Æ½¾ùÖµ)201205LVRTatZB
 	float   npriqrf_cl;                   //Íø²àÎŞ¹¦µçÁ÷¸ø¶¨Öµ(½öÍø²àÎŞ¹¦ÔËĞĞÊ±Ê¹ÓÃ)201205LVRTatZB
 	float   toqrf_lv;                      //»ú²à×ª¾Ø¸ø¶¨Öµ(ÓĞ¹¦)	20130128
-}GIVE;
-float OCS_Trf;                          //Ö÷¿Ø¸ø¹ıÀ´µÄ×ª¾ØÖ¸Áî
+};
+
 
 //¸ø¶¨»ı·ÖÏà¹Ø¼Ä´æÆ÷
-struct	RUN{									
+struct	RUN
+{
 	float   urf;						//µçÑ¹¸ø¶¨»ı·ÖÖµ
 	float   ustep;						//µçÑ¹¸ø¶¨»ı·Ö²½³¤
 	float   mpridrf;						//ÓĞ¹¦µçÁ÷¸ø¶¨»ı·ÖÖµ
@@ -775,7 +696,7 @@ struct	RUN{
 	float   npriqrf;						//ÎŞ¹¦µçÁ÷¸ø¨»ı·ÖÖ?
  	float   npriqstep;						//ÎŞ¹¦µçÁ÷¸ø¶¨»ı·Ö²½³¤
 	float   mpriqrf;						//ÎŞ¹¦µçÁ÷¸ø¨»ı·ÖÖ?
- 	float   mpriqstep;						//ÎŞ¹¦µçÁ÷¸ø¶¨»ı·Ö²½¤
+ 	float   mpriqstep;						//ÎŞ¹¦µçÁ÷¸ø¶¨»ı·Ö²½
 	float   toqrf;						//×ª¾Ø¸ø¶¨»ı·ÖÖµ
 	float   toqstep;					//×ª¾Ø¸ø¶¨»ı·Ö²½³¤
 	float   aglrf;						//¹¦ÂÊÒòÊı½Ç¸ø¶¨»ı
@@ -793,7 +714,8 @@ struct	RUN{
     float   radianrf;
 	float   mpridrf_exi;
 	float   mpridrf_var;
-}RUN; 
+};
+
 //×ø±ê±ä»»Ïà¹Ø¼Ä´æÆ÷
 struct	TRANS_DATA{
     float a;           	//aÏà
@@ -841,23 +763,7 @@ struct	TRANS_DATA{
 	float bc;           //bc
 
 };																 
-struct	TRANS_DATA TRS_NPR_I;   //Íø²à±äÁ÷Æ÷µÄµçÁ÷£¨ÕâÀïNPR×÷Îªºó×º£¬²»ÓÃgrd£¬ÒÔÇø·ÖµçÍøµçÁ÷»¹ÊÇÍø²à±äÁ÷Æ÷µçÁ÷£©
-struct	TRANS_DATA TRS_MPR_I;   //»ú²à±äÁ÷Æ÷µÄµçÁ÷
-struct	TRANS_DATA TRS_MPR_U;   //»ú²à±äÁ÷Æ÷ËãÂö³åÓÃ
-struct	TRANS_DATA TRS_NPR_U;   //Íø²à±äÁ÷Æ÷ËãÂö³å
-struct	TRANS_DATA TRS_NGS_U;   //ø²àµçÍøµçÑ¹
-struct	TRANS_DATA TRS_STA_I;   //¶¨×ÓµçÁ÷
-struct	TRANS_DATA TRS_STA_U;   //¶¨×ÓµçÑ¹
-struct	TRANS_DATA TRS_GSTA_U;  //Ä¿±ê¶¨×ÓµçÑ¹
-struct	TRANS_DATA TRS_PSTA_U;  //ÓÃÓÚ±àÂëÆ÷Î»ÖÃ¼ì²âµÄ¶¨×ÓµçÑ¹
-struct	TRANS_DATA TRS_PMPR_I;  //ÓÃÓÚ±àÂëÆ÷Î»ÖÃ¼ì²âµÄ×ª×ÓµçÁ÷   
-struct	TRANS_DATA DIP_NPR_U;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã  
-struct	TRANS_DATA DIP_NPR_I;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã 
-struct	TRANS_DATA DIP_STA_U;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã 
-struct	TRANS_DATA DIP_STA_I;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã 
-struct	TRANS_DATA DIP_MPR_I;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã  
-struct	TRANS_DATA TRS_GAC_U;  //ÓÃÓÚ201011PLL	
-struct	TRANS_DATA TRS_SCR_I;   //»ú²àcrowbarµçÁ÷BJTULVRT201204
+
 
 struct I_DATA_PLL				//201011PLL
 {
@@ -865,7 +771,7 @@ struct I_DATA_PLL				//201011PLL
    	float out0;
    	float out1;
 	float out;
-}I_DATA_PLL; 
+};
 
 //PI»·Ïà¹Ø¼Ä´æÆ÷
 struct PI_DATA
@@ -874,21 +780,12 @@ struct PI_DATA
 	float feedback;								//·´À¡Öµ
 	float errorp;								//°Î²î
 	float error;								//Îó²î
-	float integrator;							//Ç°´Î»ıÖ½á¹û
+	float integrator;							//Ç°´Î»ıÖ½á¹
 	float out;
 	float last;							//201011PLL
 	float outflt;						//201011PLL 
 };  
-struct PI_DATA PI_NPR_Id;				//Íø²à±äÁ÷Æ÷dÖáµçÁ÷±Õ»·
-struct PI_DATA PI_NPR_Iq;				//Íø²à±äÁ÷Æ÷qÖáµçÁ÷±Õ»·
-struct PI_DATA PI_MPR_Id;				//»ú²à±ä÷Æ÷dÖáµçÁ÷±Õ»·
-struct PI_DATA PI_MPR_Iq;				//»ú²à±äÁ÷Æ÷qÖáµçÁ÷±Õ»·
-struct PI_DATA PI_NPR_U;				//Íø²à±äÁ÷Æ÷µçÑ¹»·
-struct PI_DATA PI_MPR_U;				//Èí²¢Íø±Õ»·
-struct PI_DATA PI_STA_Id;				//Àø´Å¿ØÖÆd
-struct PI_DATA PI_STA_Iq;				//Àø´Å¿ØÖÆq 
-struct PI_DATA PI_DATA_PLL;				//201011PLL
-struct PI_PARA PI_PARA_DYMI;			//¶¯Ì¬¿í´ø¿íPI¿ØÖÆBJTULVRT201204
+
 
 struct PI_PARA
 {
@@ -900,28 +797,17 @@ struct PI_PARA
    float incrementmax;
    float outmax;
 };
-struct PI_PARA PI_PARA_NPRU;
-struct PI_PARA PI_PARA_NPRID;
-struct PI_PARA PI_PARA_MPRU;
-struct PI_PARA PI_PARA_MPRID;
-struct PI_PARA PI_PARA_NPRIQ;
-struct PI_PARA PI_PARA_MPRIQ;
-struct PI_PARA PI_PARA_DYNU;
-struct PI_PARA PI_PARA_DYNID;
-struct PI_PARA PI_PARA_DYNIQ;
-struct PI_PARA PI_PARA_MPRI;
-struct PI_PARA PI_PARA_STAI;
-struct PI_PARA PI_PARA_PLL;				//201011PLL
 
 
-//÷Ñ­»·¶¨Ê±Æ÷¼°ÑÓÊ±¼ÆÊıÆ÷
+
+//÷Ñ­»·¶¨Ê±Æ÷¼°ÑÓÊ±¼ÆÊıÆ
 struct	MAIN_LOOP{
 	int32 cnt1;					//Ö÷Ñ­·¶¨Ê±¼ÄæÆ÷5ms
 	int32 cnt2;					//Ö÷Ñ­»·¶¨Ê±¼Ä´æÆ÷10ms
 	int32 cnt3;					//Ö÷Ñ­»·¶¨Ê±¼Ä´æÆ÷20ms
-	int32 cnt4;					//Ö÷Ñ­»·¨Ê±¼Ä´æÆ÷50ms
-	int32 cnt5;					//÷Ñ­»·¶¨Ê±¼Ä´æÆ÷100ms
-	int32 cnt6;					//Ö÷Ñ­»·¶¨Ê±¼Ä´æ÷1000ms
+	int32 cnt4;					//Ö÷Ñ­»·¨Ê±¼Ä´æÆ 0ms
+	int32 cnt5;					//÷Ñ­»·¶¨Ê±¼Ä´æÆ 00ms
+	int32 cnt6;					//Ö÷Ñ­»·¶¨Ê±¼Ä´æ 000ms
 	int32 pulse;				//Ö÷Ñ­»··ÖÊ±Âö³å¼Ä´æÆ÷
     int32 cnt_AMUX;            	//ÂıËÙAD
 	
@@ -929,7 +815,7 @@ struct	MAIN_LOOP{
 	int32 cnt_pwmout;			//PWMÊä³öÑÓÊ±
 	int32 cnt_nprlamp;			//Íø²àÂö³å·¢³öÖ¸Ê¾µÆÉÁË¸ÑÓÊ±¼ÆÊı
 	int32 cnt_mprlamp;			//»ú²àÂö³å·¢³öÖ¸Ê¾µÆÉÁË¸ÑÓÊ±¼ÆÊı 
-	int32 cnt_freq;			   	//ÆµÂÊÆ«ÒÆ¼Æ±
+	int32 cnt_freq;			   	//ÆµÂÊÆ«ÒÆ¼Æ
 	int32 cnt_cbfreq;
 	int32 cnt_estop;
 	int32 cnt_rcvr;				//¹ÊÕÏÑÓÊ±»Ö¸´¼ÆÊ±
@@ -937,7 +823,7 @@ struct	MAIN_LOOP{
 	int32 cnt_datasave;
 	int32 cnt_datasave2;
 
-	int32 cnt_detectdelay;		//¿ª¹ØÒâÍâ¶¯×÷ÇĞ»»ÑÓ±	110818
+	int32 cnt_detectdelay;		//¿ª¹ØÒâÍâ¶¯×÷ÇĞ»»ÑÓ 110818
 	int32 cnt_exfault;
 	int32 cnt_cbtp;
 	int32 cnt_cberror;
@@ -950,7 +836,7 @@ struct	MAIN_LOOP{
 	int32 cnt_canfault;
 	int32 cnt_speedout;
 	int32 cnt_uaclv1;   		//20091027atzy		
-	int32 cnt_gfault1;			//ø²à½ÓµØ¹ÊÕÏ
+	int32 cnt_gfault1;			//ø²à½ÓµØ¹ÊÕ
 	int32 cnt_gfault2;			//»ú²à½ÓµØ¹ÊÕÏ
 	int32 cnt_synfail;			//Í¬²½²¢ÍøÊ§¹ÊÕÏ
 	int32 cnt_nprtlov;			//Íø²àµç¸Ğ³¬ÎÂ
@@ -1055,11 +941,9 @@ struct	MAIN_LOOP{
 	int32 cnt_lv_scrkeepon;			//20130221
 	int32 cnt_chopper;				//2013-12-6	ZZJÕ¶²¨²âÊÔ
 
-}MAIN_LOOP;  
+};
 
-//ÂıËÙAD´¦Àí¼Ä´æÆ÷
-Uint16 _OUT_AMUX1=0;  //ÓÃÓÚÂıËÙADÑ¡Í¨ĞÅºÅ£¬Ã¿´ÎÒªÑ¡Í¨ÏÂÒ»¸öADÍ¨µÀ£¬_OUT_AMUX¼Ó1£¬È»ºóËÍµ½CPLDÈ¥´¦Àí£¬Ñ¡Í¨16Ñ¡1Ğ¾Æ¬
-Uint16 _OUT_AMUX2;    //ÓÃÓÚÂıËÙADÑ¡Í¨ĞÅºÅ£¬Ã¿´ÎÒªÑ¡Í¨ÏÂÒ»¸öADÍ¨µÀ£¬_OUT_AMUX¼Ó1£¬È»ºóËÍµ½CPLDÈ¥´¦Àí£¬Ñ¡Í¨16Ñ¡1Ğ¾Æ¬
+
 struct  AMUX{
     float NPR_tempa;  //NPRµÄAÏà°ëµ¼ÌåÎÂ¶È£¬Skiip´«»ØÀ´µÄ
     float NPR_tempb;  //NPRµÄBÏà°ëµ¼ÌåÎÂ¶È£¬Skiip´«»ØÀ´µÄ
@@ -1075,14 +959,14 @@ struct  AMUX{
 	float Lac_R;   			//½»Á÷µç¸Ğpt100
 	float Ldudt_R; 			//du/dtµÄpt100
 
-}AMUX;
+};
 
 //ADÄ£¿é´¦Àí¼Ä´æÆ÷
 struct	AD{
 	int16  dat[18];													//ADµ±Ç°×ª»»½á¹û´æ·Å
 	Uint32 cputime;
 	Uint32 cputime_last;
-}AD;
+};
 
 //AD×ª»»½á¹û¼Ä´æÆ÷
 struct	ADFINAL{
@@ -1109,7 +993,7 @@ struct	ADFINAL{
 
 
 
-}ADFINAL;
+};
    
 
 //ÍøÑ¹Ê¸Á¿
@@ -1132,18 +1016,9 @@ struct AD_DATA{
 	  float  c_dc;
 	  float  ps;
 };
-struct AD_DATA AD_OUT_GRD_U;  //µçÍøµçÑ¹£¨Ö÷¶ÏÇ°£©
-struct AD_DATA AD_OUT_STA_U;  //µç»ú¶¨×Ó²àµçÑ¹ ´óÂË²¨Í¨µÀ
-struct AD_DATA AD_OUT_NGS_U;  //µçÍøµçÑ¹£¨Ö÷¶Ïºó£©
-struct AD_DATA AD_OUT_NPR_I;  //Íø²à±äÁ÷Æ÷µçÁ÷
-struct AD_DATA AD_OUT_MPR_I;  //»ú²à±äÁ÷Æ÷µçÁ÷
-struct AD_DATA AD_OUT_STA_I;  //¶¨×Ó²àµçÁ÷  
-struct AD_DATA AD_OUT_NGF_U;  //µçÍøµçÑ¹£¨Ö÷¶Ïºó£©´óÂË²¨Í¨µÀ
-struct AD_DATA AD_OUT_STAD_U;  //²îÖµ
-struct AD_DATA AD_OUT_SCR_I;  //ACTIVECROWBARµçÁ÷  
-struct AD_DATA AD_OUT_DC_I;  //CHOPPERµçÁ÷  
 
-float  AD_OUT_UDC; //AD¼ÆËãºóÊä³öµÄÖ±Á÷µç¹£¨V£©
+
+
 
 //ÇóÆ½¾ùÖµ
 struct MEAN_DATA{
@@ -1159,17 +1034,17 @@ struct MEAN_DATA{
 	   float zfia3,zfib3,zfic3; 	//¶¨×Ó²àµçÁ÷´«¸ĞÆ÷ÁãÆ¯ÂË²¨
 	   float zfuab1,zfubc1; 		//Íø²àµçÑ¹´«¸ĞÆ÷ÁãÆ¯ÂË²¨
 	   float zfuab2,zfubc2; 		//¶¨×ÓµçÑ¹´«¸ĞÆ÷ÁãÆ¯ÂË²¨
-	   float zfuab3,zfubc3; 		//Íø²àµçÑ¹ ´óÂË²¨Í¨µÀ	ÁãÆ¯ÂË¨
+	   float zfuab3,zfubc3; 		//Íø²àµçÑ¹ ´óÂË²¨Í¨µÀ	ÁãÆ¯ÂË
 	   float nid,niq,nud,nuq;    	//¶ÔNPRÁ¿½øĞĞÂË²¨
 	   float uab,ubc;	   			//Ö÷¶ÏÇ°Íø²àµçÑ¹Æ½¾ùÖµÂË²¨
 	   float zfuab,zfubc; 		    //Ö÷¶ÏÇ°µçÑ¹´«¸ĞÆ÷ÁãÆ¯ÂË²¨
 	   float udc;
 	   float iac3,iba3,icb3;				//¶¨×Ó²àµçÁ÷Æ½¾ùÖµÂË²¨
-	   float psactive;				//¶¨×Ó²àµçÁ÷Æ½¾ùÖµÂË¨
+	   float psactive;				//¶¨×Ó²àµçÁ÷Æ½¾ùÖµÂË
 	   float Lac_temp,Ldudt_temp;   //µç¸ĞÎÂ¶ÈÂË²¨
 	   float ubc_t;					//20130801
 	   	   
-}MEAN_DATA;  
+};
 
 //±£»¤Ä£¿é½á¹û±äÁ¿
 struct	PRO{									
@@ -1199,9 +1074,9 @@ struct	PRO{
 				float   npr_ubr;	  							//Íø²àbÏàµçÑ¹V RMS
 				float   npr_ucr;	  							//Íø²àcÏàµçÑ¹V RMS
 				float   npr_iar;   								//Íø²à,AÏà²¢ÍøµçÁ÷ÓĞĞ§Öµ,µ¥Î»A
-				float   npr_ibr;	  							//Íø²à,BÏà²¢ÍøµçÁ÷ĞĞ§Öµ,µ¥Î»A
-				float   npr_icr;	  							//ø²à,CÏà²¢øµçÁ÷ÓĞĞ§Öµ,µ¥Î»A
-				float   Psactive; 								//¶¨×Ó²àĞ¹¦¹¦ÂÊ
+				float   npr_ibr;	  							//Íø²à,BÏà²¢ÍøµçÁ÷ĞĞ§Ö µ¥Î»A
+				float   npr_icr;	  							//ø² CÏà²¢øµçÁ÷ÓĞĞ§Ö µ¥Î»A
+				float   Psactive; 								//¶¨×Ó²àĞ¹¦¹¦Â
 				float   Psreactive; 							//¶¨×Ó²àÎŞ¹¦¹¦ÂÊ
 				float   Ps;          							//¶¨×Ó²àÊÓÔÚ¹¦ÂÊ
 				float   Pnactive;    							//Íø²àÓĞ¹¦¹¦ÂÊ
@@ -1209,7 +1084,7 @@ struct	PRO{
 				float   Pn;          							//Íø²àÊÓÔÚ¹¦ÂÊ
 				float   Pgactive;    							//²¢Íø×ÜµÄÓĞ¹¦¹¦ÂÊ	
 				float   Pgreactive;  							//Íø²à×ÜÄŞ¹¦¹¦ÂÊ				
-				float   Pg;       								//¢Íø×ÜµÄÊÓÔÚ¹¦ÂÊ
+				float   Pg;       								//¢Íø×ÜµÄÊÓÔÚ¹¦Â
 				float	CHOP_idc;								//chopperµçÁ÷ÕıÊµ¼ÊÖµ(A)20120228	BJTULVRT201204
 				float   Psactive2; 								//¶¨×Ó²àÓĞ¹¦¹¦ÂÊ
 				float   Psreactive2; 							//¨×Ó²àŞ¹¦¹¦ÂÊ
@@ -1220,22 +1095,22 @@ struct	PRO{
 
 				float   Pgactive_lv;   							//LVRTÇ°µÄ¹¦ÂÊ20121210	
 
-		   }PRO; 
+		   };
  
-//ÏÔÊ¾à¿Ø±äÁ¿
+//ÏÔÊ¾à¿Ø±äÁ
 struct	DISP{										
     			float  npr_iai;   //Íø²à,AÏà²¢ÍøµçÁ÷Ë²Ê±Öµ,µ¥Î»A
 				float  npr_ibi;	  //Íø²à,BÏà²¢ÍøµçÁ÷Ë²Ê±Öµ,µ¥Î»A
-				float  npr_ici;	  //Íøà,CÏà²¢ÍøçÁ÷Ë²Ê±Öµ,¥Î»A
+				float  npr_ici;	  //Íø CÏà²¢ÍøçÁ÷Ë²Ê±Ö ¥Î»A
 				float  mpr_iai;	  //µç»ú²à,AÏàµçÁ÷Ë²Ê±Öµ,µ¥Î»A
-				float  mpr_ibi;	  //µç»ú²à,BÏàµçÁ÷±Öµ,µ¥Î»A
+				float  mpr_ibi;	  //µç»ú²à,BÏàµçÁ÷±Ö µ¥Î»A
 				float  mpr_ici;   //µç»ú²à,CÏàµçÁ÷Ê±Öµ,µ¥Î»A
 				float  npr_iar;   								//Íø²à,AÏà²¢ÍøµçÁ÷ÓĞĞ§Öµ,µ¥Î»A
 				float  npr_ibr;	  							//Íø²à,BÏà²¢Íøµç÷ĞĞ§Öµ,µ¥Î»A
 				float  npr_icr;	  							//Íø²à,CÏà²¢ÍøµçÁ÷ÓĞĞ§Öµ,µ¥Î»A
 				float  mpr_iar;	  //çú²à,AÏàµçÁ÷ÓĞĞ§Öµ,µ¥Î»A
 				float  mpr_ibr;	  //µç»ú²à,BÏàµçÁ÷ÓĞĞ§Öµ,µ¥Î»A
-				float  mpr_icr;   //µç»ú²à,CàµçÁ÷ÓĞĞ§Öµ,¥Î»A 
+				float  mpr_icr;   //µç»ú²à,CàµçÁ÷ÓĞĞ§Ö ¥Î»A
     			float  npr_uab;	  //Íø²àabÏàµçÑ¹V RMS
 				float  npr_ubc;	  //Íø²àbcÏàµçÑ¹V RMS
 
@@ -1248,7 +1123,7 @@ struct	DISP{
 				float  grd_ubc;   //Ö÷¶ÏÇ°Íø²àbcµçÑ¹V RMS
 				float  uab23;     //¶¨×ÓÍ¬²½²¢ÍøÇ°¶¨×ÓÇ°ºóabµçÑ¹²î V
 				float  ubc23;     //¶¨×ÓÍ¬²½²¢ÍøÇ°¶¨×ÓÇ°ºóbcµçÑ¹²î V			
-				float  Lac_temp;  //Íø²àç¸ĞÎÂ¶È ÉãÊÏ¶È
+				float  Lac_temp;  //Íø²àç¸ĞÎÂ¶ ÉãÊÏ¶È
 				float  Ldudt_temp;  //»ú²àµç¸ĞÎÂ¶È ÉãÊÏ¶È
 				float  NPR_skiptemp;  //SKIIPÎÂ¶È ÉãÊÏ¶È
 				float  MPR_skiptemp;  //SKIIPÎÂ¶È ÉãÊÏ¶È
@@ -1269,7 +1144,7 @@ struct	DISP{
 				float  piomid; 		//»ú²àµçÁ÷d»·Êä³ö
 				float  piomiq; 		//»ú²àµçÁ÷q»·Êä³ö
 				float  Psactive; 	//¶¨×Ó²àÓĞ¹¦¹¦ÂÊ
-				float  Psreactive; 	//¶¨×Ó²àÎŞ¹¦¹¦Ê
+				float  Psreactive; 	//¶¨×Ó²àÎŞ¹¦¹¦
 				float  Ps;          //¶¨×Ó²àÊÓÔÚ¹¦ÂÊ
 				float  Pnactive;    //Íø²àÓĞ¹¦¹¦ÂÊ
 				float  Pnreactive;  //Íø²àÎŞ¹¦¹¦ÂÊ
@@ -1277,32 +1152,32 @@ struct	DISP{
 				float  Pgactive;    //²¢Íø×ÜµÄÓĞ¹¦¹¦ÂÊ	
 				float  Pgreactive;  //Íø²à×ÜµÄÎŞ¹¦¹¦ÂÊ				
 				float  Pg;       	//²¢Íø×ÜµÄÊÓÔÚ¹¦ÂÊ			
-			}DISP;
+			};
  
 //¶»Ä£¿é±äÁ¿
 struct CAP_DATA	{
 					float		prd;				//Cap4ÊÂ¼şÖÜÆÚ
 					Uint32		adsmptsctr; 		//AD²ÉÑùÊ±¿ÌµÄCap4¼ÆÊıÆ÷Öµ(±¾´ÎADÔÚCAP4Ö®ºóÔËĞĞ)
 					float 		phase;	    		//ÊÂ¼şµ±Ç°ÏàÎ»//ÓÃÓÚÏàĞò¼ì²é
-					float 		freqtmp;			//¾´ÎÊÂ¼şÆµÂÊ
+					float 		freqtmp;			//¾´ÎÊÂ¼şÆµÂ
 					float 		freq;	    		//È·ÈÏºóµÄÆµÂÊ
 					float	    omigasyn;			//Í¬²½½ÇÆµÂÊ£­µçÆµÂÊ
 					float 		omigaslp;	    	//×ª²î½ÇÆµÂÊ
 					float	    radpertb;			//¼ÆÊıÆ÷¼Æµ¥Î»Ê±¼äÊ¸Á¿Î»ÖÃÔöÁ¿ rad per timebase
 					float	    nprtrstheta;		//Íø²àËã·¨Õı±ä»»½Ç¶È
 					float	    npratitheta;		//Íø²àËã·¨·´±ä»»½Ç¶È
-					float	    mprtrstheta;		//»úàËã·¨Õı±ä»»½Ç¶È
+					float	    mprtrstheta;		//»úàËã·¨Õı±ä»»½Ç¶
 					float	    mpratitheta;		//»ú²àËã·¨·´±ä»»½Ç¶È
 					float	    stavectheta;	    //¶¨×Ó´ÅÁ´Ïà¶ÔÓëAÏàÖáÏßÎ»ÖÃ	
 					float	    nprtrstheta_lv;		//Íø²àËã·¨Õı±ä»»½Ç¶È 201011LVRT 201011PLL
 				};
-struct CAP_DATA CAP4,CAP5;
+
 
 struct QEPDATA{
 //----------------------×ª×ÓÎ»ÖÃ¼ì²â±äÁ¿-----------------------------------------------------------
 					Uint16		qcapprd;		//QCAPµ¥ÔªÖÜÆÚ¼Ä´æÆ÷Öµ£¬ÓÃÓÚ²âÖÜ·¨Ëã×ªËÙ
 					float 		omigamec;		//»úĞµ½ÇËÙ¶È
-					float 		omigarote;	    //µçÆø½ÇÙ¶È rotor electric
+					float 		omigarote;	    //µçÆø½ÇÙ¶ rotor electric
 					float 		omigaroteflt;	//
 					float 		rotpos;			//×ª×Óµ±Ç°Î»ÖÃrad£¨µç»¡¶È£©
 					Uint32   	adsmposcnt;		//²ÉÑùÊ±¿Ì±àÂëÆ÷¶ÁÊı  
@@ -1316,7 +1191,7 @@ struct QEPDATA{
 					float 		encodpos;		//±àÂëÆ÷Î»ÖÃrad£¨µç»¡¶È£©
 					float 		u_stapos;		//2S²Î¿¼ÏµÏÂ¶¨×ÓµçÑ¹Ê¸Á¿µÄÎ»ÖÃrad£¨µç»¡¶È£©
 					float 		i_rotpos;		//2S²Î¿¼ÏµÏÂ×ª×ÓµçÁ÷Ê¸Á¿µÄÎ»ÖÃrad£¨µç»¡¶È£©
-			  }QEPDATA; 
+			  };
 
 //SCIÄ£¿é±äÁ¿
 struct	SCI{
@@ -1324,7 +1199,7 @@ struct	SCI{
 					Uint16 rxb[SCI485NUM_RX];		//SCIB½ÓÊÕÊı¾İ//modbus
 					int32 cnt_sciover;				//SCI·¢ËÍ/½ÓÊÕ³¬Ê±¶¨Ê±Æ÷
 					int32 cnt_scispace;				//SCI½ÓÊÕµ½·¢ËÍµÄ¼ä¸ô¶¨Ê±Æ÷
-		   }SCI;
+		   };
 
 //SCICANOPENÄ£¿é±äÁ¿
 struct	SCI_CANOPEN{
@@ -1344,25 +1219,25 @@ struct	SCI_CANOPEN{
 					Uint16 tx_watertempout;
 					Uint16 tx_skiiptempmax;
 					Uint16 tx_demand;
-		   }SCI_canopen;
+		   };
 
 //SPIÄ£¿é±äÁ¿
 struct	SPI{
 					Uint16 da7614_txb[SPINUM];		//SPI,DA·¢ËÍÊı¾İ
 					Uint16 da7614point;				//
-		   }SPI;
+		   };
 
 //EEPROMÄ£¿é±äÁ¿
 struct	EEPROM{
 				Uint16 data[11];					//¶Á³ö»òĞ´ÈëµÄÊı¾İ
 				Uint16 point;						//EEPROMµ±Ç°×÷±äÁ¿ĞòºÅ
 				Uint16 mcode;						//ĞèÒªĞŞ¸ÄµÄ¹¦ÄÜÂëÃû³Æ
-			  }EEPROM;
+			  };
 
 //RTIMERÄ£¿é±äÁ¿
 struct	RTIMER{
 				Uint16 time[6];				//µ±Ç°Ê±¼ä[5~0]-->Äê ÔÂ ÈÕ Ê± ·Ö Ãë£¨¾ùÎª8Î»Êı¾İ£©
-			  }RTIMER;
+			  };
 
 //´ÅÁ´¹Û²âBJTULVRT201204
 struct PHI_DATA
@@ -1402,7 +1277,7 @@ struct PHI_DATA
    float Imdflt;							//dÖá×ª×ÓµçÁ÷
    float Imqflt;							//qÖá×ª×ÓµçÁ÷ 
 };
-struct PHI_DATA PHI_DATA_M; 
+
 
 //201110bs
 struct BS_DATA
@@ -1414,14 +1289,7 @@ struct BS_DATA
 	float outp;					//out(k-1)
 	float outfp;				//out(k-2)
 };  
-struct BS_DATA BS_MPR_Id;				//×ª×Ó²àµçÁ÷dÖá
-struct BS_DATA BS_MPR_Iq;				//×ª×Ó²àµçÁ÷qÖá
-struct BS_DATA BS_STA_Id;				//¶¨×Ó²àµçÁ÷dÖá
-struct BS_DATA BS_STA_Iq;				//¶¨×Ó²àµçÁ÷qÖá
-struct BS_DATA BS_NPR_Ud;				//Íø²à±äÁ÷Æ÷dÖá
-struct BS_DATA BS_NPR_Uq;				//Íø²à±äÁ÷Æ÷dÖá
-struct BS_DATA BS_NPR_Udn;				//Íø²à±äÁ÷Æ÷dÖá
-struct BS_DATA BS_NPR_Uqn;				//Íø²à±äÁ÷Æ÷dÖá
+
 
 struct BS_PARA
 {
@@ -1429,414 +1297,604 @@ struct BS_PARA
    float fb;
    float outmax;
 };
-struct BS_PARA BS_PARA_MPRI;
-struct BS_PARA BS_PARA_STAI;
-struct BS_PARA BS_PARA_NPRU;
+
+extern Uint16 DEBUG_OPER;                                        //20100401at27
+
+//µç»ú²ÎÊıÉè¶¨2010atcpc
+extern float  	MPR_Ls;	 	    				//¶¨×Ó×Ô¸Ğ	--µ¥Î»H
+extern float	MPR_Lr;	 	    				//×ª×Ó×Ô¸Ğ	--µ¥Î»H
+extern float 	MPR_Lm;	 	    				//¶¨×ª×Ó»¥¸Ğ--µ¥Î»H
+extern float 	MPR_Rs;	     					//¶¨×Óµç×è	--µ¥Î»ohm
+extern float 	MPR_Rr;	    					//×ª×Óµç×è	--µ¥Î»ohm
+extern float 	SIGMA;							//(1-MPR_Lm*MPR_Lm/(MPR_Ls*MPR_Lr))
+extern float	STAROTRTO;       				//¶¨×ª×Ó±ä±È
+extern float	STAROTRTO2;       				//¶¨×ª×Ó±ä±ÈµÄÆ½·½
+extern float	POLEPAIRES;       				//µç»ú¼«¶ÔÊı
+
+extern Uint16  BANK_RAMDATA_POS;						    					//´æ´¢±äÁ¿µÄ´æ´¢µãÎ»ÖÃ[0,4999]
+extern Uint16  ERROR_RAMDATA_POS;
+
+extern Uint16   _OUT4_DATA;		//¸Ã±êÖ¾Î»ÎŞÓÃ¸ÄÎªºê¶¨Òå20130222//´æ´¢±äÁ¿µÄ´æ´¢µãÎ»ÖÃ[0,4999]
+
+//------------------------------------const¶¨Òå--------------------------------------------
+
+//eepromÎ»²Ù×÷
+extern const  Uint16 ONEBYTE[8];
+
+//AD1544Í¨µÀÑ¡Ôñ
+extern const  Uint16 AD1544[4];
+//--------------------------------------±äÁ¿¶¨Òå-------------------------------------------
+extern Uint16	flag[16];													//±êÖ¾Î»±äÁ¿
+//extern Uint16	disp[15];
+
+extern struct MC_DATA MC_DATA;
+
+extern float   MC_y_test;
+extern float   MC_U_test;
+extern float	Uns_ft;
+extern Uint16	MC_N_test;
+extern Uint32	MC_F_cnt;
+
+extern Uint32	QEP_CNT1;
+extern Uint32	QEP_CNT2;
+extern int16	QEPPHE_N;
 
 
+extern float   	pll_theta; 				//201011PLL
+extern float  	ptheta;
+extern float  	ntheta;
+extern float	temp_pd;
+extern float 	temp_pq;
+extern float 	temp_nd;
+extern float 	temp_nq;
+extern float	NGS_Udq_lv;
+extern float   	NGS_Udq_p;
+extern float   	NGS_Udq_n;
+extern float   	NGS_Udq_epsilon;
+extern float   	NGS_Udq_p_ex;		//20130206
+extern float   	NGS_Udq_epsilon_lv;	//20130301
+extern float   	NGS_Udq_pflt;		//20130301
 
+extern float   LV_A1;				//201011LVRT
+extern float   LV_A2;
+extern float   LV_T1;
+extern float   LV_T2;
+
+extern float   lv_flag_flt;		//2013-12-6 LVRT±êÖ¾Î»ÑÓÊ±¼ÆÊıÆ÷
+
+//ModbusRS485
+extern Uint16  length485;													//modbus
+extern Uint16  longtx_num;													//modbus
+
+extern float   RUN_mpridrf_exi;
+extern Uint16  RUN_mpriq;
+extern Uint16  _OUT3_TEST;
+extern Uint16  _NQEPPCO;
+extern Uint16  R_SCOUT;
+extern float   Ud_lv;
+extern float   temp_ud;
+
+//extern float   NGS_Udq_p;
+//extern float   NGS_Udq_epsilon;
+extern float   NGS_Udq;
+extern float   PHAI_d;
+extern float   PHAI_q;
+extern float   PHAI_dq;
+
+extern int32   ET_SUM1;
+extern int32   ET_SUM2;
+
+/*ÏÂÃæµÄÓÃ×÷SVPWM¼ÆËã*/
+extern Uint16 SW_NPR,SW_MPR;
+extern float   vdc;
+extern float   m;
+extern float   ua_m,ub_m,uc_m;  //µ÷ÖÆ²¨
+extern float   u_alfa_NPR,u_beta_NPR;
+extern float   u_alfa_MPR,u_beta_MPR;
+
+extern struct	GIVE GIVE;
+extern float OCS_Trf;                          //Ö÷¿Ø¸ø¹ıÀ´µÄ×ª¾ØÖ¸Áî
+
+extern struct RUN RUN;
+
+extern struct	TRANS_DATA TRS_NPR_I;   //Íø²à±äÁ÷Æ÷µÄµçÁ÷£¨ÕâÀïNPR×÷Îªºó×º£¬²»ÓÃgrd£¬ÒÔÇø·ÖµçÍøµçÁ÷»¹ÊÇÍø²à±äÁ÷Æ÷µçÁ÷£©
+extern struct	TRANS_DATA TRS_MPR_I;   //»ú²à±äÁ÷Æ÷µÄµçÁ÷
+extern struct	TRANS_DATA TRS_MPR_U;   //»ú²à±äÁ÷Æ÷ËãÂö³åÓÃ
+extern struct	TRANS_DATA TRS_NPR_U;   //Íø²à±äÁ÷Æ÷ËãÂö³å
+extern struct	TRANS_DATA TRS_NGS_U;   //ø²àµçÍøµçÑ
+extern struct	TRANS_DATA TRS_STA_I;   //¶¨×ÓµçÁ÷
+extern struct	TRANS_DATA TRS_STA_U;   //¶¨×ÓµçÑ¹
+extern struct	TRANS_DATA TRS_GSTA_U;  //Ä¿±ê¶¨×ÓµçÑ¹
+extern struct	TRANS_DATA TRS_PSTA_U;  //ÓÃÓÚ±àÂëÆ÷Î»ÖÃ¼ì²âµÄ¶¨×ÓµçÑ¹
+extern struct	TRANS_DATA TRS_PMPR_I;  //ÓÃÓÚ±àÂëÆ÷Î»ÖÃ¼ì²âµÄ×ª×ÓµçÁ÷
+extern struct	TRANS_DATA DIP_NPR_U;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã
+extern struct	TRANS_DATA DIP_NPR_I;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã
+extern struct	TRANS_DATA DIP_STA_U;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã
+extern struct	TRANS_DATA DIP_STA_I;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã
+extern struct	TRANS_DATA DIP_MPR_I;  //ÓÃÓÚ¹¦ÂÊ¼ÆËã
+extern struct	TRANS_DATA TRS_GAC_U;  //ÓÃÓÚ201011PLL
+extern struct	TRANS_DATA TRS_SCR_I;   //»ú²àcrowbarµçÁ÷BJTULVRT201204
+
+extern struct I_DATA_PLL I_DATA_PLL;
+
+extern struct PI_DATA PI_NPR_Id;				//Íø²à±äÁ÷Æ÷dÖáµçÁ÷±Õ»·
+extern struct PI_DATA PI_NPR_Iq;				//Íø²à±äÁ÷Æ÷qÖáµçÁ÷±Õ»·
+extern struct PI_DATA PI_MPR_Id;				//»ú²à±ä÷Æ÷dÖáµçÁ÷±Õ»·
+extern struct PI_DATA PI_MPR_Iq;				//»ú²à±äÁ÷Æ÷qÖáµçÁ÷±Õ»·
+extern struct PI_DATA PI_NPR_U;				//Íø²à±äÁ÷Æ÷µçÑ¹»·
+extern struct PI_DATA PI_MPR_U;				//Èí²¢Íø±Õ»·
+extern struct PI_DATA PI_STA_Id;				//Àø´Å¿ØÖÆd
+extern struct PI_DATA PI_STA_Iq;				//Àø´Å¿ØÖÆq
+extern struct PI_DATA PI_DATA_PLL;				//201011PLL
+extern struct PI_PARA PI_PARA_DYMI;			//¶¯Ì¬¿í´ø¿íPI¿ØÖÆBJTULVRT201204
+
+extern struct PI_PARA PI_PARA_NPRU;
+extern struct PI_PARA PI_PARA_NPRID;
+extern struct PI_PARA PI_PARA_MPRU;
+extern struct PI_PARA PI_PARA_MPRID;
+extern struct PI_PARA PI_PARA_NPRIQ;
+extern struct PI_PARA PI_PARA_MPRIQ;
+extern struct PI_PARA PI_PARA_DYNU;
+extern struct PI_PARA PI_PARA_DYNID;
+extern struct PI_PARA PI_PARA_DYNIQ;
+extern struct PI_PARA PI_PARA_MPRI;
+extern struct PI_PARA PI_PARA_STAI;
+extern struct PI_PARA PI_PARA_PLL;				//201011PLL
+
+extern struct MAIN_LOOP MAIN_LOOP;
+
+extern struct AMUX AMUX;
+//ÂıËÙAD´¦Àí¼Ä´æÆ÷
+extern Uint16 _OUT_AMUX1;  //ÓÃÓÚÂıËÙADÑ¡Í¨ĞÅºÅ£¬Ã¿´ÎÒªÑ¡Í¨ÏÂÒ»¸öADÍ¨µÀ£¬_OUT_AMUX¼Ó1£¬È»ºóËÍµ½CPLDÈ¥´¦Àí£¬Ñ¡Í¨16Ñ¡1Ğ¾Æ¬
+extern Uint16 _OUT_AMUX2;    //ÓÃÓÚÂıËÙADÑ¡Í¨ĞÅºÅ£¬Ã¿´ÎÒªÑ¡Í¨ÏÂÒ»¸öADÍ¨µÀ£¬_OUT_AMUX¼Ó1£¬È»ºóËÍµ½CPLDÈ¥´¦Àí£¬Ñ¡Í¨16Ñ¡1Ğ¾Æ¬
+
+extern struct AD AD;
+extern struct ADFINAL ADFINAL;
+
+extern struct AD_DATA AD_OUT_GRD_U;  //µçÍøµçÑ¹£¨Ö÷¶ÏÇ°£©
+extern struct AD_DATA AD_OUT_STA_U;  //µç»ú¶¨×Ó²àµçÑ¹ ´óÂË²¨Í¨µÀ
+extern struct AD_DATA AD_OUT_NGS_U;  //µçÍøµçÑ¹£¨Ö÷¶Ïºó£©
+extern struct AD_DATA AD_OUT_NPR_I;  //Íø²à±äÁ÷Æ÷µçÁ÷
+extern struct AD_DATA AD_OUT_MPR_I;  //»ú²à±äÁ÷Æ÷µçÁ÷
+extern struct AD_DATA AD_OUT_STA_I;  //¶¨×Ó²àµçÁ÷
+extern struct AD_DATA AD_OUT_NGF_U;  //µçÍøµçÑ¹£¨Ö÷¶Ïºó£©´óÂË²¨Í¨µÀ
+extern struct AD_DATA AD_OUT_STAD_U;  //²îÖµ
+extern struct AD_DATA AD_OUT_SCR_I;  //ACTIVECROWBARµçÁ÷
+extern struct AD_DATA AD_OUT_DC_I;  //CHOPPERµçÁ÷
+
+extern float  AD_OUT_UDC; //AD¼ÆËãºóÊä³öµÄÖ±Á÷µç¹£¨V£©
+
+extern struct MEAN_DATA MEAN_DATA;
+extern struct PRO PRO;
+extern struct DISP DISP;
+
+extern struct CAP_DATA CAP4,CAP5;
+
+extern struct QEPDATA QEPDATA;
+extern struct SCI SCI;
+extern struct SCI_CANOPEN SCI_canopen;
+extern struct SPI SPI;
+extern struct EEPROM EEPROM;
+extern struct RTIMER RTIMER;
+
+extern struct PHI_DATA PHI_DATA_M;
+
+extern struct BS_DATA BS_MPR_Id;				//×ª×Ó²àµçÁ÷dÖá
+extern struct BS_DATA BS_MPR_Iq;				//×ª×Ó²àµçÁ÷qÖá
+extern struct BS_DATA BS_STA_Id;				//¶¨×Ó²àµçÁ÷dÖá
+extern struct BS_DATA BS_STA_Iq;				//¶¨×Ó²àµçÁ÷qÖá
+extern struct BS_DATA BS_NPR_Ud;				//Íø²à±äÁ÷Æ÷dÖá
+extern struct BS_DATA BS_NPR_Uq;				//Íø²à±äÁ÷Æ÷dÖá
+extern struct BS_DATA BS_NPR_Udn;				//Íø²à±äÁ÷Æ÷dÖá
+extern struct BS_DATA BS_NPR_Uqn;				//Íø²à±äÁ÷Æ÷dÖá
+
+extern struct BS_PARA BS_PARA_MPRI;
+extern struct BS_PARA BS_PARA_STAI;
+extern struct BS_PARA BS_PARA_NPRU;
 
 //-----------------------------ÄÚ²¿±äÁ¿----------------------------------------------------------
-Uint16  _NULL_VAL=0;
-Uint16  _MSG_SCOUT1;												//SCOUTĞÅÏ¢¼¶±ğ(Ç°´Î)
-Uint16  _MSG_SCOUT2;												//SCOUTĞÅÏ¢¼¶±ğ(±¾´Î)
-Uint16  _SY_RTRN;
-Uint32   POSCNT_TEST;
-float   DM_imrd;   						//×ª×ÓÀø´ÅµçÁ÷
-float   DM_imrq;   						//×ª×ÓÀø´ÅµçÁ÷
-float   DM_Lr;							//µ±Ç°ÖØÊÔ´ÎÊı
-float   Te_feedback;                    //Êµ¼Ê×ª¾ØÖµ·´À¡
-float   Pnactive;    					//Íø²àÓĞ¹¦¹¦ÂÊ
-float   Pnreactive;    					//Íø²àÎŞ¹¦¹¦ÂÊ
-float   Pcreactive;    					//Íø²àµçÈİÎŞ¹¦¹¦ÂÊ201205LVRTatZB
+extern Uint16  _NULL_VAL;
+extern Uint16  _MSG_SCOUT1;												//SCOUTĞÅÏ¢¼¶±ğ(Ç°´Î)
+extern Uint16  _MSG_SCOUT2;												//SCOUTĞÅÏ¢¼¶±ğ(±¾´Î)
+extern Uint16  _SY_RTRN;
+extern Uint32   POSCNT_TEST;
+extern float   DM_imrd;   						//×ª×ÓÀø´ÅµçÁ÷
+extern float   DM_imrq;   						//×ª×ÓÀø´ÅµçÁ÷
+extern float   DM_Lr;							//µ±Ç°ÖØÊÔ´ÎÊı
+extern float   Te_feedback;                    //Êµ¼Ê×ª¾ØÖµ·´À¡
+extern float   Pnactive;    					//Íø²àÓĞ¹¦¹¦ÂÊ
+extern float   Pnreactive;    					//Íø²àÎŞ¹¦¹¦ÂÊ
+extern float   Pcreactive;
+
 //----------------------------²ÎÊı±äÁ¿------------------------------------------------------------
-Uint16 _MC_TYPE;						//»úĞÍ²ÎÊı
-Uint16 _MC_REV;							//Èí¼ş°æ±¾
-Uint16 _MC_DATE;						//³ö³§ÈÕÆÚ
-Uint16 _MC_ID;							//²úÆ·±àºÅ
-Uint16 _SCIB_ADDR;						//485½ÚµãµØÖ·
-Uint16 _PROSTDBY1;						//
-Uint16 _PROSTDBY2;						//
+extern Uint16 _MC_TYPE;						//»úĞÍ²ÎÊı
+extern Uint16 _MC_REV;							//Èí¼ş°æ±¾
+extern Uint16 _MC_DATE;						//³ö³§ÈÕÆÚ
+extern Uint16 _MC_ID;							//²úÆ·±àºÅ
+extern Uint16 _SCIB_ADDR;						//485½ÚµãµØÖ·
+extern Uint16 _PROSTDBY1;						//
+extern Uint16 _PROSTDBY2;						//
 
-Uint16 _SW_FR;							//¿ª¹ØÆµÂÊ(kHz)
-Uint16 _DEADTIME;						//Âö³åµÄ×îĞ¡µ¼Í¨Ê±¼ä(us)
-Uint16 _COMPTIME;						//Âö³åµÄ×îĞ¡µ¼Í¨Ê±¼ä(ms)
-Uint16 _MINONTIME;						//Âö³åµÄ×îĞ¡µ¼Í¨Ê±¼ä(us)
+extern Uint16 _SW_FR;							//¿ª¹ØÆµÂÊ(kHz)
+extern Uint16 _DEADTIME;						//Âö³åµÄ×îĞ¡µ¼Í¨Ê±¼ä(us)
+extern Uint16 _COMPTIME;						//Âö³åµÄ×îĞ¡µ¼Í¨Ê±¼ä(ms)
+extern Uint16 _MINONTIME;						//Âö³åµÄ×îĞ¡µ¼Í¨Ê±¼ä(us)
 
-Uint16 _RU_UDCT;						//µçÑ¹Ö¸Áî»ı·ÖÊ±¼ä(ms)
-Uint16 _RU_IDT;							//µçÁ÷Ö¸Áî»ı·ÖÊ±¼ä(ms)
-Uint16 _RU_IQT;							//µçÁ÷Ö¸Áî»ı·ÖÊ±¼ä(ms)
-Uint16 _RU_TOQT;						//×ª¾ØÖ¸Áî»ı·Ö±ä(ms)
-Uint16 _RU_AGLT;                        //¹¦ÂÊÒòÊı½ÇÖ¸Áî»ı·ÖÊ±¼ä(ms)
-Uint16 _URF;							//Ö±Á÷µçÑ¹¸ø¶¨Öµ
-Uint16 _MIDRF;							//dÖáµçÁ÷¸ø¶¨Öµ
-Uint16 _NIQRF;							//qÖáµçÁ÷¸ø¶¨Öµ
-Uint16 _MIQRF;							//qÖáµçÁ÷¸ø¶¨Öµ
-Uint16 _TOQRF;							//×ª¾ØÖ¸Áî
-Uint16 _AGLRF;							//»ú²à¹¦ÂÊÒòÊı½Ç
-Uint16 _EIDCO;							//ÊÖ¶¯ »ú²àÀø´ÅµçÁ÷µ÷ÕûÏµÊı
-Uint16 _ENCODPOS;						//ÊÖ¶¯ ±àÂëÆ÷³õÊ¼Î»ÖÃ½Ç¶È
+extern Uint16 _RU_UDCT;						//µçÑ¹Ö¸Áî»ı·ÖÊ±¼ä(ms)
+extern Uint16 _RU_IDT;							//µçÁ÷Ö¸Áî»ı·ÖÊ±¼ä(ms)
+extern Uint16 _RU_IQT;							//µçÁ÷Ö¸Áî»ı·ÖÊ±¼ä(ms)
+extern Uint16 _RU_TOQT;						//×ª¾ØÖ¸Áî»ı·Ö±ä(ms)
+extern Uint16 _RU_AGLT;                        //¹¦ÂÊÒòÊı½ÇÖ¸Áî»ı·ÖÊ±¼ä(ms)
+extern Uint16 _URF;							//Ö±Á÷µçÑ¹¸ø¶¨Öµ
+extern Uint16 _MIDRF;							//dÖáµçÁ÷¸ø¶¨Öµ
+extern Uint16 _NIQRF;							//qÖáµçÁ÷¸ø¶¨Öµ
+extern Uint16 _MIQRF;							//qÖáµçÁ÷¸ø¶¨Öµ
+extern Uint16 _TOQRF;							//×ª¾ØÖ¸Áî
+extern Uint16 _AGLRF;							//»ú²à¹¦ÂÊÒòÊı½Ç
+extern Uint16 _EIDCO;							//ÊÖ¶¯ »ú²àÀø´ÅµçÁ÷µ÷ÕûÏµÊı
+extern Uint16 _ENCODPOS;						//ÊÖ¶¯ ±àÂëÆ÷³õÊ¼Î»ÖÃ½Ç¶È
 
-Uint16 _STDBY1;							//±¸ÓÃ1
-Uint16 _STDBY2;							//±¸ÓÃ2
-Uint16 _STDBY3;							//±¸ÓÃ3
-Uint16 _STDBY4;							//±¸ÓÃ4
-Uint16 _STDBY5;							//±¸ÓÃ5
-Uint16 _STDBY6;							//±¸ÓÃ6
-Uint16 _STDBY7;							//±¸ÓÃ7
+extern Uint16 _STDBY1;							//±¸ÓÃ1
+extern Uint16 _STDBY2;							//±¸ÓÃ2
+extern Uint16 _STDBY3;							//±¸ÓÃ3
+extern Uint16 _STDBY4;							//±¸ÓÃ4
+extern Uint16 _STDBY5;							//±¸ÓÃ5
+extern Uint16 _STDBY6;							//±¸ÓÃ6
+extern Uint16 _STDBY7;							//±¸ÓÃ7
 //Uint16 _STDBY8;							//±¸ÓÃ8
-Uint16 _MC_OK;							//±¸ÓÃ8	 MagnetCurve2013-12-13
-Uint16 _STDBY9;							//±¸ÓÃ9
-Uint16 _STDBY10;						//±¸ÓÃ10
-Uint16 _STDBY11;						//±¸ÓÃ11
-Uint16 _STDBY12;						//±¸ÓÃ12
-Uint16 _STDBY13;						//±¸ÓÃ13
-Uint16 _STDBY14;						//±¸ÓÃ14
-float _eidco;
-float _encodpos;
-float _sc_freq1;
-float _sc_freq2;
+extern Uint16 _MC_OK;							//±¸ÓÃ8	 MagnetCurve2013-12-13
+extern Uint16 _STDBY9;							//±¸ÓÃ9
+extern Uint16 _STDBY10;						//±¸ÓÃ10
+extern Uint16 _STDBY11;						//±¸ÓÃ11
+extern Uint16 _STDBY12;						//±¸ÓÃ12
+extern Uint16 _STDBY13;						//±¸ÓÃ13
+extern Uint16 _STDBY14;						//±¸ÓÃ14
+extern float _eidco;
+extern float _encodpos;
+extern float _sc_freq1;
+extern float _sc_freq2;
 
 //----'Êı×ÖÁ¿±äÁ¿'PC------
-Uint16 _COMMAND1;
-Uint16 _COMMAND2;
-Uint16 _PCEROTRIG;					    //20100308
-Uint16 _DISPLAY;
-Uint16 _STATE1;
-Uint16 _STATE2;
-Uint16 _INPUT;
-Uint16 _OUTPUT;
-Uint16 _LVRT;
+extern Uint16 _COMMAND1;
+extern Uint16 _COMMAND2;
+extern Uint16 _PCEROTRIG;					    //20100308
+extern Uint16 _DISPLAY;
+extern Uint16 _STATE1;
+extern Uint16 _STATE2;
+extern Uint16 _INPUT;
+extern Uint16 _OUTPUT;
+extern Uint16 _LVRT;
 
-float _stdby01;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦ÀíºóÖµ
-float _stdby02;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦ÀíºóÖµ
-float _stdby03;							//¸Ó¾­¹ıĞ¡Êıµã´¦íºóÖµ
-float _stdby04;							//±¸ÓÃ­¹ıĞ¡Êıµã´¦ÀíºóÖµ
-float _stdby05;							//±¸ÓÃ¾­¹ıĞ¡Êı´¦ÀíºóÖµ
-float _stdby06;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦Öµ
-float _stdby07;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦ÀíºóÖµ
-float _stdby08;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦ÀíºóÖµ
+extern float _stdby01;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦ÀíºóÖµ
+extern float _stdby02;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦ÀíºóÖµ
+extern float _stdby03;							//¸Ó¾­¹ıĞ¡Êıµã´¦íºóÖ
+extern float _stdby04;							//±¸ÓÃ­¹ıĞ¡Êıµã´¦ÀíºóÖ
+extern float _stdby05;							//±¸ÓÃ¾­¹ıĞ¡Êı´¦ÀíºóÖµ
+extern float _stdby06;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦Öµ
+extern float _stdby07;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦ÀíºóÖµ
+extern float _stdby08;							//±¸ÓÃ¾­¹ıĞ¡Êıµã´¦ÀíºóÖµ
 //------------------------ÔËĞĞÄ£Ê½±äÁ¿-------------------------------------------------------------
-Uint16 _ENSCR;							//
+extern Uint16 _ENSCR;							//
 
 //-----------------------PI»·²ÎÊı±äÁ¿--------------------------------------------------------------
-Uint16	_NPR_U_Kp;		  		//Íø²à±äÁ÷Æ÷µçÑ¹±Õ»·±ÈÀıÏµÊı
-Uint16	_NPR_U_Ki;		   		//Íø²àäÁ÷Æ÷µçÑ¹±Õ»·»ı·ÖÏµÊı
-Uint16	_NPR_U_Kd;		   		//Íø²àä÷Æ÷µçÑ¹±Õ·Î¢·ÖÏµÊı
-Uint16	_NPR_U_outmax;			//Íø²à±äÁ÷Æ÷çÑ¹±Õ»·Êä³öÏŞ·ù
-Uint16	_NPR_U_errmax;		 	//Íø²à±äÁ÷Æ÷µçÑ¹±Õ»·Îó²îÏŞ·ù
-Uint16	_NPR_U_errmin;		   	//Íø²à±äÁ÷÷µçÑ¹±Õ»·Îó²îîĞÖµ
-Uint16	_NPR_U_incrementmax;	//Íø²à±äÁ÷Æ÷µçÑ¹±Õ»·ÔöÁ¿ÏŞ·ù
+extern Uint16	_NPR_U_Kp;		  		//Íø²à±äÁ÷Æ÷µçÑ¹±Õ»·±ÈÀıÏµÊı
+extern Uint16	_NPR_U_Ki;		   		//Íø²àäÁ÷Æ÷µçÑ¹±Õ»·»ı·ÖÏµÊ
+extern Uint16	_NPR_U_Kd;		   		//Íø²àä÷Æ÷µçÑ¹±Õ·Î¢·ÖÏµÊ
+extern Uint16	_NPR_U_outmax;			//Íø²à±äÁ÷Æ÷çÑ¹±Õ»·Êä³öÏŞ·
+extern Uint16	_NPR_U_errmax;		 	//Íø²à±äÁ÷Æ÷µçÑ¹±Õ»·Îó²îÏŞ·ù
+extern Uint16	_NPR_U_errmin;		   	//Íø²à±äÁ÷÷µçÑ¹±Õ»·Îó²îîĞÖ
+extern Uint16	_NPR_U_incrementmax;	//Íø²à±äÁ÷Æ÷µçÑ¹±Õ»·ÔöÁ¿ÏŞ·ù
 
-Uint16	_NPR_ID_Kp;				//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀıÏµÊı
-Uint16	_NPR_ID_Ki;	   			//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·»ı·ÖÏµÊı
-Uint16	_NPR_ID_Kd;	   			//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Î¢·ÖÏµÊı
-Uint16	_NPR_ID_outmax;			//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·ÊäöÏŞ·ù
-Uint16	_NPR_ID_errmax;	 		//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏŞ·ù
-Uint16	_NPR_ID_errmin;	  		//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îîĞ¡Öµ
-Uint16	_NPR_ID_incrementmax; 	//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·öÁ¿ÏŞ·ù
+extern Uint16	_NPR_ID_Kp;				//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀıÏµÊı
+extern Uint16	_NPR_ID_Ki;	   			//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·»ı·ÖÏµÊı
+extern Uint16	_NPR_ID_Kd;	   			//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Î¢·ÖÏµÊı
+extern Uint16	_NPR_ID_outmax;			//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·ÊäöÏŞ·
+extern Uint16	_NPR_ID_errmax;	 		//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏŞ·ù
+extern Uint16	_NPR_ID_errmin;	  		//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îîĞ¡Ö
+extern Uint16	_NPR_ID_incrementmax; 	//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·öÁ¿ÏŞ·
 
-Uint16	_NPR_IQ_Kp;				//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀıÏµÊı
-Uint16	_NPR_IQ_Ki;	   			//Íø²à±ä÷Æ÷µçÁ÷±Õ»·»ı·ÖÏµÊı
-Uint16	_NPR_IQ_Kd;	   			//Íøà±äÁ÷Æ÷µçÁ÷±Õ»·Î¢·ÖÏµÊı
-Uint16	_NPR_IQ_outmax;			//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Êä³öÏŞ·ù
-Uint16	_NPR_IQ_errmax;	 		//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏŞ·ù
-Uint16	_NPR_IQ_errmin;	  		//Íøà±äÁ÷Æ÷µçÁ÷±»·Îó²î×îĞ¡Öµ
-Uint16	_NPR_IQ_incrementmax; 	//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·ÔöÁ¿ÏŞ·ù
+extern Uint16	_NPR_IQ_Kp;				//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀıÏµÊı
+extern Uint16	_NPR_IQ_Ki;	   			//Íø²à±ä÷Æ÷µçÁ÷±Õ»·»ı·ÖÏµÊ
+extern Uint16	_NPR_IQ_Kd;	   			//Íøà±äÁ÷Æ÷µçÁ÷±Õ»·Î¢·ÖÏµÊ
+extern Uint16	_NPR_IQ_outmax;			//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Êä³öÏŞ·ù
+extern Uint16	_NPR_IQ_errmax;	 		//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏŞ·ù
+extern Uint16	_NPR_IQ_errmin;	  		//Íøà±äÁ÷Æ÷µçÁ÷±»·Îó²î×îĞ¡Öµ
+extern Uint16	_NPR_IQ_incrementmax; 	//Íø²à±äÁ÷Æ÷µçÁ÷±Õ»·ÔöÁ¿ÏŞ·ù
 
-Uint16	_MPR_U_Kp;	   			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·±ÈÀıÏµÊı
-Uint16	_MPR_U_Ki;	  			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·»ı·ÖÏµÊı
-Uint16	_MPR_U_Kd;	  			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Î¢·ÖÏµÊı
-Uint16	_MPR_U_outmax;	 		//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Êä³öÏŞ·ù
-Uint16	_MPR_U_errmax;	  		//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Îó²îÏŞù
-Uint16	_MPR_U_errmin;		 	//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Îó²î×îĞ¡Öµ
-Uint16	_MPR_U_incrementmax; 	//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·ÔöÁ¿ÏŞ·ù
+extern Uint16	_MPR_U_Kp;	   			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·±ÈÀıÏµÊı
+extern Uint16	_MPR_U_Ki;	  			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·»ı·ÖÏµÊı
+extern Uint16	_MPR_U_Kd;	  			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Î¢·ÖÏµÊı
+extern Uint16	_MPR_U_outmax;	 		//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Êä³öÏŞ·ù
+extern Uint16	_MPR_U_errmax;	  		//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Îó²îÏŞ
+extern Uint16	_MPR_U_errmin;		 	//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Îó²î×îĞ¡Öµ
+extern Uint16	_MPR_U_incrementmax; 	//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·ÔöÁ¿ÏŞ·ù
 
-Uint16 _MPR_ID_Kp;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀıÏµÊı
-Uint16 _MPR_ID_Ki;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·»ı·ÖÏµÊı
-Uint16 _MPR_ID_Kd;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Î¢·ÖÏµÊı
-Uint16 _MPR_ID_outmax;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Êä³öÏŞ·ù
-Uint16 _MPR_ID_errmax;			//»ú²àäÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏŞ·ù
-Uint16 _MPR_ID_errmin;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²î×îĞ¡Öµ
-Uint16 _MPR_ID_incrementmax;		//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·ÔöÁ¿ÏŞ·ù
+extern Uint16 _MPR_ID_Kp;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀıÏµÊı
+extern Uint16 _MPR_ID_Ki;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·»ı·ÖÏµÊı
+extern Uint16 _MPR_ID_Kd;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Î¢·ÖÏµÊı
+extern Uint16 _MPR_ID_outmax;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Êä³öÏŞ·ù
+extern Uint16 _MPR_ID_errmax;			//»ú²àäÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏŞ·
+extern Uint16 _MPR_ID_errmin;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²î×îĞ¡Öµ
+extern Uint16 _MPR_ID_incrementmax;		//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·ÔöÁ¿ÏŞ·ù
 
-Uint16 _MPR_IQ_Kp;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀıÏµÊı
-Uint16 _MPR_IQ_Ki;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·»ı·ÖÏµÊı
-Uint16 _MPR_IQ_Kd;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Î¢·ÖÏµÊı
-Uint16 _MPR_IQ_outmax;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Êä³öÏŞ·ù
-Uint16 _MPR_IQ_errmax;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏŞ·ù
-Uint16 _MPR_IQ_errmin;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²î×îĞ¡Öµ
-Uint16 _MPR_IQ_incrementmax;	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·ÔöÁ¿ÏŞ·ù
-
-
-Uint16	_DYN_U_Kp;	   			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·±ÈÀıÏµÊı
-Uint16	_DYN_U_Ki;	  			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·»ı·ÖÏµÊı
-Uint16	_DYN_U_Kd;	  			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Î¢·ÖÏµÊı
-Uint16	_DYN_U_outmax;	 		//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Êä³öÏŞ·ù
-Uint16	_DYN_U_errmax;	  		//»ú²à±äÁ÷Æ÷µç¹±»·Îó²îÏŞ·ù
-Uint16	_DYN_U_errmin;		 	//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Îó²î×îĞ¡Öµ
-Uint16	_DYN_U_incrementmax; 	//»ú²à±äÁ÷Æ÷µç¹±Õ»·ÔöÁ¿ÏŞ·ù
+extern Uint16 _MPR_IQ_Kp;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀıÏµÊı
+extern Uint16 _MPR_IQ_Ki;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·»ı·ÖÏµÊı
+extern Uint16 _MPR_IQ_Kd;				//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Î¢·ÖÏµÊı
+extern Uint16 _MPR_IQ_outmax;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Êä³öÏŞ·ù
+extern Uint16 _MPR_IQ_errmax;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏŞ·ù
+extern Uint16 _MPR_IQ_errmin;			//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²î×îĞ¡Öµ
+extern Uint16 _MPR_IQ_incrementmax;	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·ÔöÁ¿ÏŞ·ù
 
 
-Uint16 _SC_RTRN;													//¹ÊÕÏ×î´óÖØÊÔ´ÎÊı
-Uint16 _SC_RTRT;													//Á½´Î¹ÊÕÏÖØÊÔ¼ä¸ôÊ±¼ä(ms)
+extern Uint16	_DYN_U_Kp;	   			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·±ÈÀıÏµÊı
+extern Uint16	_DYN_U_Ki;	  			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·»ı·ÖÏµÊı
+extern Uint16	_DYN_U_Kd;	  			//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Î¢·ÖÏµÊı
+extern Uint16	_DYN_U_outmax;	 		//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Êä³öÏŞ·ù
+extern Uint16	_DYN_U_errmax;	  		//»ú²à±äÁ÷Æ÷µç¹±»·Îó²îÏŞ·ù
+extern Uint16	_DYN_U_errmin;		 	//»ú²à±äÁ÷Æ÷µçÑ¹±Õ»·Îó²î×îĞ¡Öµ
+extern Uint16	_DYN_U_incrementmax; 	//»ú²à±äÁ÷Æ÷µç¹±Õ»·ÔöÁ¿ÏŞ·
 
-Uint16 _SC_IACOV1;													//»ù×¼µçÁ÷µÄ°Ù·ÖÖµ)
-Uint16 _SC_UDCOV;													//ÖĞ¼äÖ±Á÷µçÑ¹¹ıÑ¹Öµ(V)
-Uint16 _SC_UDCOVH;													//ÖĞ¼äÖ±Á÷µçÑ¹¹ıÑ¹Öµ£¨ÍøÑ¹µøÂä£©(V)
-Uint16 _SC_IDCOV;													//¸ÄÎªdc-chopperµçÁ÷±£»¤BJTULVRT201204
-//Uint16 _SC_UDCLV;													//ÖĞ¼äÖ±Á÷µçÑ¹Ç·Ñ¹Öµ(V)
-Uint16 _SC_VDCON;													//ÉÏµçµçÑ¹
-Uint16 _SC_UACOV1;													//ÍøÑ¹½»Á÷µçÑ¹¹ıÑ¹¶¯×÷Öµ(V)
-Uint16 _SC_UACLV1;													//½»Á÷µçÑ¹È±Ïà¶¯×÷Öµ(V)
-Uint16 _SC_IACOV2;													//»ù×¼µçÁ÷µÄ°Ù·ÖÖµ)
-Uint16 _SC_PGOV;													//
-Uint16 _SC_QGOV;													//
-Uint16 _SC_IACOVST;                                                 //¶¨×ÓµçÁ÷¹ıÁ÷±£»¤ 
 
-Uint16 _SC_Rs;														//¶¨×Óµç×è(mohm)
-Uint16 _SC_Lls;														//¶¨×ÓÂ©¿¹(mH)
-Uint16 _SC_Rr;														//×ª×Óµç×è(mohm)
-Uint16 _SC_Llr;														//×ª×ÓÂ©¿¹(mH)
-Uint16 _SC_Lm;														//Àø´Åµç¹(mH)
-Uint16 _SC_POLES;													//¼«¶ÔÊı
-Uint16 _SC_Usn;														//¶¨×Ó¶î¶¨µçÑ¹(V)
-Uint16 _SC_Uro;                                                		//×ª×Ó¿ªÂ·µçÑ¹(V)	
-Uint16 _SC_PLSPRVL;													//±àÂëÆ÷Ã¿È¦¹âÕ¤ÊıÁ¿
-Uint16 _SC_MSTDBY;                                               	//µç»ú²ÎÊı±¸ÓÃ
-Uint16 _SC_EXISTY1;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ1
-Uint16 _SC_EXISTY2;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ2
-Uint16 _SC_EXISTY3;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ3
-Uint16 _SC_EXISTY4;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ4
-Uint16 _SC_EXISTY5;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ5
+extern Uint16 _SC_RTRN;													//¹ÊÕÏ×î´óÖØÊÔ´ÎÊı
+extern Uint16 _SC_RTRT;													//Á½´Î¹ÊÕÏÖØÊÔ¼ä¸ôÊ±¼ä(ms)
 
-Uint16 _BA_ERR4;													//µÚËÄ´Î¹ÊÕÏĞÅÏ¢
-Uint16 _BA_ERR3;													//µÚÈı´Î¹ÊÕÏĞÅÏ¢
-Uint16 _BA_ERR2;													//µÚ¶ş´Î¹ÊÕÏĞÅÏ¢
-Uint16 _BA_ERR1;													//µÚÒ»´Î¹ÊÕÏĞÅÏ¢
-Uint16 _BA_ERR5;													//Ê¾²¨Æ÷¹ÊÕÏĞÅÏ¢
-//--------------------------------±¨¾¯ĞÅÏ¢±ä¿-----------------------------------------------------
-Uint16 _BA_EMIDRF;													//×îĞÂ¹ÊÕÏÊ±¿Ì dÖáµçÁ÷Ö¸Áî(A)
-Uint16 _BA_ENIQRF;													//×îĞÂ¹ÊÕÏÊ±¿Ì qÖáµçÁ÷Ö¸Áî(A)
-Uint16 _BA_EMIQRF;													//×îÂ¹ÕÏÊ±¿Ì qÖáµçÁ÷Ö¸Áî(A)
-Uint16 _BA_ETOQRF;													//×îĞÂ¹ÊÕÏÊ±¿Ì ×ª¾ØÖ¸Áî(NM)
-Uint16 _BA_EURF;													//×îĞÂ¹ÊÕÏÊ±¿Ì ÖĞ¼äÖ±Á÷µçÑ¹¸ø¨(V)
-Uint16 _BA_EUDC;													//×îĞÂ¹ÊÕÏÊ±¿Ì ÖĞ¼äÖ±Á÷µçÑ¹(V)
-Uint16 _BA_EAGLRF;													//×îĞÂ¹ÊÕÏÊ±¿Ì ÎŞ¹¦½Ç¶ÈÖ¸Áî()
-Uint16 _BA_EIA1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àAÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_EIB1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àBÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_EIC1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àCÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_EIA2;													//×îĞÂ¹ÊÕÏÊ±¿Ì ç»ú²àAÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_EIB2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²àBÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_EIC2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²àCÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_EUAB1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àAÏàµçÑ¹ÓĞĞ§Öµ(V)
-Uint16 _BA_EUBC1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àBÏàµçÑ¹ÓĞĞ§Öµ(V)
-Uint16 _BA_EUAB2;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àÏàµçÑ¹ÓĞĞ§Öµ(V)
-Uint16 _BA_EUBC2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²àAÏàµçÁ÷ÓĞĞ§Öµ(V)
-Uint16 _BA_EUAB0;													//×îĞÂ¹ÊÕÏÊ±¿Ì Ö÷¶ÏÇ°ABÏßµçÑ¹ÓĞĞ§Öµ(V)
-Uint16 _BA_EUBC0;													//×îĞÂ¹ÊÕÏÊ±¿Ì Ö÷ÏÇ°BCÏßµçÑ¹ÓĞĞ§Öµ(V)
-Uint16 _BA_EFREQ;													//×îĞÂ¹ÊÕÏÊ±¿Ì µçÍøÆµÂÊ(hz)
-Uint16 _BA_ESPEED;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú×ªËÙ(rpm)
-Uint16 _BA_ENPRUD;              			//dÖáÖ÷¶ÏºóÍøÑ¹·´À¡20091026atzy
-Uint16 _BA_ENPRUQ;          				//qÖáÖ÷¶ÏºóÍøÑ¹·´À¡20091026atzy
-Uint16 _BA_ENPRUD2;          				//dÖáÖ÷¶ÏºóÍøÑ¹·´À¡ ÂË²¨ºó20091026atzy
-Uint16 _BA_ENPRUQ2;          				//qÖáÖ÷¶ÏºóÍøÑ¹·´À¡ ÂË²¨ºó20091026atzy
-Uint16 _BA_ENUDOUT;          				//ø²àdáµçÑ¹Êä³ö20091026atzy
-Uint16 _BA_ENUQOUT;          				//Íø²àqÖáµçÑ¹Êä³ö20091026atzy
-Uint16 _BA_ETA1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²à±äÁ÷Æ÷AÇÅ±ÛÎÂ¶È
-Uint16 _BA_ETB1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²à±äÁ÷Æ÷BÇÅ±ÛÎÂ¶È
-Uint16 _BA_ETC1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²à±äÁ÷Æ÷CÇÅ±ÛÎÂ¶È
-Uint16 _BA_ETA2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²à±äÁ÷Æ÷AÅ±ÛÎÂ¶È
-Uint16 _BA_ETB2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²àäÁ÷Æ÷BÇÅ±ÛÎÂÈ
-Uint16 _BA_ETC2;													//×îÂ¹ÊÕÏÊ±¿Ì µç»ú²à±äÁ÷Æ÷CÇÅ±ÛÎÂ¶È
-Uint16 _BA_EPIONU;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àµçÑ¹»·Êä³ö
-Uint16 _BA_EPIONID;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àdÖáµçÁ÷»·Êä³ö
-Uint16 _BA_EPIONIQ;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àqÖáµçÁ÷»·Êä³ö
-Uint16 _BA_EMEXI;													//×îĞÂ¹ÊÕÏÊ±¿Ì »ú²àÀø´ÅÀíÂÛ¼ÆËãÖµÏÔÊ¾
-Uint16 _BA_EPIOMID;													//×îĞÂ¹ÊÕÏÊ±¿Ì »ú²àdÖáµçÁ÷»·Êäö
-Uint16 _BA_EPIOMIQ;													//×îĞÂ¹ÊÕÏÊ±¿Ì »ú²àqÖáµçÁ÷»·Êä³ö
-Uint16 _BA_ETLAC;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àµç¸ĞÎÂ¶È
-Uint16 _BA_ETLDUDT;													//×îĞÂ¹ÊÕÏÊ±¿Ì »ú²àµç¸ĞÎÂ¶È
-Uint16 _BA_ETSKIIP;													//×îĞÂ¹ÊÕÏÊ±¿Ì SKIIPÎÂÈ
-Uint16 _BA_ESTAIAC;	
-Uint16 _BA_ESTAIBA;	
-Uint16 _BA_ETOQFB;	
-Uint16 _BA_EPSTA;	
-Uint16 _BA_EPNPR;	
-Uint16 _BA_EPGRID;	
+extern Uint16 _SC_IACOV1;													//»ù×¼µçÁ÷µÄ°Ù·ÖÖµ)
+extern Uint16 _SC_UDCOV;													//ÖĞ¼äÖ±Á÷µçÑ¹¹ıÑ¹Öµ(V)
+extern Uint16 _SC_UDCOVH;													//ÖĞ¼äÖ±Á÷µçÑ¹¹ıÑ¹Öµ£¨ÍøÑ¹µøÂä£©(V)
+extern Uint16 _SC_IDCOV;													//¸ÄÎªdc-chopperµçÁ÷±£»¤BJTULVRT201204
+//extern Uint16 _SC_UDCLV;													//ÖĞ¼äÖ±Á÷µçÑ¹Ç·Ñ¹Öµ(V)
+extern Uint16 _SC_VDCON;													//ÉÏµçµçÑ¹
+extern Uint16 _SC_UACOV1;													//ÍøÑ¹½»Á÷µçÑ¹¹ıÑ¹¶¯×÷Öµ(V)
+extern Uint16 _SC_UACLV1;													//½»Á÷µçÑ¹È±Ïà¶¯×÷Öµ(V)
+extern Uint16 _SC_IACOV2;													//»ù×¼µçÁ÷µÄ°Ù·ÖÖµ)
+extern Uint16 _SC_PGOV;													//
+extern Uint16 _SC_QGOV;													//
+extern Uint16 _SC_IACOVST;                                                 //¶¨×ÓµçÁ÷¹ıÁ÷±£»¤
 
-Uint16 _BA_TIME4_0;													//×îĞÂ¹ÊÕÏÊ±¼ä(Ãë)
-Uint16 _BA_TIME4_1;													//×îĞÂ¹ÊÕÏÊ±¼ä(Ö)
-Uint16 _BA_TIME4_2;													//×îĞÂ¹ÊÕÏÊ±¼ä(Ê±)
-Uint16 _BA_TIME4_3;													//×îĞÂ¹ÊÕÏÊ±¼ä(ÈÕ)
-Uint16 _BA_TIME4_4;													//×îĞÂ¹ÊÏÊ±¼ä(ÔÂ)
-Uint16 _BA_TIME4_5;													//×îĞÂ¹ÊÕÏÊ±¼ä(Äê)
+extern Uint16 _SC_Rs;														//¶¨×Óµç×è(mohm)
+extern Uint16 _SC_Lls;														//¶¨×ÓÂ©¿¹(mH)
+extern Uint16 _SC_Rr;														//×ª×Óµç×è(mohm)
+extern Uint16 _SC_Llr;														//×ª×ÓÂ©¿¹(mH)
+extern Uint16 _SC_Lm;														//Àø´Åµç mH)
+extern Uint16 _SC_POLES;													//¼«¶ÔÊı
+extern Uint16 _SC_Usn;														//¶¨×Ó¶î¶¨µçÑ¹(V)
+extern Uint16 _SC_Uro;                                                		//×ª×Ó¿ªÂ·µçÑ¹(V)
+extern Uint16 _SC_PLSPRVL;													//±àÂëÆ÷Ã¿È¦¹âÕ¤ÊıÁ¿
+extern Uint16 _SC_MSTDBY;                                               	//µç»ú²ÎÊı±¸ÓÃ
+extern Uint16 _SC_EXISTY1;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ1
+extern Uint16 _SC_EXISTY2;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ2
+extern Uint16 _SC_EXISTY3;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ3
+extern Uint16 _SC_EXISTY4;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ4
+extern Uint16 _SC_EXISTY5;                                               	//µç»úÀø´Åµ÷½Ú±¸ÓÃ5
 
-Uint16 _BA_TIME3_0;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(Ãë)
-Uint16 _BA_TIME3_1;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(·Ö)
-Uint16 _BA_TIME3_2;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(Ê±)
-Uint16 _BA_TIME3_3;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(ÈÕ)
-Uint16 _BA_TIME3_4;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(ÔÂ)
-Uint16 _BA_TIME3_5;													//µÚÈı´Î¹ÊÏÊ±¼ä(Äê)
+extern Uint16 _BA_ERR4;													//µÚËÄ´Î¹ÊÕÏĞÅÏ¢
+extern Uint16 _BA_ERR3;													//µÚÈı´Î¹ÊÕÏĞÅÏ¢
+extern Uint16 _BA_ERR2;													//µÚ¶ş´Î¹ÊÕÏĞÅÏ¢
+extern Uint16 _BA_ERR1;													//µÚÒ»´Î¹ÊÕÏĞÅÏ¢
+extern Uint16 _BA_ERR5;													//Ê¾²¨Æ÷¹ÊÕÏĞÅÏ¢
+//--------------------------------±¨¾¯ĞÅÏ¢±ä ----------------------------------------------------
+extern Uint16 _BA_EMIDRF;													//×îĞÂ¹ÊÕÏÊ±¿Ì dÖáµçÁ÷Ö¸Áî(A)
+extern Uint16 _BA_ENIQRF;													//×îĞÂ¹ÊÕÏÊ±¿Ì qÖáµçÁ÷Ö¸Áî(A)
+extern Uint16 _BA_EMIQRF;													//×îÂ¹ÕÏÊ±¿Ì qÖáµçÁ÷Ö¸Áî(A)
+extern Uint16 _BA_ETOQRF;													//×îĞÂ¹ÊÕÏÊ±¿Ì ×ª¾ØÖ¸Áî(NM)
+extern Uint16 _BA_EURF;													//×îĞÂ¹ÊÕÏÊ±¿Ì ÖĞ¼äÖ±Á÷µçÑ¹¸ø V)
+extern Uint16 _BA_EUDC;													//×îĞÂ¹ÊÕÏÊ±¿Ì ÖĞ¼äÖ±Á÷µçÑ¹(V)
+extern Uint16 _BA_EAGLRF;													//×îĞÂ¹ÊÕÏÊ±¿Ì ÎŞ¹¦½Ç¶ÈÖ¸Áî()
+extern Uint16 _BA_EIA1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àAÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_EIB1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àBÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_EIC1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àCÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_EIA2;													//×îĞÂ¹ÊÕÏÊ±¿Ì ç»ú²àAÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_EIB2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²àBÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_EIC2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²àCÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_EUAB1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àAÏàµçÑ¹ÓĞĞ§Öµ(V)
+extern Uint16 _BA_EUBC1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àBÏàµçÑ¹ÓĞĞ§Öµ(V)
+extern Uint16 _BA_EUAB2;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àÏàµçÑ¹ÓĞĞ§Öµ(V)
+extern Uint16 _BA_EUBC2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²àAÏàµçÁ÷ÓĞĞ§Öµ(V)
+extern Uint16 _BA_EUAB0;													//×îĞÂ¹ÊÕÏÊ±¿Ì Ö÷¶ÏÇ°ABÏßµçÑ¹ÓĞĞ§Öµ(V)
+extern Uint16 _BA_EUBC0;													//×îĞÂ¹ÊÕÏÊ±¿Ì Ö÷ÏÇ°BCÏßµçÑ¹ÓĞĞ§Öµ(V)
+extern Uint16 _BA_EFREQ;													//×îĞÂ¹ÊÕÏÊ±¿Ì µçÍøÆµÂÊ(hz)
+extern Uint16 _BA_ESPEED;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú×ªËÙ(rpm)
+extern Uint16 _BA_ENPRUD;              			//dÖáÖ÷¶ÏºóÍøÑ¹·´À¡20091026atzy
+extern Uint16 _BA_ENPRUQ;          				//qÖáÖ÷¶ÏºóÍøÑ¹·´À¡20091026atzy
+extern Uint16 _BA_ENPRUD2;          				//dÖáÖ÷¶ÏºóÍøÑ¹·´À¡ ÂË²¨ºó20091026atzy
+extern Uint16 _BA_ENPRUQ2;          				//qÖáÖ÷¶ÏºóÍøÑ¹·´À¡ ÂË²¨ºó20091026atzy
+extern Uint16 _BA_ENUDOUT;          				//ø²àdáµçÑ¹Êä³ 0091026atzy
+extern Uint16 _BA_ENUQOUT;          				//Íø²àqÖáµçÑ¹Êä³ö20091026atzy
+extern Uint16 _BA_ETA1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²à±äÁ÷Æ÷AÇÅ±ÛÎÂ¶È
+extern Uint16 _BA_ETB1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²à±äÁ÷Æ÷BÇÅ±ÛÎÂ¶È
+extern Uint16 _BA_ETC1;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²à±äÁ÷Æ÷CÇÅ±ÛÎÂ¶È
+extern Uint16 _BA_ETA2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²à±äÁ÷Æ÷AÅ±ÛÎÂ¶
+extern Uint16 _BA_ETB2;													//×îĞÂ¹ÊÕÏÊ±¿Ì µç»ú²àäÁ÷Æ÷BÇÅ±ÛÎÂ
+extern Uint16 _BA_ETC2;													//×îÂ¹ÊÕÏÊ±¿ µç»ú²à±äÁ÷Æ÷CÇÅ±ÛÎÂ¶È
+extern Uint16 _BA_EPIONU;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àµçÑ¹»·Êä³ö
+extern Uint16 _BA_EPIONID;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àdÖáµçÁ÷»·Êä³ö
+extern Uint16 _BA_EPIONIQ;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àqÖáµçÁ÷»·Êä³ö
+extern Uint16 _BA_EMEXI;													//×îĞÂ¹ÊÕÏÊ±¿Ì »ú²àÀø´ÅÀíÂÛ¼ÆËãÖµÏÔÊ¾
+extern Uint16 _BA_EPIOMID;													//×îĞÂ¹ÊÕÏÊ±¿Ì »ú²àdÖáµçÁ÷»·Êä
+extern Uint16 _BA_EPIOMIQ;													//×îĞÂ¹ÊÕÏÊ±¿Ì »ú²àqÖáµçÁ÷»·Êä³ö
+extern Uint16 _BA_ETLAC;													//×îĞÂ¹ÊÕÏÊ±¿Ì Íø²àµç¸ĞÎÂ¶È
+extern Uint16 _BA_ETLDUDT;													//×îĞÂ¹ÊÕÏÊ±¿Ì »ú²àµç¸ĞÎÂ¶È
+extern Uint16 _BA_ETSKIIP;													//×îĞÂ¹ÊÕÏÊ±¿Ì SKIIPÎÂ
+extern Uint16 _BA_ESTAIAC;
+extern Uint16 _BA_ESTAIBA;
+extern Uint16 _BA_ETOQFB;
+extern Uint16 _BA_EPSTA;
+extern Uint16 _BA_EPNPR;
+extern Uint16 _BA_EPGRID;
 
-Uint16 _BA_TIME2_0;													//µÚ¶şÎÊÕÏÊ±¼ä(Ãë)
-Uint16 _BA_TIME2_1;													//µÚ¶ş´Î¹ÊÕÏÊ±¼ä(·Ö)
-Uint16 _BA_TIME2_2;													//µÚ¶ş´Î¹ÊÕÏ±¼?Ê±)
-Uint16 _BA_TIME2_3;													//µÚ¶ş´Î¹ÊÕÏÊ±¼ä(ÈÕ)
-Uint16 _BA_TIME2_4;													//µÚ¶ş´Î¹ÊÕÏÊ±¼ä(ÔÂ)
-Uint16 _BA_TIME2_5;													//µÚ¶ş´Î¹ÊÕÏÊ±?Äê)
+extern Uint16 _BA_TIME4_0;													//×îĞÂ¹ÊÕÏÊ±¼ä(Ãë)
+extern Uint16 _BA_TIME4_1;													//×îĞÂ¹ÊÕÏÊ±¼ä(
+extern Uint16 _BA_TIME4_2;													//×îĞÂ¹ÊÕÏÊ±¼ä(Ê±)
+extern Uint16 _BA_TIME4_3;													//×îĞÂ¹ÊÕÏÊ±¼ä(ÈÕ)
+extern Uint16 _BA_TIME4_4;													//×îĞÂ¹ÊÏÊ±¼ ÔÂ)
+extern Uint16 _BA_TIME4_5;													//×îĞÂ¹ÊÕÏÊ±¼ä(Äê)
 
-Uint16 _BA_TIME1_0;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(Ãë)
-Uint16 _BA_TIME1_1;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(·Ö)
-Uint16 _BA_TIME1_2;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(Ê±)
-Uint16 _BA_TIME1_3;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(ÈÕ)
-Uint16 _BA_TIME1_4;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(ÔÂ)
-Uint16 _BA_TIME1_5;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(Äê)
+extern Uint16 _BA_TIME3_0;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(Ãë)
+extern Uint16 _BA_TIME3_1;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(·Ö)
+extern Uint16 _BA_TIME3_2;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(Ê±)
+extern Uint16 _BA_TIME3_3;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(ÈÕ)
+extern Uint16 _BA_TIME3_4;													//µÚÈı´Î¹ÊÕÏÊ±¼ä(ÔÂ)
+extern Uint16 _BA_TIME3_5;													//µÚÈı´Î¹ÊÏÊ±¼ Äê)
 
-Uint16 _BA_TIME5_0;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(Ãë)
-Uint16 _BA_TIME5_1;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(·Ö)
-Uint16 _BA_TIME5_2;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(Ê±)
-Uint16 _BA_TIME5_3;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(ÈÕ)
-Uint16 _BA_TIME5_4;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(ÔÂ)
-Uint16 _BA_TIME5_5;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(Äê)
+extern Uint16 _BA_TIME2_0;													//µÚ¶şÎÊÕÏÊ±¼ä(Ãë)
+extern Uint16 _BA_TIME2_1;													//µÚ¶ş´Î¹ÊÕÏÊ±¼ä(·Ö)
+extern Uint16 _BA_TIME2_2;													//µÚ¶ş´Î¹ÊÕÏ±¼?Ê±)
+extern Uint16 _BA_TIME2_3;													//µÚ¶ş´Î¹ÊÕÏÊ±¼ä(ÈÕ)
+extern Uint16 _BA_TIME2_4;													//µÚ¶ş´Î¹ÊÕÏÊ±¼ä(ÔÂ)
+extern Uint16 _BA_TIME2_5;													//µÚ¶ş´Î¹ÊÕÏÊ±?Äê)
+
+extern Uint16 _BA_TIME1_0;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(Ãë)
+extern Uint16 _BA_TIME1_1;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(·Ö)
+extern Uint16 _BA_TIME1_2;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(Ê±)
+extern Uint16 _BA_TIME1_3;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(ÈÕ)
+extern Uint16 _BA_TIME1_4;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(ÔÂ)
+extern Uint16 _BA_TIME1_5;													//µÚÒ»´Î¹ÊÕÏÊ±¼ä(Äê)
+
+extern Uint16 _BA_TIME5_0;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(Ãë)
+extern Uint16 _BA_TIME5_1;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(·Ö)
+extern Uint16 _BA_TIME5_2;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(Ê±)
+extern Uint16 _BA_TIME5_3;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(ÈÕ)
+extern Uint16 _BA_TIME5_4;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(ÔÂ)
+extern Uint16 _BA_TIME5_5;													//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(Äê)
 
 //-------------------------------------ÔËĞĞ¼à¿Ø±äÁ¿-----------------------------------------------
-Uint16 _BA_MIDRF;													//dÖáµçÁ÷Ö¸Áî(A)
-Uint16 _BA_NIQRF;													//qÖáµçÁ÷Ö¸Áî(A)
-Uint16 _BA_MIQRF;													//qÖáµçÁ÷Ö¸Áî(A)
-Uint16 _BA_TOQRF;													//×ª¾ØÖ¸Áî(NM)
-Uint16 _BA_AGLRF;													//ÎŞ¹¦½Ç¶ÈÖ¸Áî(NM)
-Uint16 _BA_TOQFB;													//×ª¾Ø·´À¡(NM)
-Uint16 _BA_URF;														//ÖĞ¼äÖ±Á÷µçÑ¹¸ø¶¨(V)
-Uint16 _BA_UDC;														//ÖĞ¼äÖ±Á÷µçÑ¹(V)
-Uint16 _BA_IA1;														//ÍøàAÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_IB1;														//Íø²àBÏàµçÁ÷ÓĞ§Ö?A)
-Uint16 _BA_IC1;														//Íø²àCÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_IA2;														//µç»ú²àAÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_IB2;														//µç»ú²àBÏàµç÷ÓĞĞ§Öµ(A)
-Uint16 _BA_IC2;														//µç»ú²àCÏàµçÁ÷ÓĞĞ§Öµ(A)
-Uint16 _BA_UAB1;													//Íø²àABÏßµçÑ¹ÓĞĞ§Öµ(V)
-Uint16 _BA_UBC1;													//Íø²àBCÏßµçÑ¹ĞĞ§Öµ(V)
-Uint16 _BA_UAB2;													//µç»ú²àABÏßµçÑ¹ÓĞĞ§Öµ(V)
-Uint16 _BA_UBC2;													//µç»ú²àBCÏßµçÁ÷ÓĞĞ§Öµ(V)
-Uint16 _BA_UAB0;												    	//Ö÷¶ÏÇ°ABÏßµçÑ¹ÓĞĞ§Öµ(V)
-Uint16 _BA_UBC0;												    	//Ö÷¶ÏÇ°BCÏßµçÁ÷ÓĞĞ§Öµ(V) 
-Uint16 _BA_FREQ;													//µçÍøÆµÊ(hz)
-Uint16 _BA_SPEED;													//µç»ú×ªËÙ(rpm)
-Uint16 _BA_TA1;														//Íø²à±äÁ÷Æ÷AÇÅÛÎÂ¶
-Uint16 _BA_TB1;														//Íø²à±äÁ÷÷BÇÅ±ÛÎÂ¶È
-Uint16 _BA_TC1;														//Íø²à±äÁ÷Æ÷CÇÅ±ÛÎÂ¶È
-Uint16 _BA_TA2;														//µç»ú²à±äÁ÷Æ÷AÇÅ±ÛÎÂ¶È
-Uint16 _BA_TB2;														//µç»ú²à±äÁ÷Æ÷BÇÅ±ÛÎÂ¶È
-Uint16 _BA_TC2;														//µç»ú²à±äÁ÷Æ÷CÇÅ±ÛÎÂ¶È
-Uint16 _BA_PIONU;													//Íø²àµçÑ¹»·Êä³ö
-Uint16 _BA_PIONID;													//Íø²àdÖáµçÁ÷»·Êä³ö
-Uint16 _BA_PIONIQ;													//Íø²àqÖáµçÁ÷»·Êä³ö
-Uint16 _BA_MEXI;													//
-Uint16 _BA_PIOMID;													//»ú²àdÖáµçÁ÷»·Êä³ö
-Uint16 _BA_PIOMIQ;													//»ú²àqÖáµçÁ÷»·Êä³ö
-Uint16 _BA_GRDUD;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹d
-Uint16 _BA_GRDUQ;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹q
+extern Uint16 _BA_MIDRF;													//dÖáµçÁ÷Ö¸Áî(A)
+extern Uint16 _BA_NIQRF;													//qÖáµçÁ÷Ö¸Áî(A)
+extern Uint16 _BA_MIQRF;													//qÖáµçÁ÷Ö¸Áî(A)
+extern Uint16 _BA_TOQRF;													//×ª¾ØÖ¸Áî(NM)
+extern Uint16 _BA_AGLRF;													//ÎŞ¹¦½Ç¶ÈÖ¸Áî(NM)
+extern Uint16 _BA_TOQFB;													//×ª¾Ø·´À¡(NM)
+extern Uint16 _BA_URF;														//ÖĞ¼äÖ±Á÷µçÑ¹¸ø¶¨(V)
+extern Uint16 _BA_UDC;														//ÖĞ¼äÖ±Á÷µçÑ¹(V)
+extern Uint16 _BA_IA1;														//ÍøàAÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_IB1;														//Íø²àBÏàµçÁ÷ÓĞ§Ö?A)
+extern Uint16 _BA_IC1;														//Íø²àCÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_IA2;														//µç»ú²àAÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_IB2;														//µç»ú²àBÏàµç÷ÓĞĞ§Ö A)
+extern Uint16 _BA_IC2;														//µç»ú²àCÏàµçÁ÷ÓĞĞ§Öµ(A)
+extern Uint16 _BA_UAB1;													//Íø²àABÏßµçÑ¹ÓĞĞ§Öµ(V)
+extern Uint16 _BA_UBC1;													//Íø²àBCÏßµçÑ¹ĞĞ§Ö V)
+extern Uint16 _BA_UAB2;													//µç»ú²àABÏßµçÑ¹ÓĞĞ§Öµ(V)
+extern Uint16 _BA_UBC2;													//µç»ú²àBCÏßµçÁ÷ÓĞĞ§Öµ(V)
+extern Uint16 _BA_UAB0;												    	//Ö÷¶ÏÇ°ABÏßµçÑ¹ÓĞĞ§Öµ(V)
+extern Uint16 _BA_UBC0;												    	//Ö÷¶ÏÇ°BCÏßµçÁ÷ÓĞĞ§Öµ(V)
+extern Uint16 _BA_FREQ;													//µçÍøÆµ hz)
+extern Uint16 _BA_SPEED;													//µç»ú×ªËÙ(rpm)
+extern Uint16 _BA_TA1;														//Íø²à±äÁ÷Æ÷AÇÅÛÎÂ¶
+extern Uint16 _BA_TB1;														//Íø²à±äÁ÷÷BÇÅ±ÛÎÂ¶È
+extern Uint16 _BA_TC1;														//Íø²à±äÁ÷Æ÷CÇÅ±ÛÎÂ¶È
+extern Uint16 _BA_TA2;														//µç»ú²à±äÁ÷Æ÷AÇÅ±ÛÎÂ¶È
+extern Uint16 _BA_TB2;														//µç»ú²à±äÁ÷Æ÷BÇÅ±ÛÎÂ¶È
+extern Uint16 _BA_TC2;														//µç»ú²à±äÁ÷Æ÷CÇÅ±ÛÎÂ¶È
+extern Uint16 _BA_PIONU;													//Íø²àµçÑ¹»·Êä³ö
+extern Uint16 _BA_PIONID;													//Íø²àdÖáµçÁ÷»·Êä³ö
+extern Uint16 _BA_PIONIQ;													//Íø²àqÖáµçÁ÷»·Êä³ö
+extern Uint16 _BA_MEXI;													//
+extern Uint16 _BA_PIOMID;													//»ú²àdÖáµçÁ÷»·Êä³ö
+extern Uint16 _BA_PIOMIQ;													//»ú²àqÖáµçÁ÷»·Êä³ö
+extern Uint16 _BA_GRDUD;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹d
+extern Uint16 _BA_GRDUQ;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹q
 
-//Uint16 _BA_STAUD;													//¶¨×ÓµçÑ¹d MagnetCurve2013-12-13
-Uint16 _BA_MC_IN;													//Àø´ÅĞ£ÕıÊäÈë MagnetCurve2013-12-13
-Uint16 _BA_MC_K;													//Àø´ÅĞ£ÕıÊä³ö MagnetCurve2013-12-13
-//Uint16 _BA_STAUQ;													//¶¨×ÓµçÑ¹q MagnetCurve2013-12-13
+//extern Uint16 _BA_STAUD;													//¶¨×ÓµçÑ¹d MagnetCurve2013-12-13
+extern Uint16 _BA_MC_IN;													//Àø´ÅĞ£ÕıÊäÈë MagnetCurve2013-12-13
+extern Uint16 _BA_MC_K;													//Àø´ÅĞ£ÕıÊä³ö MagnetCurve2013-12-13
+//extern Uint16 _BA_STAUQ;													//¶¨×ÓµçÑ¹q MagnetCurve2013-12-13
 
-Uint16 _BA_NPRID;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹d
-Uint16 _BA_NPRIQ;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹q
-//Uint16 _BA_EXCID;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹d
-//Uint16 _BA_EXCIQ;
-Uint16 _BA_SCRIA;													//SCRµçÁ÷a	20110906
-Uint16 _BA_SCRIB;													//SCRµçÁ÷b	20110906
-Uint16 _BA_TLAC;
-Uint16 _BA_TLDUDT;
-Uint16 _BA_TNSKIIP;
-Uint16 _BA_TMSKIIP;
-Uint16 _BA_STAUABD;													//¶¨×ÓÍ¬²½²¢ÍøÇ°¶¨×ÓÇ°ºóµçÑ¹²î
-Uint16 _BA_STAUBCD;													//¶¨×ÓÍ¬²½²¢ÍøÇ°¶¨×ÓÇ°ºóµçÑ¹²î
-Uint16 _BA_STAIAC;													//¶¨×ÓÏßµçÁ÷ÓĞĞ§ÖµÏÔÊ¾
-Uint16 _BA_STAIBA;													//¶¨×ÓÏßµçÁ÷ÓĞĞ§ÖµÏÔÊ¾
-Uint16 _BA_PSTA;
-Uint16 _BA_PNPR;
-Uint16 _BA_PGRID;
-Uint16 _BA_QSTA;
-Uint16 _BA_QNPR;
-Uint16 _BA_QGRID;
-Uint16 _BA_SSTA;
-Uint16 _BA_SNPR;
-Uint16 _BA_SGRID;
+extern Uint16 _BA_NPRID;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹d
+extern Uint16 _BA_NPRIQ;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹q
+//extern Uint16 _BA_EXCID;													//´«¸ĞÆ÷²âÁ¿ÍøÑ¹d
+//extern Uint16 _BA_EXCIQ;
+extern Uint16 _BA_SCRIA;													//SCRµçÁ÷a	20110906
+extern Uint16 _BA_SCRIB;													//SCRµçÁ÷b	20110906
+extern Uint16 _BA_TLAC;
+extern Uint16 _BA_TLDUDT;
+extern Uint16 _BA_TNSKIIP;
+extern Uint16 _BA_TMSKIIP;
+extern Uint16 _BA_STAUABD;													//¶¨×ÓÍ¬²½²¢ÍøÇ°¶¨×ÓÇ°ºóµçÑ¹²î
+extern Uint16 _BA_STAUBCD;													//¶¨×ÓÍ¬²½²¢ÍøÇ°¶¨×ÓÇ°ºóµçÑ¹²î
+extern Uint16 _BA_STAIAC;													//¶¨×ÓÏßµçÁ÷ÓĞĞ§ÖµÏÔÊ¾
+extern Uint16 _BA_STAIBA;													//¶¨×ÓÏßµçÁ÷ÓĞĞ§ÖµÏÔÊ¾
+extern Uint16 _BA_PSTA;
+extern Uint16 _BA_PNPR;
+extern Uint16 _BA_PGRID;
+extern Uint16 _BA_QSTA;
+extern Uint16 _BA_QNPR;
+extern Uint16 _BA_QGRID;
+extern Uint16 _BA_SSTA;
+extern Uint16 _BA_SNPR;
+extern Uint16 _BA_SGRID;
 
-Uint16 _SC_NPR_TLOV;
-Uint16 _SC_MPR_TLOV;
-Uint16 _SC_LVUDC1;
-Uint16 _SC_LVUDC2;
-Uint16 _SC_LVIAC2;
-Uint16 _SC_TSCRON;
-Uint16 _SC_MPR_UD;
-Uint16 _SC_MPR_UQ;
-Uint16 _SC_MSPEED1;
-Uint16 _SC_MSPEED2;
-Uint16 _SC_UDSTAC;
-Uint16 _SCIB_BAUD;													//485²¨ÌØÂÊ
-Uint16 _SC_SKPTOV;
-Uint16 _SC_FREQ1;
-Uint16 _SC_FREQ2;
- 
+extern Uint16 _SC_NPR_TLOV;
+extern Uint16 _SC_MPR_TLOV;
+extern Uint16 _SC_LVUDC1;
+extern Uint16 _SC_LVUDC2;
+extern Uint16 _SC_LVIAC2;
+extern Uint16 _SC_TSCRON;
+extern Uint16 _SC_MPR_UD;
+extern Uint16 _SC_MPR_UQ;
+extern Uint16 _SC_MSPEED1;
+extern Uint16 _SC_MSPEED2;
+extern Uint16 _SC_UDSTAC;
+extern Uint16 _SCIB_BAUD;													//485²¨ÌØÂÊ
+extern Uint16 _SC_SKPTOV;
+extern Uint16 _SC_FREQ1;
+extern Uint16 _SC_FREQ2;
+
 //-----------------------²âÊÔÓÃ±äÁ¿-----------------------------------------------------------
-int16 	zys[4];			//DA±äÁ¿
-Uint16 	daindex[4]; 	//BJTULVRT201204
+extern int16 	zys[4];			//DA±äÁ¿
+extern Uint16 	daindex[4]; 	//BJTULVRT201204
 
 
 //int32 	zys = 0;
 //int16 	zys1,zys2,zys3,zys4;
-Uint32 	i_cnt1=0;  //ÓÃÓÚCCS²¨ĞÎÏÔÊ¾
-Uint32 	i_cnt2=0;  //ÓÃÓÚCCS²¨ĞÎÏÔÊ¾
-Uint32 	i_cnt3=0;  //ÓÃÓÚCCS²¨ĞÎÏÔÊ¾
-float   draw1[150]={0.0},draw2[150]={0.0},draw3[150]={0.0},draw4[150]={0.0},draw5[150]={0.0};
-float   draw6[150]={0.0};//,draw7[100]={0.0},draw8[100]={0.0},draw9[100]={0.0},draw10[100]={0.0};
-Uint16 zsector = 0;
-float testtheta;
+extern Uint32 	i_cnt1;  //ÓÃÓÚCCS²¨ĞÎÏÔÊ¾
+extern Uint32 	i_cnt2;  //ÓÃÓÚCCS²¨ĞÎÏÔÊ¾
+extern Uint32 	i_cnt3;  //ÓÃÓÚCCS²¨ĞÎÏÔÊ¾
+extern float   draw1[150],draw2[150],draw3[150],draw4[150],draw5[150];
+extern float   draw6[150];//,draw7[100]={0.0},draw8[100]={0.0},draw9[100]={0.0},draw10[100]={0.0};
+extern Uint16 zsector;
+extern float testtheta;
 
-Uint16 temp_flag3;		//120507
-Uint16 TX_SPEED;		//120507
+extern Uint16 temp_flag3;		//120507
+extern Uint16 TX_SPEED;		//120507
 
-Uint16	state_n=0;		//110818
-Uint16	state_m=0;		//110818
-Uint16	action1=0;		//110818
-Uint16	action2=0;		//110818
+extern Uint16	state_n;		//110818
+extern Uint16	state_m;		//110818
+extern Uint16	action1;		//110818
+extern Uint16	action2;		//110818
 
 //----------20121103ĞÂÌí¼Ó±äÁ¿--------------
-float   GRD_Ut;
-float   GRD_Utlv;		//201205LVRTatZB
-float   kq;
-Uint16	CNT_SCRON;		//20120602
-float   Te_instant;
-float   Te_instant2;
-float   Te_instant3;
+extern float   GRD_Ut;
+extern float   GRD_Utlv;		//201205LVRTatZB
+extern float   kq;
+extern Uint16	CNT_SCRON;		//20120602
+extern float   Te_instant;
+extern float   Te_instant2;
+extern float   Te_instant3;
 
 //---------20121210----------
-float   lv_ctrl1=0;
-float   lv_ctrl2=0;
-float   lv_ctrl3=0;
-float   lv_ctrl4=0;
-float   lv_ctrl5=0;
-float   lv_ctrl6=0;
+extern float   lv_ctrl1;
+extern float   lv_ctrl2;
+extern float   lv_ctrl3;
+extern float   lv_ctrl4;
+extern float   lv_ctrl5;
+extern float   lv_ctrl6;
 
 //----20130225atsp----
-float   kq_lv;
-float   NGS_Udq_p_lv;
-float   Te_feedback_lv;                    //Êµ¼Ê×ª¾ØÖµ·´À¡
-Uint16	scrdone=0;		//20130222
-Uint16	scrhold=0;		//20130223
-Uint16	scroff1=0;		//20130303
-Uint16	cnt_lv_clrerram=0;		//20130303
+extern float   kq_lv;
+extern float   NGS_Udq_p_lv;
+extern float   Te_feedback_lv;                    //Êµ¼Ê×ª¾ØÖµ·´À¡
+extern Uint16	scrdone;		//20130222
+extern Uint16	scrhold;		//20130223
+extern Uint16	scroff1;		//20130303
+extern Uint16	cnt_lv_clrerram;		//20130303
 
 //--------------------
 //---------20130801---------
-Uint16	ecpostep1 = 0;
-Uint16	ecpostep2 = 0;
-Uint16	ecpostep3 = 0;
+extern Uint16	ecpostep1 ;
+extern Uint16	ecpostep2 ;
+extern Uint16	ecpostep3 ;
+
 
 #ifdef __cplusplus
 }

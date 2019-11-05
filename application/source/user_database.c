@@ -1,363 +1,366 @@
+#include "DSP2833x_Device.h"     				// DSP2833x Headerfile Include File
+
+#include "user_header.h"
 #include "user_database.h"
 
-//--------------------------------------//æ•°æ®æ€»è¡¨
+//--------------------------------------//Êý¾Ý×Ü±í
 const struct PARA FUNC[PARA_NUM]={
-//		åç§°   		åˆå€¼		æœ€å°å€¼		æœ€å¤§å€¼		æœ€å°å€¼æŒ‡é’ˆ	æœ€å¤§å€¼æŒ‡é’ˆ	å±žæ€§		è¯´æ˜Ž
-//-------------------------------'åˆ¶é€ å•†ç”¨'-------------------------------------------------------
+//		Ãû³Æ   		³õÖµ		×îÐ¡Öµ		×î´óÖµ		×îÐ¡ÖµÖ¸Õë	×î´óÖµÖ¸Õë	ÊôÐÔ		ËµÃ÷
+//-------------------------------'ÖÆÔìÉÌÓÃ'-------------------------------------------------------
 //--29/0-28
-	{&_MC_TYPE,		MC_TYPE,	MC_TYPE,	MC_TYPE,	&_NULL_VAL,	&_NULL_VAL,	RDO},		//æœºåž‹å‚
-	{&_MC_REV, 		MC_REV,		MC_REV,		MC_REV,		&_NULL_VAL,	&_NULL_VAL,	KEY},		//è½¯ä»¶ç‰ˆæœ¬å·
-	{&_MC_DATE,		MC_DATE,	0,	    	65535,		&_NULL_VAL,	&_NULL_VAL,	KEY},		//å‡ºåŽ‚æ—¥æœŸ
-	{&_MC_ID,		MC_ID,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	KEY},		//äº§å“ç¼–å·
-	{&_SW_FR,		210,		200,		1800,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT2},	//å¼€å…³é¢‘çŽ‡(0.01kHz)
+	{&_MC_TYPE,		MC_TYPE,	MC_TYPE,	MC_TYPE,	&_NULL_VAL,	&_NULL_VAL,	RDO},		//»úÐÍ²Î
+	{&_MC_REV, 		MC_REV,		MC_REV,		MC_REV,		&_NULL_VAL,	&_NULL_VAL,	KEY},		//Èí¼þ°æ±¾ºÅ
+	{&_MC_DATE,		MC_DATE,	0,	    	65535,		&_NULL_VAL,	&_NULL_VAL,	KEY},		//³ö³§ÈÕÆÚ
+	{&_MC_ID,		MC_ID,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	KEY},		//²úÆ·±àºÅ
+	{&_SW_FR,		210,		200,		1800,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT2},	//¿ª¹ØÆµÂÊ(0.01kHz)
 	
-	{&_DEADTIME,	8,			0,			20,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//æ­»åŒºæ—¶é—´(us)
-	{&_COMPTIME,	45,			0,			50,			&_NULL_VAL,	&_NULL_VAL,	WR1+DOT1},	//æ­»åŒºè¡¥å¿æ—¶é—´(ms)
-	{&_MINONTIME,	4,			0,			20,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//æœ€å°å¯¼é€šæ—¶é—´(us)
-	{&_RU_UDCT,		10000,		1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//ç”µåŽ‹æŒ‡ä»¤ç»™å®šç§¯åˆ†ä¸Šå‡/ä¸‹é™æ—¶é—´(ms)
-	{&_RU_IDT,		2,			1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//ç”µæµæŒ‡ä»¤ç»™å®šç§¯åˆ†ä¸Šå‡/ä¸‹é™æ—¶é—´(ms)
+	{&_DEADTIME,	8,			0,			20,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//ËÀÇøÊ±¼ä(us)
+	{&_COMPTIME,	45,			0,			50,			&_NULL_VAL,	&_NULL_VAL,	WR1+DOT1},	//ËÀÇø²¹³¥Ê±¼ä(ms)
+	{&_MINONTIME,	4,			0,			20,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//×îÐ¡µ¼Í¨Ê±¼ä(us)
+	{&_RU_UDCT,		10000,		1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//µçÑ¹Ö¸Áî¸ø¶¨»ý·ÖÉÏÉý/ÏÂ½µÊ±¼ä(ms)
+	{&_RU_IDT,		2,			1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//µçÁ÷Ö¸Áî¸ø¶¨»ý·ÖÉÏÉý/ÏÂ½µÊ±¼ä(ms)
 	
-	{&_RU_IQT,		10,			1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//ç”µæµæŒ‡ä»¤ç»™å®šç§¯åˆ†ä¸Šå‡/ä¸‹é™æ—¶é—´(ms)
-	{&_RU_TOQT,		500,		1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//è½¬çŸ©æŒ‡ä»¤ç»™å®šç§¯åˆ†ä¸Šå‡/ä¸‹é™æ—¶é—´(ms)
-	{&_RU_AGLT,		500,		1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//åŠŸçŽ‡å› æ•°è§’æŒ‡ä»¤ç»™å®šç§¯åˆ†ä¸Šå‡/ä¸‹é™æ—¶é—´(ms)
-	{&_URF,			1100,		0,			1200,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ä¸­é—´ç›´æµç”µåŽ‹ç»™å®šå€¼
-	{&_MIDRF,		0,			0,		    550,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//æœºä¾§æ— åŠŸç”µæµç»™å®šå€¼
+	{&_RU_IQT,		10,			1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//µçÁ÷Ö¸Áî¸ø¶¨»ý·ÖÉÏÉý/ÏÂ½µÊ±¼ä(ms)
+	{&_RU_TOQT,		500,		1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×ª¾ØÖ¸Áî¸ø¶¨»ý·ÖÉÏÉý/ÏÂ½µÊ±¼ä(ms)
+	{&_RU_AGLT,		500,		1,			20000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//¹¦ÂÊÒòÊý½ÇÖ¸Áî¸ø¶¨»ý·ÖÉÏÉý/ÏÂ½µÊ±¼ä(ms)
+	{&_URF,			1100,		0,			1200,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ÖÐ¼äÖ±Á÷µçÑ¹¸ø¶¨Öµ
+	{&_MIDRF,		0,			0,		    550,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//»ú²àÎÞ¹¦µçÁ÷¸ø¶¨Öµ
 	
-	{&_NIQRF,		65,			-200,		200,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//å¹¶ç½‘æ— åŠŸç”µæµç»™å®šå€¼ 20140503LJDç”µèƒ½è´¨é‡
-	{&_MIQRF,		0,			0,			700,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//æœºç½‘æœ‰åŠŸç”µæµç»™å®šå€¼
-    {&_TOQRF,		0,			0,			9000,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},   //æœºä¾§è½¬çŸ©ç»™å®šå€¼
-    {&_AGLRF,		0,			-36,		36,	   		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},   //æœºä¾§åŠŸçŽ‡å› æ•°è§’ç»™å®šå€¼
-	{&_EIDCO,		1000,		0,			10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//æœºä¾§åŠ±ç£ç³»æ•°
+	{&_NIQRF,		65,			-200,		200,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//²¢ÍøÎÞ¹¦µçÁ÷¸ø¶¨Öµ 20140503LJDµçÄÜÖÊÁ¿
+	{&_MIQRF,		0,			0,			700,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//»úÍøÓÐ¹¦µçÁ÷¸ø¶¨Öµ
+    {&_TOQRF,		0,			0,			9000,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},   //»ú²à×ª¾Ø¸ø¶¨Öµ
+    {&_AGLRF,		0,			-36,		36,	   		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},   //»ú²à¹¦ÂÊÒòÊý½Ç¸ø¶¨Öµ
+	{&_EIDCO,		1000,		0,			10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//»ú²àÀø´ÅÏµÊý
 
-	{&_ENCODPOS,	4503,		0,			6283,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//è‚«éž’è·å˜‰æ¢åª’åµŒï¿½0--2PIE 201005atcpc 20140503LJDç”µèƒ½è´¨é‡
-	{&_STDBY1,		5000,  	    0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//å¤‡ç”¨1
-	{&_STDBY2,		135,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//å¤‡ç”¨2 20140503LJDç”µèƒ½è´¨é‡
-	{&_STDBY3,		5500,	    0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//å¤‡ç”¨3
-	{&_STDBY4,		5,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//å¤‡ç”¨4
+	{&_ENCODPOS,	4503,		0,			6283,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//ëÆ÷³õÊ¼Î»ÖÃ½Ç¶0--2PIE 201005atcpc 20140503LJDµçÄÜÖÊÁ¿
+	{&_STDBY1,		5000,  	    0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//±¸ÓÃ1
+	{&_STDBY2,		135,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//±¸ÓÃ2 20140503LJDµçÄÜÖÊÁ¿
+	{&_STDBY3,		5500,	    0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//±¸ÓÃ3
+	{&_STDBY4,		5,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//±¸ÓÃ4
 
-	{&_STDBY5,		10,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//å¤‡ç”¨5
-	{&_STDBY6,		604,		-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//å¤‡ç”¨6
-	{&_STDBY7,		10,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//å¤‡ç”¨7
-//	{&_STDBY8,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//å¤‡ç”¨8
-	{&_MC_OK,		1,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//å¤‡ç”¨8åŠ±ç£å®Œæˆæ ‡å¿—MagnetCurve2013-12-13--ZZJ
+	{&_STDBY5,		10,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//±¸ÓÃ5
+	{&_STDBY6,		604,		-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//±¸ÓÃ6
+	{&_STDBY7,		10,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//±¸ÓÃ7
+//	{&_STDBY8,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//±¸ÓÃ8
+	{&_MC_OK,		1,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//±¸ÓÃ8Àø´ÅÍê³É±êÖ¾MagnetCurve2013-12-13--ZZJ
 	
-//-------------------------------'PIå‚æ•°'---------------------------------------------------------
+//-------------------------------'PI²ÎÊý'---------------------------------------------------------
 //--42/29-70
-	{&_NPR_U_Kp,			40,		1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//ç½‘ä¾§ç”µåŽ‹çŽ¯æ¯”ä¾‹ç³»æ•°
-	{&_NPR_U_Ki,			1000,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//ç½‘ä¾§ç”µåŽ‹çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_NPR_U_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//ç½‘ä¾§ç”µåŽ‹çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_NPR_U_outmax,		600,	1,		1000,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ç½‘ä¾§ç”µåŽ‹é—­çŽ¯è¾“å‡ºé™å¹…
-	{&_NPR_U_errmax,		1000,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//ç½‘ä¾§ç”µåŽ‹é—­çŽ¯è¯¯å·®ä¸Šé™é™å¹…
-	{&_NPR_U_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//ç½‘ä¾§ç”µåŽ‹çŽ¯ä¸‹é™è¯¯å·®
-	{&_NPR_U_incrementmax,  1000,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//ç½‘ä¾§ç”µåŽ‹çŽ¯å¢žé‡é™å¹…
+	{&_NPR_U_Kp,			40,		1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//Íø²àµçÑ¹»·±ÈÀýÏµÊý
+	{&_NPR_U_Ki,			1000,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//Íø²àµçÑ¹»·»ý·ÖÏµÊý
+	{&_NPR_U_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//Íø²àµçÑ¹»·»ý·ÖÏµÊý
+	{&_NPR_U_outmax,		600,	1,		1000,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//Íø²àµçÑ¹±Õ»·Êä³öÏÞ·ù
+	{&_NPR_U_errmax,		1000,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//Íø²àµçÑ¹±Õ»·Îó²îÉÏÏÞÏÞ·ù
+	{&_NPR_U_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//Íø²àµçÑ¹»·ÏÂÏÞÎó²î
+	{&_NPR_U_incrementmax,  1000,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//Íø²àµçÑ¹»·ÔöÁ¿ÏÞ·ù
 
-	{&_NPR_ID_Kp,			7000, 	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//ç½‘ä¾§ç”µæµé—­çŽ¯æ¯”ä¾‹ç³»æ•°
-	{&_NPR_ID_Ki,			1000,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//ç½‘ä¾§ç”µæµé—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_NPR_ID_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//ç½‘ä¾§ç”µæµé—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_NPR_ID_outmax,		10,		1,		500,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ç½‘ä¾§ç”µæµé—­çŽ¯è¾“å‡ºé™å¹…
-	{&_NPR_ID_errmax,		6200,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//ç½‘ä¾§ç”µæµé—­çŽ¯è¯¯å·®ä¸Šé™é™å¹…
-	{&_NPR_ID_errmin,		1200,	0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//ç½‘ä¾§ç”µæµé—­çŽ¯è¯¯å·®ä¸‹é™é™å¹…
-	{&_NPR_ID_incrementmax,	4000, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//ç½‘ä¾§ç”µæµé—­çŽ¯å¢žé‡é™å¹…
+	{&_NPR_ID_Kp,			7000, 	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//Íø²àµçÁ÷±Õ»·±ÈÀýÏµÊý
+	{&_NPR_ID_Ki,			1000,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//Íø²àµçÁ÷±Õ»·»ý·ÖÏµÊý
+	{&_NPR_ID_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//Íø²àµçÁ÷±Õ»·»ý·ÖÏµÊý
+	{&_NPR_ID_outmax,		10,		1,		500,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//Íø²àµçÁ÷±Õ»·Êä³öÏÞ·ù
+	{&_NPR_ID_errmax,		6200,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//Íø²àµçÁ÷±Õ»·Îó²îÉÏÏÞÏÞ·ù
+	{&_NPR_ID_errmin,		1200,	0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//Íø²àµçÁ÷±Õ»·Îó²îÏÂÏÞÏÞ·ù
+	{&_NPR_ID_incrementmax,	4000, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//Íø²àµçÁ÷±Õ»·ÔöÁ¿ÏÞ·ù
 
-	{&_NPR_IQ_Kp,			40, 	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//ç½‘ä¾§ç”µæµé—­çŽ¯æ¯”ä¾‹ç³»æ•° 201005atcpc
-	{&_NPR_IQ_Ki,			1670,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//ç½‘ä¾§ç”µæµé—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_NPR_IQ_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//ç½‘ä¾§ç”µæµé—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_NPR_IQ_outmax,		200,	1,		500,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ç½‘ä¾§ç”µæµé—­çŽ¯è¾“å‡ºé™å¹…
-	{&_NPR_IQ_errmax,		500,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//ç½‘ä¾§ç”µæµé—­çŽ¯è¯¯å·®ä¸Šé™é™å¹…
-	{&_NPR_IQ_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//ç½‘ä¾§ç”µæµé—­çŽ¯è¯¯å·®ä¸‹é™é™å¹…
-	{&_NPR_IQ_incrementmax,	550, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//ç½‘ä¾§ç”µæµé—­çŽ¯å¢žé‡é™å¹…
+	{&_NPR_IQ_Kp,			40, 	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//Íø²àµçÁ÷±Õ»·±ÈÀýÏµÊý 201005atcpc
+	{&_NPR_IQ_Ki,			1670,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//Íø²àµçÁ÷±Õ»·»ý·ÖÏµÊý
+	{&_NPR_IQ_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//Íø²àµçÁ÷±Õ»·»ý·ÖÏµÊý
+	{&_NPR_IQ_outmax,		200,	1,		500,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//Íø²àµçÁ÷±Õ»·Êä³öÏÞ·ù
+	{&_NPR_IQ_errmax,		500,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//Íø²àµçÁ÷±Õ»·Îó²îÉÏÏÞÏÞ·ù
+	{&_NPR_IQ_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//Íø²àµçÁ÷±Õ»·Îó²îÏÂÏÞÏÞ·ù
+	{&_NPR_IQ_incrementmax,	550, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//Íø²àµçÁ÷±Õ»·ÔöÁ¿ÏÞ·ù
 
-	{&_MPR_ID_Kp,			40, 	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯æ¯”ä¾‹ç³»æ•°
-	{&_MPR_ID_Ki,			1600,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_MPR_ID_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_MPR_ID_outmax,		200,	1,		500,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯è¾“å‡ºé™å¹…
-	{&_MPR_ID_errmax,		500,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯è¯¯å·®é™å¹…
-	{&_MPR_ID_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯è¯¯å·®é™å¹…
-	{&_MPR_ID_incrementmax,	550, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯å¢žé‡é™å¹…
+	{&_MPR_ID_Kp,			40, 	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀýÏµÊý
+	{&_MPR_ID_Ki,			1600,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·»ý·ÖÏµÊý
+	{&_MPR_ID_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·»ý·ÖÏµÊý
+	{&_MPR_ID_outmax,		200,	1,		500,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Êä³öÏÞ·ù
+	{&_MPR_ID_errmax,		500,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏÞ·ù
+	{&_MPR_ID_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏÞ·ù
+	{&_MPR_ID_incrementmax,	550, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·ÔöÁ¿ÏÞ·ù
 
-	{&_MPR_IQ_Kp,			15, 	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯æ¯”ä¾‹ç³»æ•°
-	{&_MPR_IQ_Ki,			2000,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_MPR_IQ_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_MPR_IQ_outmax,		200,	1,		500,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯è¾“å‡ºé™å¹…
-	{&_MPR_IQ_errmax,		500,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯è¯¯å·®é™å¹…
-	{&_MPR_IQ_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯è¯¯å·®é™å¹…
-	{&_MPR_IQ_incrementmax,	550, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//æœºä¾§å˜æµå™¨ç”µæµé—­çŽ¯å¢žé‡é™å¹…
+	{&_MPR_IQ_Kp,			15, 	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·±ÈÀýÏµÊý
+	{&_MPR_IQ_Ki,			2000,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·»ý·ÖÏµÊý
+	{&_MPR_IQ_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·»ý·ÖÏµÊý
+	{&_MPR_IQ_outmax,		200,	1,		500,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Êä³öÏÞ·ù
+	{&_MPR_IQ_errmax,		500,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏÞ·ù
+	{&_MPR_IQ_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·Îó²îÏÞ·ù
+	{&_MPR_IQ_incrementmax,	550, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//»ú²à±äÁ÷Æ÷µçÁ÷±Õ»·ÔöÁ¿ÏÞ·ù
 /*
-	{&_DYN_U_Kp,			40,	    1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯æ¯”ä¾‹ç³»æ•°
-	{&_DYN_U_Ki,			50,		1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//åŠ¨æ€ç”µåŽ‹é—­çŽ¯ç§¯åˆ†ç³»æ•°//201007BJTULVRT
-	{&_DYN_U_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//åŠ¨æ€ç”µåŽ‹é—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_DYN_U_outmax,		600,	1,		1000,		&_NULL_VAL,	&_NULL_VAL,	WR0},		  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯è¾“å‡ºé™å¹…
-	{&_DYN_U_errmax,		1000,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯è¯¯å·®é™å¹…
-	{&_DYN_U_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯è¯¯é’­é’šã€‰
-	{&_DYN_U_incrementmax,	1000, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯å¢žé‡é™å¹…
+	{&_DYN_U_Kp,			40,	    1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	  //¶¯Ì¬µçÑ¹±Õ»·±ÈÀýÏµÊý
+	{&_DYN_U_Ki,			50,		1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//¶¯Ì¬µçÑ¹±Õ»·»ý·ÖÏµÊý//201007BJTULVRT
+	{&_DYN_U_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//¶¯Ì¬µçÑ¹±Õ»·»ý·ÖÏµÊý
+	{&_DYN_U_outmax,		600,	1,		1000,		&_NULL_VAL,	&_NULL_VAL,	WR0},		  //¶¯Ì¬µçÑ¹±Õ»·Êä³öÏÞ·ù
+	{&_DYN_U_errmax,		1000,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //¶¯Ì¬µçÑ¹±Õ»·Îó²îÏÞ·ù
+	{&_DYN_U_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	  //¶¯Ì¬µçÑ¹±Õ»·Îóî×îÐ¡µ
+	{&_DYN_U_incrementmax,	1000, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //¶¯Ì¬µçÑ¹±Õ»·ÔöÁ¿ÏÞ·ù
 */
-	{&_DYN_U_Kp,			40,		1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯æ¯”ä¾‹ç³»æ•°
-	{&_DYN_U_Ki,			1000,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//åŠ¨æ€ç”µåŽ‹é—­çŽ¯ç§¯åˆ†ç³»æ•°//201007BJTULVRT
-	{&_DYN_U_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//åŠ¨æ€ç”µåŽ‹é—­çŽ¯ç§¯åˆ†ç³»æ•°
-	{&_DYN_U_outmax,		600,	1,		1000,		&_NULL_VAL,	&_NULL_VAL,	WR0},		  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯è¾“å‡ºé™å¹…
-	{&_DYN_U_errmax,		1000,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯è¯¯å·®é™å¹…
-	{&_DYN_U_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯è¯¯é’­é’šã€‰
-	{&_DYN_U_incrementmax,	1000, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //åŠ¨æ€ç”µåŽ‹é—­çŽ¯å¢žé‡é™å¹…
+	{&_DYN_U_Kp,			40,		1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	  //¶¯Ì¬µçÑ¹±Õ»·±ÈÀýÏµÊý
+	{&_DYN_U_Ki,			1000,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//¶¯Ì¬µçÑ¹±Õ»·»ý·ÖÏµÊý//201007BJTULVRT
+	{&_DYN_U_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//¶¯Ì¬µçÑ¹±Õ»·»ý·ÖÏµÊý
+	{&_DYN_U_outmax,		600,	1,		1000,		&_NULL_VAL,	&_NULL_VAL,	WR0},		  //¶¯Ì¬µçÑ¹±Õ»·Êä³öÏÞ·ù
+	{&_DYN_U_errmax,		1000,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //¶¯Ì¬µçÑ¹±Õ»·Îó²îÏÞ·ù
+	{&_DYN_U_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	  //¶¯Ì¬µçÑ¹±Õ»·Îóî×îÐ¡µ
+	{&_DYN_U_incrementmax,	1000, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //¶¯Ì¬µçÑ¹±Õ»·ÔöÁ¿ÏÞ·ù
 
-//-------------------------------'ä¿æŠ¤é˜ˆå€¼'---201007BJTULVRT------------------------------------------------------
+//-------------------------------'±£»¤ãÐÖµ'---201007BJTULVRT------------------------------------------------------
 //--35/71-113		
-	{&_SC_RTRN,		5,			0,			20,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//æ•…éšœæœ€å¤§é‡è¯•æ¬¡æ•°
-	{&_SC_RTRT,		15,			10,			600,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//ä¸¤æ¬¡æ•…éšœé‡è¯•é—´éš”æ—¶é—´(s)ï¼Œå»¶æ—¶æ¢å¤æ—¶é—´
-	{&_SC_UDCOV,	1300,		1130,       1300,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ä¸­é—´ç›´æµç”µåŽ‹ è¿‡åŽ‹åŠ¨ä½œå€¼(V)
-	{&_SC_IDCOV,	650,    	0,       	1100,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ä¸­é—´ç›´æµç”µåŽ‹ æ¬ åŽ‹åŠ¨ä½œå€¼(V)
-	{&_SC_VDCON,	750,		700,       	900,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ä¸­é—´ç›´æµç”µåŽ‹ ä¸Šç”µå®Œæˆæ¯”è¾ƒé˜ˆå€¼(V)
+	{&_SC_RTRN,		5,			0,			20,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//¹ÊÕÏ×î´óÖØÊÔ´ÎÊý
+	{&_SC_RTRT,		15,			10,			600,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//Á½´Î¹ÊÕÏÖØÊÔ¼ä¸ôÊ±¼ä(s)£¬ÑÓÊ±»Ö¸´Ê±¼ä
+	{&_SC_UDCOV,	1300,		1130,       1300,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ÖÐ¼äÖ±Á÷µçÑ¹ ¹ýÑ¹¶¯×÷Öµ(V)
+	{&_SC_IDCOV,	650,    	0,       	1100,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ÖÐ¼äÖ±Á÷µçÑ¹ Ç·Ñ¹¶¯×÷Öµ(V)
+	{&_SC_VDCON,	750,		700,       	900,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ÖÐ¼äÖ±Á÷µçÑ¹ ÉÏµçÍê³É±È½ÏãÐÖµ(V)
 
-	{&_SC_IACOV1,	180, 		20,			200,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ç½‘ä¾§äº¤æµç”µæµ è¿‡æµä¿æŠ¤å€¼(åŸºå‡†ç”µæµçš„ç™¾åˆ†å€¼)
-	{&_SC_UACOV1,	770,		690,		828,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ç½‘ä¾§ç”µåŽ‹ è¿‡åŽ‹åŠ¨ä½œå€¼(V) 20140503LJDç”µèƒ½è´¨é‡
-	{&_SC_UACLV1,	610,	   	0,			690,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ç½‘ä¾§ç”µåŽ‹ æ¬ åŽ‹åŠ¨ä½œå€¼(V) 20140503LJDç”µèƒ½è´¨é‡
-//	{&_SC_UACLV1,	100,	   	0,			690,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//ç½‘ä¾§ç”µåŽ‹ æ¬ åŽ‹åŠ¨ä½œå€¼(V) 201005atcpc
-	{&_SC_IACOV2,	180, 		20,			200,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ç”µæœºä¾§äº¤æµç”µæµ è¿‡æµä¿æŠ¤å€¼(åŸºå‡†ç”µæµçš„ç™¾åˆ†å€¼)
-	{&_SC_PGOV,		1800,		0,			3000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//å˜æµå™¨æœ‰åŠŸåŠŸçŽ‡è¿‡è½½é˜ˆå€¼(kW) 201005atcpc
+	{&_SC_IACOV1,	180, 		20,			200,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//Íø²à½»Á÷µçÁ÷ ¹ýÁ÷±£»¤Öµ(»ù×¼µçÁ÷µÄ°Ù·ÖÖµ)
+	{&_SC_UACOV1,	770,		690,		828,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//Íø²àµçÑ¹ ¹ýÑ¹¶¯×÷Öµ(V) 20140503LJDµçÄÜÖÊÁ¿
+	{&_SC_UACLV1,	610,	   	0,			690,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//Íø²àµçÑ¹ Ç·Ñ¹¶¯×÷Öµ(V) 20140503LJDµçÄÜÖÊÁ¿
+//	{&_SC_UACLV1,	100,	   	0,			690,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//Íø²àµçÑ¹ Ç·Ñ¹¶¯×÷Öµ(V) 201005atcpc
+	{&_SC_IACOV2,	180, 		20,			200,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//µç»ú²à½»Á÷µçÁ÷ ¹ýÁ÷±£»¤Öµ(»ù×¼µçÁ÷µÄ°Ù·ÖÖµ)
+	{&_SC_PGOV,		1800,		0,			3000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//±äÁ÷Æ÷ÓÐ¹¦¹¦ÂÊ¹ýÔØãÐÖµ(kW) 201005atcpc
 
-	{&_SC_QGOV,		1000,		0,			3000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//å˜æµå™¨æ— åŠŸåŠŸçŽ‡è¿‡è½½é˜ˆå€¼(kW)
-	{&_SC_IACOVST,	150, 		20,			200,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//å®šå­ä¾§äº¤æµç”µæµ è¿‡æµä¿æŠ¤å€¼(åŸºå‡†ç”µæµçš„ç™¾åˆ†å€¼)
-	{&_SC_NPR_TLOV,	160, 		20,	    	200,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//ç½‘ä¾§ç”µæ„ŸPT100è¶…æ¸©ä¿æŠ¤å€¼ï¼Œå•ä½æ‘„æ°åº¦
-	{&_SC_MPR_TLOV,	160, 		20,	    	200,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//ç”µæœºä¾§ç”µæ„ŸPT100è¶…æ¸©ä¿æŠ¤å€¼ï¼Œå•ä½æ‘„æ°åº¦
-	{&_SC_LVIAC2,	190, 		20,			240,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//SCRç”µæœºä¾§äº¤æµç”µæµ è¿‡æµä¿æŠ¤å€¼(åŸºå‡†ç”µæµçš„ç™¾åˆ†å€¼) 201005atcpc
+	{&_SC_QGOV,		1000,		0,			3000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//±äÁ÷Æ÷ÎÞ¹¦¹¦ÂÊ¹ýÔØãÐÖµ(kW)
+	{&_SC_IACOVST,	150, 		20,			200,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//¶¨×Ó²à½»Á÷µçÁ÷ ¹ýÁ÷±£»¤Öµ(»ù×¼µçÁ÷µÄ°Ù·ÖÖµ)
+	{&_SC_NPR_TLOV,	160, 		20,	    	200,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//Íø²àµç¸ÐPT100³¬ÎÂ±£»¤Öµ£¬µ¥Î»ÉãÊÏ¶È
+	{&_SC_MPR_TLOV,	160, 		20,	    	200,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//µç»ú²àµç¸ÐPT100³¬ÎÂ±£»¤Öµ£¬µ¥Î»ÉãÊÏ¶È
+	{&_SC_LVIAC2,	190, 		20,			240,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//SCRµç»ú²à½»Á÷µçÁ÷ ¹ýÁ÷±£»¤Öµ(»ù×¼µçÁ÷µÄ°Ù·ÖÖµ) 201005atcpc
 
-	{&_SC_LVUDC1,	1180,		1100,       1350,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//æœºä¾§å°è„‰å†² ä¸­é—´ç›´æµç”µåŽ‹1 è¿‡åŽ‹åŠ¨ä½œå€¼(V)
-	{&_SC_LVUDC2,	1200,		1100,       1350,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//SCRåŠ¨ä½œ ä¸­é—´ç›´æµç”µåŽ‹2 è¿‡åŽ‹åŠ¨ä½œå€¼(V)
-	{&_SC_TSCRON,	25,			10,         1000,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//SCRå¯¼é€šæ—¶é—´ï¼ˆmsï¼‰
-	{&_SC_MSPEED1,	950, 		800,	    1500,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//è½¬é€Ÿä¿æŠ¤ æ¬ é€Ÿä¿æŠ¤å€¼
-	{&_SC_MSPEED2,	2030, 		1800,	    2200,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//è½¬é€Ÿä¿æŠ¤ è¶…é€Ÿä¿æŠ¤å€¼
+	{&_SC_LVUDC1,	1180,		1100,       1350,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//»ú²à·âÂö³å ÖÐ¼äÖ±Á÷µçÑ¹1 ¹ýÑ¹¶¯×÷Öµ(V)
+	{&_SC_LVUDC2,	1200,		1100,       1350,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//SCR¶¯×÷ ÖÐ¼äÖ±Á÷µçÑ¹2 ¹ýÑ¹¶¯×÷Öµ(V)
+	{&_SC_TSCRON,	25,			10,         1000,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//SCRµ¼Í¨Ê±¼ä£¨ms£©
+	{&_SC_MSPEED1,	950, 		800,	    1500,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×ªËÙ±£»¤ Ç·ËÙ±£»¤Öµ
+	{&_SC_MSPEED2,	2030, 		1800,	    2200,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×ªËÙ±£»¤ ³¬ËÙ±£»¤Öµ
 
-	{&_SC_UDSTAC,	50,		    0,			150,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//å®šå­æŽ¥è§¦å™¨åˆé—¸ç”µåŽ‹å·®é˜ˆå€¼
-	{&_SC_SKPTOV,	100,		20,			110,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//IGBTè¶…æ¸©
-	{&_SC_FREQ1,	515,		500,		550,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT1},	//é¢‘çŽ‡èŒƒå›´ä¸Šé™
-	{&_SC_FREQ2,	475,		450,		500,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT1},	//é¢‘çŽ‡èŒƒå›´ä¸‹é™
-	{&_SCIB_BAUD,	19200,		1200,		57600,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//485æ³¢ç‰¹çŽ‡
+	{&_SC_UDSTAC,	50,		    0,			150,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//¶¨×Ó½Ó´¥Æ÷ºÏÕ¢µçÑ¹²îãÐÖµ
+	{&_SC_SKPTOV,	100,		20,			110,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//IGBT³¬ÎÂ
+	{&_SC_FREQ1,	515,		500,		550,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT1},	//ÆµÂÊ·¶Î§ÉÏÏÞ
+	{&_SC_FREQ2,	475,		450,		500,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT1},	//ÆµÂÊ·¶Î§ÏÂÏÞ
+	{&_SCIB_BAUD,	19200,		1200,		57600,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//485²¨ÌØÂÊ
 
-	{&_SCIB_ADDR,	1,			1,			31,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//485èŠ‚ç‚¹åœ°å€
-	{&_PROSTDBY1,	500,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//å¤‡ç”¨
-	{&_PROSTDBY2,	665,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//å¤‡ç”¨
+	{&_SCIB_ADDR,	1,			1,			31,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//485½ÚµãµØÖ·
+	{&_PROSTDBY1,	500,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//±¸ÓÃ
+	{&_PROSTDBY2,	665,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//±¸ÓÃ
 
 //201005atcpc
-	{&_SC_Rs,		7747,		0,			15000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//å®šå­ç”µé˜»(mohm)
-	{&_SC_Lls,		284,		1,			1000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//å®šå­æ¼æŠ—(mH)
-	{&_SC_Rr,		4175,		0,			15000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//è½¬å­ç”µé˜»(mohm)
-	{&_SC_Llr,		456,		1,			1000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//è½¬å­æ¼æŠ—(mH)
-	{&_SC_Lm,		17870,		1,			50000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//åŠ±ç£ç”µæŠ—(mH)
+	{&_SC_Rs,		7747,		0,			15000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//¶¨×Óµç×è(mohm)
+	{&_SC_Lls,		284,		1,			1000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//¶¨×ÓÂ©¿¹(mH)
+	{&_SC_Rr,		4175,		0,			15000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//×ª×Óµç×è(mohm)
+	{&_SC_Llr,		456,		1,			1000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//×ª×ÓÂ©¿¹(mH)
+	{&_SC_Lm,		17870,		1,			50000,		&_NULL_VAL,	&_NULL_VAL,	WR1+DOT3},	//Àø´Åµç¿¹(mH)
 
-	{&_SC_POLES,	2,		    1,			8,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//æžå¯¹æ•°
-	{&_SC_Usn,		690,		380,		690,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//å®šå­é¢å®šç”µåŽ‹(V)
-	{&_SC_Uro,		2018,		380,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//è½¬å­å¼€è·¯ç”µåŽ‹(V)
-	{&_SC_PLSPRVL,	2048,		1,			10000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//ç¼–ç å™¨æ¯åœˆå…‰æ …æ•°é‡
-	{&_SC_MSTDBY,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//ç”µæœºå‚æ•°å¤‡ç”¨ MagnetCurve2013-12-13--ZZJ
+	{&_SC_POLES,	2,		    1,			8,			&_NULL_VAL,	&_NULL_VAL,	WR1},		//¼«¶ÔÊý
+	{&_SC_Usn,		690,		380,		690,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//¶¨×Ó¶î¶¨µçÑ¹(V)
+	{&_SC_Uro,		2018,		380,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×ª×Ó¿ªÂ·µçÑ¹(V)
+	{&_SC_PLSPRVL,	2048,		1,			10000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//±àÂëÆ÷Ã¿È¦¹âÕ¤ÊýÁ¿
+	{&_SC_MSTDBY,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//µç»ú²ÎÊý±¸ÓÃ MagnetCurve2013-12-13--ZZJ
 
-	{&_SC_EXISTY1,	890,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//ç”µæœºåŠ±ç£è°ƒèŠ‚å¤‡ç”¨1 MagnetCurve2013-12-13--ZZJ
-	{&_SC_EXISTY2,	930,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//ç”µæœºåŠ±ç£è°ƒèŠ‚å¤‡ç”¨2 MagnetCurve2013-12-13--ZZJ
-	{&_SC_EXISTY3,	1000,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//ç”µæœºåŠ±ç£è°ƒèŠ‚å¤‡ç”¨3	MagnetCurve2013-12-13--ZZJ
-	{&_SC_EXISTY4,	1100,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//ç”µæœºåŠ±ç£è°ƒèŠ‚å¤‡ç”¨4 MagnetCurve2013-12-13--ZZJ
-	{&_SC_EXISTY5,	1290,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//ç”µæœºåŠ±ç£è°ƒèŠ‚å¤‡ç”¨5 MagnetCurve2013-12-13--ZZJ
+	{&_SC_EXISTY1,	890,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//µç»úÀø´Åµ÷½Ú±¸ÓÃ1 MagnetCurve2013-12-13--ZZJ
+	{&_SC_EXISTY2,	930,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//µç»úÀø´Åµ÷½Ú±¸ÓÃ2 MagnetCurve2013-12-13--ZZJ
+	{&_SC_EXISTY3,	1000,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//µç»úÀø´Åµ÷½Ú±¸ÓÃ3	MagnetCurve2013-12-13--ZZJ
+	{&_SC_EXISTY4,	1100,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//µç»úÀø´Åµ÷½Ú±¸ÓÃ4 MagnetCurve2013-12-13--ZZJ
+	{&_SC_EXISTY5,	1290,		100,		3000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},		//µç»úÀø´Åµ÷½Ú±¸ÓÃ5 MagnetCurve2013-12-13--ZZJ
 
-//-------------------------------'æ¨¡æ‹Ÿæ•°å­—é‡å˜é‡'-----------------------------------------------------
+//-------------------------------'Ä£ÄâÊý×ÖÁ¿±äÁ¿'-----------------------------------------------------
 //--14/114-127
-	{&_COMMAND1,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR3},		//è¿è¡ŒæŒ‡ä»¤ç¬¬1ç»„
-	{&_COMMAND2,	0,			0,		    65535,		&_NULL_VAL,	&_NULL_VAL,	WR3},	    //è¿è¡ŒæŒ‡ä»¤ç¬¬2ç»„ 2048--0x0800 2013-12-9 ZZJ
-	{&_STDBY9,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR3},		//å¤‡ç”¨9	20141004 LJD
-	{&_PCEROTRIG,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//PCæ•…éšœç¤ºæ³¢å™¨è§¦å‘æ¡ä»¶é€‰æ‹© 20100308
-	{&_STATE1, 		0,	  	    0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//è¿è¡ŒçŠ¶æ€1
+	{&_COMMAND1,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR3},		//ÔËÐÐÖ¸ÁîµÚ1×é
+	{&_COMMAND2,	0,			0,		    65535,		&_NULL_VAL,	&_NULL_VAL,	WR3},	    //ÔËÐÐÖ¸ÁîµÚ2×é 2048--0x0800 2013-12-9 ZZJ
+	{&_STDBY9,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR3},		//±¸ÓÃ9	20141004 LJD
+	{&_PCEROTRIG,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//PC¹ÊÕÏÊ¾²¨Æ÷´¥·¢Ìõ¼þÑ¡Ôñ 20100308
+	{&_STATE1, 		0,	  	    0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ÔËÐÐ×´Ì¬1
 
-	{&_STATE2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},	    //è¿è¡ŒçŠ¶æ€2
-	{&_DISPLAY,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//æ˜¾ç¤º
-	{&_INPUT,		0,		    0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},   	//IOè¾“å…¥çŠ¶æ€
-	{&_OUTPUT,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//IOè¾“å‡ºçŠ¶æ€
-	{&_LVRT,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//LVRTçŠ¶æ€ç›¸å…³ä½
+	{&_STATE2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},	    //ÔËÐÐ×´Ì¬2
+	{&_DISPLAY,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ÏÔÊ¾
+	{&_INPUT,		0,		    0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},   	//IOÊäÈë×´Ì¬
+	{&_OUTPUT,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//IOÊä³ö×´Ì¬
+	{&_LVRT,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//LVRT×´Ì¬Ïà¹ØÎ»
 
-	{&_STDBY11,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//å¤‡ç”¨11
-	{&_STDBY12,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//å¤‡ç”¨12
-	{&_STDBY13,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//å¤‡ç”¨13
-	{&_STDBY14,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//å¤‡ç”¨14
+	{&_STDBY11,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//±¸ÓÃ11
+	{&_STDBY12,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//±¸ÓÃ12
+	{&_STDBY13,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//±¸ÓÃ13
+	{&_STDBY14,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//±¸ÓÃ14
 
-//-------------------------------æ—¶é—´è®¾å®š-----------------------------------------------------------
+//-------------------------------Ê±¼äÉè¶¨-----------------------------------------------------------
 //--6/128-133
-	{&RTIMER.time[0],	0,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//æœ€æ–°æ•…éšœæ—¶é—´(ç§’)
-	{&RTIMER.time[1],	0,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//æœ€æ–°æ•…éšœæ—¶é—´(åˆ†)
-	{&RTIMER.time[2],	0,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//æœ€æ–°æ•…éšœæ—¶é—´(æ—¶)
-	{&RTIMER.time[3],	1,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//æœ€æ–°æ•…éšœæ—¶é—´(æ—¥)
-	{&RTIMER.time[4],	1,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//æœ€æ–°æ•…éšœæ—¶é—´(æœˆ)
-	{&RTIMER.time[5],	10,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//æœ€æ–°æ•…éšœæ—¶é—´(å¹´)
+	{&RTIMER.time[0],	0,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×îÐÂ¹ÊÕÏÊ±¼ä(Ãë)
+	{&RTIMER.time[1],	0,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×îÐÂ¹ÊÕÏÊ±¼ä(·Ö)
+	{&RTIMER.time[2],	0,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×îÐÂ¹ÊÕÏÊ±¼ä(Ê±)
+	{&RTIMER.time[3],	1,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×îÐÂ¹ÊÕÏÊ±¼ä(ÈÕ)
+	{&RTIMER.time[4],	1,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×îÐÂ¹ÊÕÏÊ±¼ä(ÔÂ)
+	{&RTIMER.time[5],	10,		0,			65535,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//×îÐÂ¹ÊÕÏÊ±¼ä(Äê)
 
 
-//-------------------------------è¿è¡Œç›‘æŽ§----------------------------------------------------------
+//-------------------------------ÔËÐÐ¼à¿Ø----------------------------------------------------------
 //--53/134-186
-	{&_BA_MIDRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//dè½´ç”µæµæŒ‡ä»¤(A)
-	{&_BA_NIQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//qè½´ç”µæµæŒ‡ä»¤(A)
-	{&_BA_MIQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//qè½´ç”µæµæŒ‡ä»¤(A)
-	{&_BA_TOQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},	//è½¬çŸ©æŒ‡ä»¤(NM)
-	{&_BA_AGLRF,	0,			-90,		90,	    	&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},	//æ— åŠŸè§’åº¦æŒ‡ä»¤()
+	{&_BA_MIDRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//dÖáµçÁ÷Ö¸Áî(A)
+	{&_BA_NIQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//qÖáµçÁ÷Ö¸Áî(A)
+	{&_BA_MIQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//qÖáµçÁ÷Ö¸Áî(A)
+	{&_BA_TOQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},	//×ª¾ØÖ¸Áî(NM)
+	{&_BA_AGLRF,	0,			-90,		90,	    	&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},	//ÎÞ¹¦½Ç¶ÈÖ¸Áî()
 
-	{&_BA_URF,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ä¸­é—´ç›´æµç”µåŽ‹ç»™å®šå€¼(V)
-	{&_BA_UDC,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ä¸­é—´ç›´æµç”µåŽ‹(V)
-	{&_BA_IA1,		0,			0,    		65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//ç½‘ä¾§å˜æµå™¨Aç›¸å¹¶ç½‘ç”µæµæœ‰æ•ˆå€¼(A)
-	{&_BA_IB1,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//ç½‘ä¾§å˜æµå™¨Bç›¸å¹¶ç½‘ç”µæµè¡ŒÐµ?A)
-	{&_BA_IC1,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//ç½‘ä¾§å˜æµå™¨Cç›¸å¹¶ç½‘ç”µæµæœ‰æ•ˆå€¼(A)
+	{&_BA_URF,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ÖÐ¼äÖ±Á÷µçÑ¹¸ø¶¨Öµ(V)
+	{&_BA_UDC,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ÖÐ¼äÖ±Á÷µçÑ¹(V)
+	{&_BA_IA1,		0,			0,    		65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//Íø²à±äÁ÷Æ÷AÏà²¢ÍøµçÁ÷ÓÐÐ§Öµ(A)
+	{&_BA_IB1,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//Íø²à±äÁ÷Æ÷BÏà²¢ÍøµçÁ÷ÐÐ§Ö?A)
+	{&_BA_IC1,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//Íø²à±äÁ÷Æ÷CÏà²¢ÍøµçÁ÷ÓÐÐ§Öµ(A)
 
-	{&_BA_IA2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//ç”µæœºä¾§å˜æµå™¨Aå—–â‘¼î‰ˆç¼Œé¥”è¡ŒÐµï¿½A)
-	{&_BA_IB2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//ç”µæœºä¾§å˜æµå™¨Bç›¸å¹¶î‰ˆç¼Œé¥”è¡ŒÐµ?A)
-	{&_BA_IC2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//ç”µæœºä¾§å˜æµå™¨Cç›¸å¹¶ç½‘ç”µæµæœ‰æ•ˆå€¼(A)
-	{&_BA_UAB1,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç½‘ä¾§ABçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
-	{&_BA_UBC1,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç½‘ä¾§BCçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
+	{&_BA_IA2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//µç»ú²à±äÁ÷Æ÷Aà²¢ÍøµçÁ÷ÓÐÐ§ÖA)
+	{&_BA_IB2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//µç»ú²à±äÁ÷Æ÷BÏà²¢øµçÁ÷ÓÐÐ§Ö?A)
+	{&_BA_IC2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	//µç»ú²à±äÁ÷Æ÷CÏà²¢ÍøµçÁ÷ÓÐÐ§Öµ(A)
+	{&_BA_UAB1,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//Íø²àABÏßµçÑ¹ÓÐÐ§Öµ(V)
+	{&_BA_UBC1,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//Íø²àBCÏßµçÑ¹ÓÐÐ§Öµ(V)
 
-	{&_BA_UAB2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//20091027atzyæŒªç”¨ä½œç½‘åŽ‹è·Œè½æ£€æµ‹ ç”µæœºä¾§ABçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
-	{&_BA_UBC2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//20091027atzyæŒªç”¨ä½œç½‘åŽ‹è·Œè½æ£€æµ‹ ç”µæœºä¾§BCçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
-	{&_BA_FREQ,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç”µç½‘é¢‘çŽ‡(hz)
-	{&_BA_UAB0,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ä¸»æ–­å‰ABçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
-	{&_BA_UBC0,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ä¸»æ–­å‰BCçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
+	{&_BA_UAB2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//20091027atzyÅ²ÓÃ×÷ÍøÑ¹µøÂä¼ì²â µç»ú²àABÏßµçÑ¹ÓÐÐ§Öµ(V)
+	{&_BA_UBC2,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//20091027atzyÅ²ÓÃ×÷ÍøÑ¹µøÂä¼ì²â µç»ú²àBCÏßµçÑ¹ÓÐÐ§Öµ(V)
+	{&_BA_FREQ,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//µçÍøÆµÂÊ(hz)
+	{&_BA_UAB0,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//Ö÷¶ÏÇ°ABÏßµçÑ¹ÓÐÐ§Öµ(V)
+	{&_BA_UBC0,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//Ö÷¶ÏÇ°BCÏßµçÑ¹ÓÐÐ§Öµ(V)
 
-	{&_BA_TLAC,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},	//ç½‘ä¾§ç”µæ„Ÿæ¸©åº¦(æ‘„æ°åº¦)20091019atzy
-	{&_BA_TLDUDT,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},	//æœºä¾§ç”µæ„Ÿæ¸©åº¦(æ‘„æ°åº¦)20091019atzy
-	{&_BA_TNSKIIP,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç½‘ä¾§SKIIPæ¸©åº¦(æ‘„æ°åº¦) CPC
-	{&_BA_TMSKIIP,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//æœºä¾§SKIIPæ¸©åº¦(æ‘„æ°åº¦) cpc
-	{&_BA_SPEED,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç”µîŒ¦î€ªï¿½rpm)
+	{&_BA_TLAC,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},	//Íø²àµç¸ÐÎÂ¶È(ÉãÊÏ¶È)20091019atzy
+	{&_BA_TLDUDT,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},	//»ú²àµç¸ÐÎÂ¶È(ÉãÊÏ¶È)20091019atzy
+	{&_BA_TNSKIIP,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//Íø²àSKIIPÎÂ¶È(ÉãÊÏ¶È) CPC
+	{&_BA_TMSKIIP,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//»ú²àSKIIPÎÂ¶È(ÉãÊÏ¶È) cpc
+	{&_BA_SPEED,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//µçú×ªËrpm)
 
-	{&_BA_PIONU,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//ç½‘ä¾§ç¼ªå¤Ÿè‚¥æ¶‘ï¿½
-	{&_BA_PIONID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//ç½‘ä¾§dè½´ç”µæµçŽ¯è¾“å‡º
-	{&_BA_PIONIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//ç½‘ä¾§qè½´ç”µæµçŽ¯è¾“å‡º
+	{&_BA_PIONU,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//Íø²àçÑ¹»·Êä³
+	{&_BA_PIONID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//Íø²àdÖáµçÁ÷»·Êä³ö
+	{&_BA_PIONIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//Íø²àqÖáµçÁ÷»·Êä³ö
 	{&_BA_MEXI,	    0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//
-	{&_BA_PIOMID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœºä¾§dè½´ç”µæµçŽ¯è¾“å‡º
+	{&_BA_PIOMID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//»ú²àdÖáµçÁ÷»·Êä³ö
 
-	{&_BA_PIOMIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœºä¾§qè½´ç”µæµçŽ¯è¾“å‡º
-	{&_BA_GRDUD,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//dè½´ä¸»æ–­åŽç½‘åŽ‹åé¦ˆ æ»¤æ³¢åŽ
-	{&_BA_MC_IN,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT2},		//åŠ±ç£æ ¡æ­£è¾“å…¥MagnetCurve2013-12-13--ZZJ
-//	{&_BA_STAUD,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//å®šå­ç”µåŽ‹d
-	{&_BA_GRDUQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//qè½´ä¸»æ–­åŽç½‘åŽ‹åé¦ˆ æ»¤æ³¢åŽ
-	{&_BA_MC_K,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT3},		//åŠ±ç£æ ¡æ­£è¾“å‡ºMagnetCurve2013-12-13--ZZJ
-//	{&_BA_STAUQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//å®šå­ç”µåŽ‹q
+	{&_BA_PIOMIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//»ú²àqÖáµçÁ÷»·Êä³ö
+	{&_BA_GRDUD,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//dÖáÖ÷¶ÏºóÍøÑ¹·´À¡ ÂË²¨ºó
+	{&_BA_MC_IN,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT2},		//Àø´ÅÐ£ÕýÊäÈëMagnetCurve2013-12-13--ZZJ
+//	{&_BA_STAUD,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//¶¨×ÓµçÑ¹d
+	{&_BA_GRDUQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//qÖáÖ÷¶ÏºóÍøÑ¹·´À¡ ÂË²¨ºó
+	{&_BA_MC_K,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT3},		//Àø´ÅÐ£ÕýÊä³öMagnetCurve2013-12-13--ZZJ
+//	{&_BA_STAUQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//¶¨×ÓµçÑ¹q
 
 
-	{&_BA_NPRID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//dè½´ç”µæµåé¦ˆ æ»¤æ³¢åŽ 201005atcpc
-	{&_BA_NPRIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//qè½´ç”µæµåé¦ˆ æ»¤æ³¢åŽ 201005atcpc
-//	{&_BA_EXCID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœºä¾§åŠ±ç£ç”µæµdè½´
-//	{&_BA_EXCIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	 //æœºä¾§åŠ±ç£ç”µæµqè½´
+	{&_BA_NPRID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//dÖáµçÁ÷·´À¡ ÂË²¨ºó 201005atcpc
+	{&_BA_NPRIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//qÖáµçÁ÷·´À¡ ÂË²¨ºó 201005atcpc
+//	{&_BA_EXCID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//»ú²àÀø´ÅµçÁ÷dÖá
+//	{&_BA_EXCIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	 //»ú²àÀø´ÅµçÁ÷qÖá
 	{&_BA_SCRIA,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//SCR-A	20110906
 	{&_BA_SCRIB,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//SCR-B	20110906
-//	{&_BA_STAUABD,	0,			0,    		65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//20091027atzyæŒªç”¨ä½œç½‘åŽ‹è·Œè½æ£€æµ‹ å®šå­åŒæ­¥å¹¶ç½‘å‰å®šå­å‰åŽç”µåŽ‹å·®
-	{&_BA_STAUABD,	0,			-10000,		10000,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//å®šå­åŠ±ç£ç”µåŽ‹å·®--ç”¨äºŽæ ¡æ­£åŠ±ç£æ›²çº¿MagnetCurve2013-12-13--ZZJ
+//	{&_BA_STAUABD,	0,			0,    		65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//20091027atzyÅ²ÓÃ×÷ÍøÑ¹µøÂä¼ì²â ¶¨×ÓÍ¬²½²¢ÍøÇ°¶¨×ÓÇ°ºóµçÑ¹²î
+	{&_BA_STAUABD,	0,			-10000,		10000,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//¶¨×ÓÀø´ÅµçÑ¹²î--ÓÃÓÚÐ£ÕýÀø´ÅÇúÏßMagnetCurve2013-12-13--ZZJ
 
-	{&_BA_STAUBCD,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	    //20091027atzyæŒªç”¨ä½œç½‘åŽ‹è·Œè½æ£€æµ‹ å®šå­åŒæ­¥å¹¶ç½‘å‰å®šå­å‰åŽç”µåŽ‹å·®
-	{&_BA_STAIAC,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//å®šå­çº¿ç”µæµæœ‰æ•ˆå€¼æ˜¾ç¤º cpc
-	{&_BA_STAIBA,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//å®šå­çº¿ç”µæµæœ‰æ•ˆå€¼æ˜¾ç¤ºcpc
-	{&_BA_TOQFB,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//çŸ©åé¦ˆ(NM)
-	{&_BA_PSTA,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//å®šå­ä¾§æœ‰åŠŸåŠŸçŽ‡æ˜¾ç¤ºkW
+	{&_BA_STAUBCD,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},	    //20091027atzyÅ²ÓÃ×÷ÍøÑ¹µøÂä¼ì²â ¶¨×ÓÍ¬²½²¢ÍøÇ°¶¨×ÓÇ°ºóµçÑ¹²î
+	{&_BA_STAIAC,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//¶¨×ÓÏßµçÁ÷ÓÐÐ§ÖµÏÔÊ¾ cpc
+	{&_BA_STAIBA,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//¶¨×ÓÏßµçÁ÷ÓÐÐ§ÖµÏÔÊ¾cpc
+	{&_BA_TOQFB,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//¾Ø·´À¡(NM)
+	{&_BA_PSTA,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//¶¨×Ó²àÓÐ¹¦¹¦ÂÊÏÔÊ¾kW
 
-	{&_BA_PNPR,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//ç½‘ä¾§æœ‰åŠŸåŠŸçŽ‡æ˜¾ç¤º
-	{&_BA_PGRID,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//å¹¶ç½‘æ€»çš„æœ‰åŠŸåŠŸçŽ‡æ˜¾ç¤º
-	{&_BA_QSTA,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//å®šå­ä¾§æ— åŠŸåŠŸçŽ‡æ˜¾ç¤ºkVAR
-	{&_BA_QNPR,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//ç½‘ä¾§æ— åŠŸåŠŸçŽ‡æ˜¾ç¤º
-	{&_BA_QGRID,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//å¹¶ç½‘æ€»çš„æ— åŠŸåŠŸçŽ‡æ˜¾ç¤º
+	{&_BA_PNPR,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//Íø²àÓÐ¹¦¹¦ÂÊÏÔÊ¾
+	{&_BA_PGRID,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//²¢Íø×ÜµÄÓÐ¹¦¹¦ÂÊÏÔÊ¾
+	{&_BA_QSTA,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//¶¨×Ó²àÎÞ¹¦¹¦ÂÊÏÔÊ¾kVAR
+	{&_BA_QNPR,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//Íø²àÎÞ¹¦¹¦ÂÊÏÔÊ¾
+	{&_BA_QGRID,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//²¢Íø×ÜµÄÎÞ¹¦¹¦ÂÊÏÔÊ¾
 
-	{&_BA_SSTA,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//å®šå­ä¾§è§†åœ¨åŠŸçŽ‡æ˜¾ç¤º
-	{&_BA_SNPR,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//ç½‘ä¾§è§†åœ¨åŠŸçŽ‡æ˜¾ç¤º
-	{&_BA_SGRID,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//å¹¶ç½‘æ€»çš„æœ‰åŠŸåŠŸçŽ‡æ˜¾ç¤º
+	{&_BA_SSTA,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//¶¨×Ó²àÊÓÔÚ¹¦ÂÊÏÔÊ¾
+	{&_BA_SNPR,		0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//Íø²àÊÓÔÚ¹¦ÂÊÏÔÊ¾
+	{&_BA_SGRID,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//²¢Íø×ÜµÄÓÐ¹¦¹¦ÂÊÏÔÊ¾
 
 
-//-------------------------------'æŠ¥è­¦ä¿¡æ¯'--------------------------------------------------------
+//-------------------------------'±¨¾¯ÐÅÏ¢'--------------------------------------------------------
 //--42/187-228
-	{&_BA_EMIDRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» dè½´ç”µé«¦å™¶ï¿½A)
-	{&_BA_ENIQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» qè½´ç”µæµ(A)
-	{&_BA_EMIQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» qè½´ç”µæµæŒ‡ä»¤(A)
-	{&_BA_ETOQRF,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» è½¬çŸ©æŒ‡ä»¤(A)
-	{&_BA_EURF,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» ä¸­é—´ç›´æµç”µåŽ‹ç»™å®šå€¼(V)
+	{&_BA_EMIDRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì dÖáµç÷Ö¸ÁA)
+	{&_BA_ENIQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì qÖáµçÁ÷(A)
+	{&_BA_EMIQRF,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì qÖáµçÁ÷Ö¸Áî(A)
+	{&_BA_ETOQRF,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì ×ª¾ØÖ¸Áî(A)
+	{&_BA_EURF,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì ÖÐ¼äÖ±Á÷µçÑ¹¸ø¶¨Öµ(V)
 
-	{&_BA_EAGLRF,	0,			-90,		90,	    	&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» æ— åŠŸè§’åº¦æŒ‡ä»¤()   07.27
-	{&_BA_EUDC,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» ä¸­é—´ç›´æµç¼ª(V)
-	{&_BA_EIA1,		0,			-32767,     32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§å˜é«Œé°½ç›¸å¹¶ç½‘ç”µæµæœ‰æ•ˆå€¼(A)
-	{&_BA_EIB1,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§å˜æµå™¨Bç›¸å¹¶ç½‘ç”µæµæœ‰æ•ˆå€¼(A)
-	{&_BA_EIC1,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§å˜æµå™¨Cç›¸å¹¶ç½‘ç”µæµæœ‰æ•ˆå€¼(A)
+	{&_BA_EAGLRF,	0,			-90,		90,	    	&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì ÎÞ¹¦½Ç¶ÈÖ¸Áî()   07.27
+	{&_BA_EUDC,		0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì ÖÐ¼äÖ±Á÷çÑ(V)
+	{&_BA_EIA1,		0,			-32767,     32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²à±ä÷Æ÷AÏà²¢ÍøµçÁ÷ÓÐÐ§Öµ(A)
+	{&_BA_EIB1,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²à±äÁ÷Æ÷BÏà²¢ÍøµçÁ÷ÓÐÐ§Öµ(A)
+	{&_BA_EIC1,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²à±äÁ÷Æ÷CÏà²¢ÍøµçÁ÷ÓÐÐ§Öµ(A)
 
-	{&_BA_EIA2,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç”µæœºä¾§å˜é«Œé°½ç›¸å¹¶ç½‘ç”µæµæœ‰æ•ˆå€¼(A)
-	{&_BA_EIB2,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç”µæœºä¾§å˜æµå™¨Bç›¸å¹¶ç½‘ç”µæµæœ‰æ•ˆå€¼(A)
-	{&_BA_EIC2,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç”µæœºä¾§å˜æµå™¨Cç›¸å¹¶ç½‘ç”µæµæœ‰æ•ˆå€¼(A)
-	{&_BA_EUAB1,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§ABçº¿ç”µåŽ‹æœ‰å€¼(V)
-	{&_BA_EUBC1,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœç¬¨ï¿½ç½‘ä¾§BCçº¿ç”µåŽ‹è¡ŒÐµï¿½V)
+	{&_BA_EIA2,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì µç»ú²à±ä÷Æ÷AÏà²¢ÍøµçÁ÷ÓÐÐ§Öµ(A)
+	{&_BA_EIB2,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì µç»ú²à±äÁ÷Æ÷BÏà²¢ÍøµçÁ÷ÓÐÐ§Öµ(A)
+	{&_BA_EIC2,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì µç»ú²à±äÁ÷Æ÷CÏà²¢ÍøµçÁ÷ÓÐÐ§Öµ(A)
+	{&_BA_EUAB1,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²àABÏßµçÑ¹ÓÐÖµ(V)
+	{&_BA_EUBC1,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏ±¿Íø²àBCÏßµçÑ¹ÐÐ§ÖV)
 
-	{&_BA_EUAB2,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» ç”µæœºä¾§ABçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
-	{&_BA_EUBC2,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» ç”µæœºä¾§BCçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
-    {&_BA_EFREQ,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» ç”µç½‘é¢‘çŽ‡(hz)
-	{&_BA_EUAB0,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» ä¸»æ–­å‰ABçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
-	{&_BA_EUBC0,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» ä¸»æ–­å‰BCçº¿ç”µåŽ‹æœ‰æ•ˆå€¼(V)
+	{&_BA_EUAB2,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì µç»ú²àABÏßµçÑ¹ÓÐÐ§Öµ(V)
+	{&_BA_EUBC2,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì µç»ú²àBCÏßµçÑ¹ÓÐÐ§Öµ(V)
+    {&_BA_EFREQ,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì µçÍøÆµÂÊ(hz)
+	{&_BA_EUAB0,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì Ö÷¶ÏÇ°ABÏßµçÑ¹ÓÐÐ§Öµ(V)
+	{&_BA_EUBC0,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì Ö÷¶ÏÇ°BCÏßµçÑ¹ÓÐÐ§Öµ(V)
 
-	{&_BA_ETLAC,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§ç”µæ„Ÿæ¸©åº¦(æ‘„æ°åº¦) 20091019atzy
-	{&_BA_ETLDUDT,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» æœºä¾§ç”µæ„Ÿæ¸©åº¦(æ‘„æ°åº¦)	20091019atzy
-	{&_BA_ETSKIIP,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» SKIPPæ¸©åº¦(æ‘„æ°åº¦)
-	{&_BA_ESPEED,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//æœ€æ–°æ•…éšœæ—¶åˆ» ç”µæœºè½¬é€Ÿ(rpm)
-	{&_BA_ENPRUD,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» dè½´ä¸»æ–­åŽç½‘åŽ‹åé¦ˆ	20091019atzy
+	{&_BA_ETLAC,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²àµç¸ÐÎÂ¶È(ÉãÊÏ¶È) 20091019atzy
+	{&_BA_ETLDUDT,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì »ú²àµç¸ÐÎÂ¶È(ÉãÊÏ¶È)	20091019atzy
+	{&_BA_ETSKIIP,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì SKIPPÎÂ¶È(ÉãÊÏ¶È)
+	{&_BA_ESPEED,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},			//×îÐÂ¹ÊÕÏÊ±¿Ì µç»ú×ªËÙ(rpm)
+	{&_BA_ENPRUD,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì dÖáÖ÷¶ÏºóÍøÑ¹·´À¡	20091019atzy
 
-	{&_BA_ENPRUQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» qè½´ä¸»æ–­åŽç½‘åŽ‹åé¦ˆ	20091019atzy
-	{&_BA_ENPRUD2,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» dè½´ä¸»æ–­åŽç½‘åŽ‹åé¦ˆ æ»¤æ³¢åŽ	20091019atzy
-	{&_BA_ENPRUQ2,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» qè½´ä¸»æ–­åŽç½‘åŽ‹åé¦ˆ æ»¤æ³¢åŽ	20091019atzy
-	{&_BA_ENUDOUT,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§dè½´ç”µåŽ‹è¾“å‡º	20091019atzy
-	{&_BA_ENUQOUT,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§qè½´ç”µåŽ‹è¾“å‡º	20091019atzy
+	{&_BA_ENPRUQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì qÖáÖ÷¶ÏºóÍøÑ¹·´À¡	20091019atzy
+	{&_BA_ENPRUD2,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì dÖáÖ÷¶ÏºóÍøÑ¹·´À¡ ÂË²¨ºó	20091019atzy
+	{&_BA_ENPRUQ2,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì qÖáÖ÷¶ÏºóÍøÑ¹·´À¡ ÂË²¨ºó	20091019atzy
+	{&_BA_ENUDOUT,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²àdÖáµçÑ¹Êä³ö	20091019atzy
+	{&_BA_ENUQOUT,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²àqÖáµçÑ¹Êä³ö	20091019atzy
 
-	{&_BA_EPIONU,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§ç”µåŽ‹çŽ¯è¾“å‡º
-	{&_BA_EPIONID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§dè½´ç”µæµçŽ¯è¾“
-	{&_BA_EPIONIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§qè½´ç”µæµçŽ¯è¾“å‡º
-	{&_BA_EMEXI,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» æœºä¾§åŠ±ç£ç†è®ºè®¡ç®—å€¼æ˜¾ç¤º 07.27
-	{&_BA_EPIOMID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» æœºä¾§dè½´ç”µæµçŽ¯è¾“å‡º
+	{&_BA_EPIONU,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²àµçÑ¹»·Êä³ö
+	{&_BA_EPIONID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²àdÖáµçÁ÷»·Êä
+	{&_BA_EPIONIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²àqÖáµçÁ÷»·Êä³ö
+	{&_BA_EMEXI,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì »ú²àÀø´ÅÀíÂÛ¼ÆËãÖµÏÔÊ¾ 07.27
+	{&_BA_EPIOMID,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì »ú²àdÖáµçÁ÷»·Êä³ö
 
-	{&_BA_EPIOMIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» æœºä¾§qè½´ç”µæµçŽ¯è¾“å‡º
-	{&_BA_ESTAIAC,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//æœ€æ–°æ•…éšœæ—¶åˆ» å®šå­çº¿ç”µæµæœ‰æ•ˆå€¼æ˜¾ç¤º cpc 07.27
-	{&_BA_ESTAIBA,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//æœ€æ–°æ•…éšœæ—¶åˆ» å®šå­çº¿ç”µæµæœ‰æ•ˆå€¼æ˜¾ç¤ºcpc 07.27
-	{&_BA_ETOQFB,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//æœ€æ–°æ•…éšœæ—¶åˆ» è½¬çŸ©åé¦ˆ(NM) 07.27
-	{&_BA_EPSTA,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» å®šå­ä¾§æœ‰åŠŸåŠŸçŽ‡æ˜¾ç¤ºkW 07.27
+	{&_BA_EPIOMIQ,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì »ú²àqÖáµçÁ÷»·Êä³ö
+	{&_BA_ESTAIAC,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//×îÐÂ¹ÊÕÏÊ±¿Ì ¶¨×ÓÏßµçÁ÷ÓÐÐ§ÖµÏÔÊ¾ cpc 07.27
+	{&_BA_ESTAIBA,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO+DOT1},		//×îÐÂ¹ÊÕÏÊ±¿Ì ¶¨×ÓÏßµçÁ÷ÓÐÐ§ÖµÏÔÊ¾cpc 07.27
+	{&_BA_ETOQFB,	0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG},		//×îÐÂ¹ÊÕÏÊ±¿Ì ×ª¾Ø·´À¡(NM) 07.27
+	{&_BA_EPSTA,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì ¶¨×Ó²àÓÐ¹¦¹¦ÂÊÏÔÊ¾kW 07.27
 
-	{&_BA_EPNPR,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» ç½‘ä¾§æœ‰åŠŸåŠŸçŽ‡æ˜¾ç¤º 07.27
-	{&_BA_EPGRID,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//æœ€æ–°æ•…éšœæ—¶åˆ» å¹¶ç½‘æ€»çš„æœ‰åŠŸåŠŸçŽ‡æ˜¾ç¤º  07.27
+	{&_BA_EPNPR,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì Íø²àÓÐ¹¦¹¦ÂÊÏÔÊ¾ 07.27
+	{&_BA_EPGRID,	0,			-32767,	    32767,		&_NULL_VAL,	&_NULL_VAL,	RDO+SIG+DOT1},	//×îÐÂ¹ÊÕÏÊ±¿Ì ²¢Íø×ÜµÄÓÐ¹¦¹¦ÂÊÏÔÊ¾  07.27
 
 	
 
-//-------------------------------'æŠ¥è­¦åŽŸå› /æ—¶é—´'--------------------------------------------------------
+//-------------------------------'±¨¾¯Ô­Òò/Ê±¼ä'--------------------------------------------------------
 //--28/229-256	
-	{&_BA_ERR4,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//æœ€æ–°æ•…éšœä¿¡æ¯
-	{&_BA_TIME4_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//æœ€æ–°æ•…éšœæ—¶é—´(ç§’)
-	{&_BA_TIME4_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//æ–°æ•…éšœæ—¶é—´(åˆ†)
-	{&_BA_TIME4_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//æœ€æ–°æ•…éšœæ—¶é—´(æ—¶)
-	{&_BA_TIME4_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//æœ€æ–°æ•…éšœæ—¶é—´(æ—¥)
-	{&_BA_TIME4_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//æœ€æ–°æ•…éšœæ—¶é—´(æœˆ)
-	{&_BA_TIME4_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//æœ€æ–°æ•…éšœæ—¶é—´(å¹´)
+	{&_BA_ERR4,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//×îÐÂ¹ÊÕÏÐÅÏ¢
+	{&_BA_TIME4_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//×îÐÂ¹ÊÕÏÊ±¼ä(Ãë)
+	{&_BA_TIME4_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ÐÂ¹ÊÕÏÊ±¼ä(·Ö)
+	{&_BA_TIME4_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//×îÐÂ¹ÊÕÏÊ±¼ä(Ê±)
+	{&_BA_TIME4_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//×îÐÂ¹ÊÕÏÊ±¼ä(ÈÕ)
+	{&_BA_TIME4_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//×îÐÂ¹ÊÕÏÊ±¼ä(ÔÂ)
+	{&_BA_TIME4_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//×îÐÂ¹ÊÕÏÊ±¼ä(Äê)
 
-	{&_BA_ERR3,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸‰æ¬¡æ•…éšœä¿¡æ¯
-	{&_BA_TIME3_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸‰æ¬¡æ•…éšœæ—¶é—´(ç§’)
-	{&_BA_TIME3_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸‰æ¬¡æ•…éšœæ—¶é—´(åˆ†)
-	{&_BA_TIME3_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸‰æ¬¡æ•…éšœæ—¶é—´(æ—¶)
-	{&_BA_TIME3_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸‰æ¬¡æ•…éšœæ—¶é—´(æ—¥)
-	{&_BA_TIME3_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸‰æ¬¡æ•…éšœæ—¶é—´(æœˆ)
-	{&_BA_TIME3_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸‰æ¬¡æ•…éšœæ—¶é—´(å¹´)
+	{&_BA_ERR3,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÈý´Î¹ÊÕÏÐÅÏ¢
+	{&_BA_TIME3_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÈý´Î¹ÊÕÏÊ±¼ä(Ãë)
+	{&_BA_TIME3_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÈý´Î¹ÊÕÏÊ±¼ä(·Ö)
+	{&_BA_TIME3_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÈý´Î¹ÊÕÏÊ±¼ä(Ê±)
+	{&_BA_TIME3_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÈý´Î¹ÊÕÏÊ±¼ä(ÈÕ)
+	{&_BA_TIME3_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÈý´Î¹ÊÕÏÊ±¼ä(ÔÂ)
+	{&_BA_TIME3_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÈý´Î¹ÊÕÏÊ±¼ä(Äê)
 
-	{&_BA_ERR2,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬äºŒæ¬¡æ•…éšœä¿¡æ¯
-	{&_BA_TIME2_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬äºŒæ¬¡æ•…éšœæ—¶é—´(ç§’)
-	{&_BA_TIME2_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬äºŒæ¬¡æ•…éšœæ—¶é—´(åˆ†)
-	{&_BA_TIME2_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬äºŒæ¬¡æ•…éšœæ—¶é—´(æ—¶)
-	{&_BA_TIME2_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬äºŒæ¬¡æ•…éšœæ—¶é—´(æ—¥)
-	{&_BA_TIME2_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬äºŒæ¬¡æ•…éšœæ—¶é—´(æœˆ)
-	{&_BA_TIME2_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬äºŒå–‚æ”¶é²œå¥”?å¹´)
+	{&_BA_ERR2,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚ¶þ´Î¹ÊÕÏÐÅÏ¢
+	{&_BA_TIME2_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚ¶þ´Î¹ÊÕÏÊ±¼ä(Ãë)
+	{&_BA_TIME2_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚ¶þ´Î¹ÊÕÏÊ±¼ä(·Ö)
+	{&_BA_TIME2_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚ¶þ´Î¹ÊÕÏÊ±¼ä(Ê±)
+	{&_BA_TIME2_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚ¶þ´Î¹ÊÕÏÊ±¼ä(ÈÕ)
+	{&_BA_TIME2_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚ¶þ´Î¹ÊÕÏÊ±¼ä(ÔÂ)
+	{&_BA_TIME2_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚ¶þÎ¹ÊÕÏÊ±¼?Äê)
 
-	{&_BA_ERR1,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸€æ¬¡æ•…éšœä¿¡æ¯
-	{&_BA_TIME1_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸€æ¬¡æ•…éšœæ—¶é—´(ç§’)
-	{&_BA_TIME1_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸€æ¬¡æ•…éšœæ—¶é—´(åˆ†)
-	{&_BA_TIME1_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸€æ¬¡æ•…éšœæ—¶é—´(æ—¶)
-	{&_BA_TIME1_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸€æ¬¡æ•…éšœæ—¶é—´(æ—¥)
-	{&_BA_TIME1_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//è¯–é—®ï¿½æœˆ)
-	{&_BA_TIME1_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¬¬ä¸€æ¬¡æ•…éšœæ—¶é—´(å¹´)
+	{&_BA_ERR1,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÒ»´Î¹ÊÕÏÐÅÏ¢
+	{&_BA_TIME1_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÒ»´Î¹ÊÕÏÊ±¼ä(Ãë)
+	{&_BA_TIME1_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÒ»´Î¹ÊÕÏÊ±¼ä(·Ö)
+	{&_BA_TIME1_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÒ»´Î¹ÊÕÏÊ±¼ä(Ê±)
+	{&_BA_TIME1_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÒ»´Î¹ÊÕÏÊ±¼ä(ÈÕ)
+	{&_BA_TIME1_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//Ú´ÎÊÔÂ)
+	{&_BA_TIME1_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//µÚÒ»´Î¹ÊÕÏÊ±¼ä(Äê)
 
-	{&_BA_ERR5,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¤ºæ³¢å™¨æ•…éšœä¿¡æ¯ 201005atcpc
-	{&_BA_TIME5_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¤ºæ³¢å™¨æ•…éšœæ—¶é—´(ç§’)
-	{&_BA_TIME5_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¤ºæ³¢å™¨æ•…éšœæ—¶é—´(åˆ†)
-	{&_BA_TIME5_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¤ºæ³¢å™¨æ•…éšœæ—¶é—´(æ—¶)
-	{&_BA_TIME5_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¤ºæ³¢å™¨æ•…éšœæ—¶é—´(æ—¥)
-	{&_BA_TIME5_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¤ºæ³¢å™¨æ•…éšœæ—¶é—´(æœˆ)
-	{&_BA_TIME5_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//ç¤ºæ³¢å™¨æ•…éšœæ—¶é—´(å¹´)
+	{&_BA_ERR5,		0,			0,			100,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//Ê¾²¨Æ÷¹ÊÕÏÐÅÏ¢ 201005atcpc
+	{&_BA_TIME5_0,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(Ãë)
+	{&_BA_TIME5_1,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(·Ö)
+	{&_BA_TIME5_2,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(Ê±)
+	{&_BA_TIME5_3,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(ÈÕ)
+	{&_BA_TIME5_4,	0,			0,			65535,	    &_NULL_VAL,	&_NULL_VAL,	RDO},		//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(ÔÂ)
+	{&_BA_TIME5_5,	0,			0,			65535,		&_NULL_VAL,	&_NULL_VAL,	RDO},		//Ê¾²¨Æ÷¹ÊÕÏÊ±¼ä(Äê)
 
 //-------------------------------------------------------------------------------------------------
 };
 
-//--------------------------------------//æ•…éšœä¿¡æ¯å­è¡¨(ï¼”åª¸î§èŽ¸ç”·èšï¿½-70)20091026atzy
+//--------------------------------------//¹ÊÕÏÐÅÏ¢×Ó±í(£´æÊý¾ÝµÄÐòº-70)20091026atzy
 const Uint16 TAB_ERR[ERRO_NUM]={
 	TAB_ERR_FIRST   ,TAB_ERR_FIRST+ 1,TAB_ERR_FIRST+ 2,TAB_ERR_FIRST+ 3,
 	TAB_ERR_FIRST+ 4,TAB_ERR_FIRST+ 5,TAB_ERR_FIRST+ 6,TAB_ERR_FIRST+ 7,
@@ -381,7 +384,7 @@ const Uint16 TAB_ERR[ERRO_NUM]={
     TAB_ERR_FIRST+76
 };
 
-//--------------------------------------//ç”µæœºåŠ±ç£ç³»æ•°ä¿¡æ¯å­è¡¨(80%åˆ°115%ç–ƒã„î‰¤æ•…ï¿½540V--800V)ï¼Œå®žè”µrd*/ç†è®ºè®¡ç®—ird*)
+//--------------------------------------//µç»úÀø´ÅÏµÊýÐÅÏ¢×Ó±í(80%µ½115%î¶¨ÍøÑ¹Ê540V--800V)£¬ÊµÊird*/ÀíÂÛ¼ÆËãird*)
 const float TAB_EXI[128]={
  0.9743,    0.9750,    0.9758,    0.9766,    0.9774,    0.9783,    0.9792,
  0.9801,    0.9811,    0.9820,    0.9830,    0.9841,    0.9851,    0.9862,
@@ -407,7 +410,7 @@ const float TAB_EXI[128]={
  1.4284,    1.4384 
 }; 
 
-//--------------------------------------//ç”µæœºåŠ±ç£ç³»æ•°å­è¡¨(è¡¥å¿è´Ÿè½½ç”µæµ)
+//--------------------------------------//µç»úÀø´ÅÏµÊý×Ó±í(²¹³¥¸ºÔØµçÁ÷)
 const float TAB_IQEXI[128]={
  1.0000,   1.0239,    1.0319,    1.0398,    1.0476,    1.0554,    1.0631,    1.0707,    1.0783,    1.0858,    1.0932,    1.1006,
  1.1079,   1.1151,    1.1222,    1.1293,    1.1363,    1.1432,    1.1501,    1.1569,    1.1636,    1.1702,    1.1768,    1.1833,
@@ -423,8 +426,8 @@ const float TAB_IQEXI[128]={
 }; 
 
 
-//è¿‡è½½æ¸©åº¦è¡¨æ ¼
-//è¦æ±‚ï¼šè¿‡è½½èƒ½åŠ›ï¼š               105ï¼…/1hï¼Œ110ï¼…/3minï¼Œ150ï¼…/10sï¼Œ200%/0s
+//¹ýÔØÎÂ¶È±í¸ñ
+//ÒªÇó£º¹ýÔØÄÜÁ¦£º               105£¥/1h£¬110£¥/3min£¬150£¥/10s£¬200%/0s
 
 //tab1//1s t1(j)=10^(0.36095/(i^2-0.97538) +0.7169);
 const Uint16 TAB_ET2[256]={										//1s
@@ -486,9 +489,9 @@ const Uint16 TAB_ET1[256]={										//200us
 	42524,	43715,	44935,	46186,	47468,	48781 
 };
  
-//--------------------------------------//æŽ‰ç”µä¿¡æ¯å­è¡¨(ä¿å­˜æ•°æ®çš„åºå·)
+//--------------------------------------//µôµçÐÅÏ¢×Ó±í(±£´æÊý¾ÝµÄÐòºÅ)
 
-//--------------------------------------//æ˜¾ç¤ºä¿¡æ¯å­è¡¨Systest 2014-05-06LJDå‚ç…§åŽåˆ›ç¨‹åºä¿®æ”¹æ•…éšœå±žæ€§
+//--------------------------------------//ÏÔÊ¾ÐÅÏ¢×Ó±íSystest 2014-05-06LJD²ÎÕÕ»ª´´³ÌÐòÐÞ¸Ä¹ÊÕÏÊôÐÔ
 const struct MESSAGE TAB_MSG[MSG_NUM]={
 	{{'-',	'-',	'-'},	0, 			NONE},						//0=MSG_NONE
 
@@ -502,7 +505,7 @@ const struct MESSAGE TAB_MSG[MSG_NUM]={
 	{{'C',	'B',	'F'},	14, 		OFFCB+D_RCVR+CNT+SAVE},		//8=MSG_CBERROR 
 	{{'P',	'R',	'F'},	14, 		OFFCB+D_RCVR+CNT+SAVE},		//9=MSG_PREERROR 
 	{{'M',	'K',	'F'},	14, 		OFFCB+D_RCVR+CNT+SAVE},		//10=MSG_MAINKERROR 
-	{{'M',	'F',	'F'},	14, 		OFFCB+D_RCVR+CNT+SAVE},		//11=MSG_MAINFERROR 2014-05-06æ²¡æœ‰å‚ç…§åŽåˆ›ï¼Œå¢žåŠ äº†CNTå±žæ€§
+	{{'M',	'F',	'F'},	14, 		OFFCB+D_RCVR+CNT+SAVE},		//11=MSG_MAINFERROR 2014-05-06Ã»ÓÐ²ÎÕÕ»ª´´£¬Ôö¼ÓÁËCNTÊôÐÔ
 	{{'S',	'C',	'F'},	14, 		OFFCB+D_RCVR+CNT+SAVE},		//12=MSG_STACERROR
 	{{'O',	'C',	'1'},	13, 		OFFCB+D_RCVR+CNT+SAVE},     //13=MSG_HIA1
 	{{'O',	'C',	'2'},	13, 		OFFCB+D_RCVR+CNT+SAVE},		//14=MSG_HIB1
@@ -523,21 +526,20 @@ const struct MESSAGE TAB_MSG[MSG_NUM]={
 	{{'U',	'F',	'3'},	7, 			SHUT+I_RCVR+CNT+SAVE},  	//29=MSG_SUACOV1
 	{{'U',	'F',	'5'},	6, 			SHUT+I_RCVR+CNT+SAVE},		//30=MSG_SUDCLV
 	{{'U',	'F',	'6'},	6, 			SHUT+I_RCVR+CNT+SAVE},		//31=MSG_SUACLV1 201005atcpc
-	{{'D',	'C',	'E'},	5, 			SHUT+D_RCVR+CNT+SAVE},		//32=MSG_UDCSAVE ä¸­é—´ç”µåŽ‹æ³¢åŠ¨æ•…éšœ
-	{{'O',	'C',	'S'},	5, 			SHUT+D_RCVR+CNT+SAVE},		//33=MSG_SIOVST è½¯ä»¶å®šå­ç”µæµè¿‡æµ
-	{{'G',	'F',	'1'},	4, 			SHUT+I_RCVR+CNT+SAVE},		//34=MSG_GFAULT1 ç½‘ä¾§æŽ¥åœ°æ•…éšœ
-	{{'G',	'F',	'2'},	4, 			SHUT+I_RCVR+CNT+SAVE},		//35=MSG_GFAULT2 æœºä¾§æŽ¥åœ°æ•…éšœ
-	{{'O',	'H',	'1'},	3, 			SHUT+I_RCVR+CNT+SAVE},		//36=MSG_TOV1è¶…æ¸©
-	{{'O',	'H',	'2'},	3, 			SHUT+I_RCVR+CNT+SAVE},		//37=MSG_TOV2è¶…æ¸©
-	{{'O',	'S',	'K'},	3, 			SHUT+I_RCVR+CNT+SAVE},		//38=MSG_SKTOVè¶…æ¸©
-	{{'O',	'L',	'1'},	2, 			SHUT+I_RCVR+CNT+SAVE},		//39=MSG_TLOV1ç½‘ä¾§ç”µæ„Ÿè¶…æ¸©
-	{{'O',	'L',	'2'},	2, 			SHUT+I_RCVR+CNT+SAVE},		//40=MSG_TLOV2æœºä¾§ç”µæ„Ÿè¶…æ¸©
-	{{'P',	'O',	'V'},	1, 			SHUT+CNT+SAVE},				//41=MSG_PGOVå˜æµå™¨æœ‰åŠŸåŠŸçŽ‡è¿‡è½½
-	{{'Q',	'O',	'V'},	1, 			SHUT+CNT+SAVE},				//42=MSG_QGOVå˜æµå™¨æ— åŠŸåŠŸçŽ‡è¿‡è½½
-	{{'S',	'Y',	'F'},	1, 			SHUT+SAVE},					//43=MSG_STASYNFAILå®šå­åŒæ­¥å¹¶ç½‘å¤±è´¥
+	{{'D',	'C',	'E'},	5, 			SHUT+D_RCVR+CNT+SAVE},		//32=MSG_UDCSAVE ÖÐ¼äµçÑ¹²¨¶¯¹ÊÕÏ
+	{{'O',	'C',	'S'},	5, 			SHUT+D_RCVR+CNT+SAVE},		//33=MSG_SIOVST Èí¼þ¶¨×ÓµçÁ÷¹ýÁ÷
+	{{'G',	'F',	'1'},	4, 			SHUT+I_RCVR+CNT+SAVE},		//34=MSG_GFAULT1 Íø²à½ÓµØ¹ÊÕÏ
+	{{'G',	'F',	'2'},	4, 			SHUT+I_RCVR+CNT+SAVE},		//35=MSG_GFAULT2 »ú²à½ÓµØ¹ÊÕÏ
+	{{'O',	'H',	'1'},	3, 			SHUT+I_RCVR+CNT+SAVE},		//36=MSG_TOV1³¬ÎÂ
+	{{'O',	'H',	'2'},	3, 			SHUT+I_RCVR+CNT+SAVE},		//37=MSG_TOV2³¬ÎÂ
+	{{'O',	'S',	'K'},	3, 			SHUT+I_RCVR+CNT+SAVE},		//38=MSG_SKTOV³¬ÎÂ
+	{{'O',	'L',	'1'},	2, 			SHUT+I_RCVR+CNT+SAVE},		//39=MSG_TLOV1Íø²àµç¸Ð³¬ÎÂ
+	{{'O',	'L',	'2'},	2, 			SHUT+I_RCVR+CNT+SAVE},		//40=MSG_TLOV2»ú²àµç¸Ð³¬ÎÂ
+	{{'P',	'O',	'V'},	1, 			SHUT+CNT+SAVE},				//41=MSG_PGOV±äÁ÷Æ÷ÓÐ¹¦¹¦ÂÊ¹ýÔØ
+	{{'Q',	'O',	'V'},	1, 			SHUT+CNT+SAVE},				//42=MSG_QGOV±äÁ÷Æ÷ÎÞ¹¦¹¦ÂÊ¹ýÔØ
+	{{'S',	'Y',	'F'},	1, 			SHUT+SAVE},					//43=MSG_STASYNFAIL¶¨×ÓÍ¬²½²¢ÍøÊ§°Ü
 	{{'P',	'O',	'E'},	1, 			SHUT+I_RCVR+CNT+SAVE},		//44=MSG_PHORDE 
 };
-
 
 //===========================================================================
 // No more.

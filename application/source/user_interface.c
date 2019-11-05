@@ -27,10 +27,15 @@
 ********************************************************************************************************/
 #include "DSP2833x_Device.h"     // Headerfile Include File
 #include "DSP2833x_Examples.h"   // Examples Include File
+
 #include "math.h"				//20121103
-//º¯ÊýÉùÃ÷
-Uint16 		CheckCode(Uint16 index);
-Uint16 		SciDatpro(void);
+
+#include "user_header.h"  						//±äÁ¿³£Á¿¶¨Òå
+#include "user_macro.h"							//ºêº¯Êý
+#include "user_database.h"						//Êý¾Ý¿â
+#include "user_interface.h"
+
+
 /*********************************************************************************************************
 ** º¯ÊýÃû³Æ: EeStart
 ** ¹¦ÄÜÃèÊö: ¿ªÊ¼¶ÔeepromµÄ²Ù×÷
@@ -1259,7 +1264,7 @@ Uint16 ScibDatpro(void)
 				rx_opernum=SCI.rxb[4];							//±£´æ¹¦ÄÜÂëÖµ
 				rx_opernum=((rx_opernum<<8)&0xFF00)|SCI.rxb[5];
 				
-				//ÃüÁî×Ö¦Àí
+				//ÃüÁî×Ö¦À
 				
 				switch (rx_command&0xFFFF)					//ÃüÁî½âÎö???¸úFFFF×öÓëÔËËãÃ»ÓÐ×÷ÓÃ°¡£¿£¿£¿
 				{
@@ -1479,7 +1484,7 @@ void Sci485Ctrl(void)
 						if(M_ChkFlag(SL_EEASK_INI)==0)				//EEPROMÐÞ¸Ä¹¦ÄÜÂë²Ù×÷Íê³É?
 						{
 							M_ClrFlag(SL_RESUME);					//Çå»Ö¸´³ö³§²ÎÊý½øÐÐÖÐ±êÖ¾
-							M_SetFlag(SL_TX);						//ÖÃ·¢ÎÎñ±êÖ¾Î»
+							M_SetFlag(SL_TX);						//ÖÃ·¢ÎÎñ±êÖ¾Î
 							M_ClrFlag(SL_RX);
 							
 							Sci485_TxInit();						//485·¢ËÍ³õÊ¼»¯
@@ -1902,7 +1907,7 @@ void Sci_canopentx(void)
 /*********************************************************************************************************
 ** º¯ÊýÃû³Æ: DataFilter
 ** ¹¦ÄÜÃèÊö: Êý¾ÝÂË²¨
-** Êä¡¡Èë: 	Y(k-1)ÎªÉÏ´ÎÂË²¨½á¹û¬X(k)ªÐÂ²ÉÑùÖµ¡£¡£
+** Êä¡¡Èë: 	Y(k-1)ÎªÉÏ´ÎÂË²¨½á¹û¬X(k)ªÐÂ²ÉÑùÖµ¡£¡
 ** Êä¡¡³ö: £ºY(k)Îª±¾´ÎÂË²¨½á¹û¡£  
 ** ×¢  ÊÍ: 	 ÂË²¨¹«Ê½Îª£ºY(k)=cY(k-1)+(1-c)X(k),ÆäÖÐ£¬c=1/(1+2*PAI*fh/fs),fhÎªµÍÍ¨ÂË²¨Æ÷µÄ½ØÖ¹ÆµÂÊ£¬fsÎª²ÉÑùÆµÂÊ.
 			ÔÚÒ»½×µÍÍ¨ÂË¨ÖÐ£¬X(k)´ÎªY(k)¡£
@@ -1961,8 +1966,11 @@ void DataFilter( float c,float *out,float in)
 	var->outfp = var->outp;     //out(k-1)-->out(k-2)
 	var->outp  = var->out;      //out(k)-->out(k-1)				
 } 
+*/
 
-/*********************************************************************************************************
+
+
+/******
 ** º¯ÊýÃû³Æ: Bandstop filter without pre-warped
 ** ¹¦ÄÜÃèÊö: ÏÝ²¨Æ÷-ÎÞÔ¤»û±ä
 ** Êä¡¡Èë:   w0 ÖÐÐÄÆµÂÊ
@@ -2040,7 +2048,7 @@ void BS_Loop100(struct BS_DATA *var,struct BS_PARA BS_var)
 /*********************************************************************************************************
 ** º¯ÊýÃû³Æ: Ad8364Ctrl
 ** ¹¦ÄÜÃèÊö: ¶ÁÈ¡²¢´¦ÀíÇ°Ò»ÎµÄ×ª»»½á¹û£¬Í¬Ê±Æô¶¯ÏÂÒ»´ÎAD×ª»»
-** ä¡¡Èë: 	 
+** ä¡¡È
 ** Êä¡¡³ö:   
 ** ×¢  ÊÍ: 	 Ã¿´Î¶¼ÔËÐÐ
 **-------------------------------------------------------------------------------------------------------
@@ -2098,7 +2106,7 @@ void Ad8364Ctrl(void)
 	ADFINAL.uab1 = AD.dat[14];		// Uab Íø²àµçÑ¹		
 	ADFINAL.ubc1 = AD.dat[17];		// Ubc Íø²àµçÑ¹
 	
-	ADFINAL.uab2 = AD.dat[16];		// Uab ç»ú¶¨×Ó²àµçÑ¹		
+	ADFINAL.uab2 = AD.dat[16];		// Uab ç»ú¶¨×Ó²àµçÑ
 	ADFINAL.ubc2 = AD.dat[0];		// Ubc µç»ú¶¨×Ó²àµçÑ¹
 
 	ADFINAL.uab3 = AD.dat[6];		// Uab Íø²àµçÑ¹	´óÂË²¨Í¨µÀ 	
@@ -2195,7 +2203,7 @@ void Ad8364Ctrl(void)
 
 //------------------Íø²à±äÁ÷Æ÷µçÁ÷------------------------------------------------------------------
     AD_OUT_NPR_I.a = - (ADFINAL.ia1 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý),µ×°åÓÐÒ»¸ö·´Ïò£¬10V=1875A,=10V*1875A/(32768*10V)
-	AD_OUT_NPR_I.b = - (ADFINAL.ib1 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)£¬¿ØÖÆËã·¨ÒÔÁ÷³öSKIIPý
+	AD_OUT_NPR_I.b = - (ADFINAL.ib1 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)£¬¿ØÖÆËã·¨ÒÔÁ÷³öSKIIP
 	AD_OUT_NPR_I.c = - (ADFINAL.ic1 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)
 //---20121103-----------------²¢ÍøµçÁ÷Ë²Ê±Öµ±£»¤-201011LVRT--------------------------
 	if(abs(AD_OUT_NPR_I.a)>abs( AD_OUT_NPR_I.b))
@@ -2215,7 +2223,7 @@ void Ad8364Ctrl(void)
 	if(R_PHORDE==1)		//·´ÏàÐò¿ØÖÆ201005atcpc
 	{
     	AD_OUT_MPR_I.b =  (ADFINAL.ia2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý),µ×°åÓÐÒ»¸ö·´Ïò£¬10V=1875A,=10V*1875A/(32768*10V)
-		AD_OUT_MPR_I.a =  (ADFINAL.ib2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)£¬¿ØÖÆËã·¨ÒÔÁ÷³öSKIIPÎªý
+		AD_OUT_MPR_I.a =  (ADFINAL.ib2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)£¬¿ØÖÆËã·¨ÒÔÁ÷³öSKIIPÎª
 		AD_OUT_MPR_I.c =  (ADFINAL.ic2 * 0.0572204);  // SKIIP·´À¡µçÁ÷(Á÷³öÇÅ±ÛÎªÕý)
 	}
 	else
@@ -2270,7 +2278,7 @@ void Ad8364Ctrl(void)
 	DataFilter(0.999985,&MEAN_DATA.zfic1,AD_OUT_NPR_I.c); //Íø²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
 
 	DataFilter(0.999985,&MEAN_DATA.zfia3,AD_OUT_STA_I.a); //¶¨×Ó²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
-	DataFilter(0.999985,&MEAN_DATA.zfib3,AD_OUT_STA_I.b); //¶¨×Ó²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯Ë²¨60S
+	DataFilter(0.999985,&MEAN_DATA.zfib3,AD_OUT_STA_I.b); //¶¨×Ó²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯Ë² 0S
 	DataFilter(0.999985,&MEAN_DATA.zfic3,AD_OUT_STA_I.c); //¶¨×Ó²àµçÁ÷´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
 
 	DataFilter(0.999985,&MEAN_DATA.zfuab,AD_OUT_GRD_U.ab); //Ö÷¶ÏÇ°ÍøÑ¹µçÑ¹´«¸ÐÆ÷	ÁãÆ¯ÂË²¨60S
@@ -2298,7 +2306,7 @@ void Ad8364Ctrl(void)
 		AD_OUT_NGS_U.bc = AD_OUT_NGS_U.bc - MEAN_DATA.zfubc1;	
 	}
 */
-//-------------------Ö÷¶ÏÇ°µçÍøµçÑ¹£¬ÓÉßÑ¹×ªÎªÏàÑ¹------------------------------------------------------
+//-------------------Ö÷¶ÏÇ°µçÍøµçÑ¹£¬ÓÉßÑ¹×ªÎªÏàÑ -----------------------------------------------------
 //	AD_OUT_GRD_U.b  = (AD_OUT_GRD_U.bc - AD_OUT_GRD_U.ab) * 0.3333333;
 //	AD_OUT_GRD_U.a  = AD_OUT_GRD_U.b + AD_OUT_GRD_U.ab;	
 //	AD_OUT_GRD_U.c  = - AD_OUT_GRD_U.a - AD_OUT_GRD_U.b; 
@@ -2308,7 +2316,7 @@ void Ad8364Ctrl(void)
 	AD_OUT_NGS_U.a  = AD_OUT_NGS_U.b + AD_OUT_NGS_U.ab;	
 	AD_OUT_NGS_U.c  = - AD_OUT_NGS_U.a - AD_OUT_NGS_U.b;
 
-//-------------------µç»ú¨×Ó²àµçÑ¹£¬ÓÉÏßÑ¹ËãÏàÑ¹------------------------------------------------------
+//-------------------µç»ú¨×Ó²àµçÑ¹£¬ÓÉÏßÑ¹ËãÏàÑ -----------------------------------------------------
 	AD_OUT_STA_U.b  = (AD_OUT_STA_U.bc - AD_OUT_STA_U.ab) * 0.3333333;
 	AD_OUT_STA_U.a  = AD_OUT_STA_U.b + AD_OUT_STA_U.ab;	
     AD_OUT_STA_U.c  = - AD_OUT_STA_U.a - AD_OUT_STA_U.b;
@@ -2885,7 +2893,7 @@ void Da5344Manage(void)
 
 /*********************************************************************************************************
 ** º¯ÊýÃû³Æ: Output
-** ¹¦ÄÜÃèö: 10Â·ÐÅºÅÊä³ö; 8Â·LEDÏÔÊ¾Êä³ö
+** ¹¦ÄÜÃè  10Â·ÐÅºÅÊä³ö; 8Â·LEDÏÔÊ¾Êä³ö
 ** Êä¡¡Èë: 	 
 ** Êä¡¡³ö:   
 ** ×¢  ÊÍ: 	 
@@ -2893,7 +2901,7 @@ void Da5344Manage(void)
 ** ×÷¡¡Õß: 
 ** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
-** ÐÞË:
+** ÐÞ
 ** ÈÕ¡¡ÆÚ:
 **------------------------------------------------------------------------------------------------------
 ***********************************************************************************************/
@@ -3162,7 +3170,7 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
 		if(M_ChkCounter(MAIN_LOOP.cnt_ocsein2,DELAY_OCSEIN2)>0)		
 		{
 			M_ClrFlag(SL_OCS_EIN);		//20090817 250ms 
-			M_ClrFlag(SL_OCS_SYSRUN); 	//20110707·ûºÏ»ª´´Í¨Ñ¶,Ô­2¸öÖ¸ÁîºÏþÎªÒ»
+			M_ClrFlag(SL_OCS_SYSRUN); 	//20110707·ûºÏ»ª´´Í¨Ñ¶,Ô­2¸öÖ¸ÁîºÏþÎªÒ
 		}
 		MAIN_LOOP.cnt_ocsein1=0;
 	}
@@ -3213,7 +3221,7 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
 	}
 //-------------------------
 
-//---------------------ÉÏÎ»»úÒªÇóÍø²à±äÁ÷Æ÷µ¥ÀÔËÐÐÎÞ¹¦²¢Íø------------------------------------------------------
+//---------------------ÉÏÎ»»úÒªÇóÍø²à±äÁ÷Æ÷µ¥ÀÔËÐÐÎÞ¹¦²¢Í -----------------------------------------------------
 //	if((SCI_canopen.rx_controlword & COM_NPREIN)==COM_NPREIN)	M_SetFlag(SL_OCS_NPREIN);  //ÔÝÊ±ÆÁ±Î										
 //	else 		  												M_ClrFlag(SL_OCS_NPREIN); 
 }	 
@@ -3222,7 +3230,7 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
     PI_PARA_NPRU.ki           = _NPR_U_Ki/10.00;			//DOT1ÊôÐÔ
 //	PI_PARA_NPRU.kd           = _NPR_U_Kd/1000.00;			//DOT3ÊôÐÔ
 	PI_PARA_NPRU.outmax       = _NPR_U_outmax;
-	PI_PARA_NPRU.errmax       = _NPR_U_errmax/10.00;		//DOT1ôÐÔ		//NPRµçÑ¹»·²ÎÊý
+	PI_PARA_NPRU.errmax       = _NPR_U_errmax/10.00;		//DOT1ôÐ 	//NPRµçÑ¹»·²ÎÊý
 	PI_PARA_NPRU.errmin       = _NPR_U_errmin/1000.00;	    //DOT3ÊôÐÔ
 	PI_PARA_NPRU.incrementmax = _NPR_U_incrementmax/10.00;  //DOT1ÊôÐÔ
 /*
@@ -3270,7 +3278,7 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
     PI_PARA_MPRIQ.ki           = _MPR_IQ_Ki/10.00;			//DOT1ÊôÐÔ
 //    PI_PARA_MPRIQ.kd           = _MPR_IQ_Kd/1000.00;			//DOT3ÊôÐÔ
 	PI_PARA_MPRIQ.outmax       = _MPR_IQ_outmax;   							//MPRµçÁ÷»·²ÎÊý
-	PI_PARA_MPRIQ.errmax       = _MPR_IQ_errmax/10.00;		//DOT1ÊôÔ
+	PI_PARA_MPRIQ.errmax       = _MPR_IQ_errmax/10.00;		//DOT1Êô
 	PI_PARA_MPRIQ.errmin       = _MPR_IQ_errmin/1000.00;		//DOT3ÊôÐÔ
 	PI_PARA_MPRIQ.incrementmax = _MPR_IQ_incrementmax/10.00;	//DOT1ÊôÐÔ
 /*
@@ -3312,7 +3320,7 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
 	_encodpos= _ENCODPOS/1000.00;
 	_sc_freq1= _SC_FREQ1/10.00;
 	_sc_freq2= _SC_FREQ2/10.00;
-	_stdby01 = _STDBY1/1000.00;								//±¸ÓÃ¾­¹ýÐ¡Êýã´¦ÀíºóÖµ
+	_stdby01 = _STDBY1/1000.00;								//±¸ÓÃ¾­¹ýÐ¡Êýã´¦ÀíºóÖ
 	_stdby02 = _STDBY2/100.00;								//±¸ÓÃ¾­¹ýÐ¡Êýµã´¦ÀíºóÖµ
 	_stdby03 = _STDBY3/10.00;								//±¸ÓÃ¾­¹ýÐ¡Êýµã´¦ÀíºóÖµ
     _stdby04 = _STDBY4;			        					//±¸ÓÃ
@@ -3370,7 +3378,7 @@ if(M_ChkFlag(SL_ENPCOPER)==0)
 ** Êä¡¡³ö:   
 ** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ×÷¡¡ß: 
+** ×÷
 ** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
 ** ÐÞ¸ÄÈË:
@@ -3520,7 +3528,7 @@ void ConfigPwm(void)
 	Disepwmio_MPR();
 	EALLOW;
 //----------NPRµÄPWM1-PWM6ÉèÖÃ---------------//
-    EPwm1Regs.TBPRD = 3750000/_SW_FR;           // ¿ª¹ØÆµÂÊÎª×÷¸ø¨,_SW_FR=200¶ÔÓ¦2kHz
+    EPwm1Regs.TBPRD = 3750000/_SW_FR;           // ¿ª¹ØÆµÂÊÎª×÷¸ø _SW_FR=200¶ÔÓ¦2kHz
     EPwm2Regs.TBPRD = 3750000/_SW_FR;           // PWMÊ±ÖÓÎª75MHz
 	EPwm3Regs.TBPRD = 3750000/_SW_FR;           // TBPRD = Time-base Period Register
     SW_NPR=3750000.0/_SW_FR;
@@ -3596,7 +3604,7 @@ void EnPdpint(void)
 ** Êä¡¡:   
 ** ×¢  ÊÍ: 	 
 **-------------------------------------------------------------------------------------------------------
-** ÷¡¡Õß: 
+** ÷¡¡Õ
 ** ÈÕ¡¡ÆÚ: 
 **-------------------------------------------------------------------------------------------------------
 ** ÐÞ¸ÄÈË:
