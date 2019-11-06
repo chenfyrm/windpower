@@ -1044,7 +1044,7 @@ void RunCtrl(void)
 
 
  	   if(M_ChkFlag(SL_STEADYGV)!=0)											//待电压给定完成后再给定无功电流
-	 	   RUN.npriqrf = Give_Integral(GIVE.npriqrf,RUN.npriqstep,RUN.npriqrf); //网侧功电流给定积分	         
+	 	   RUN.npriqrf = Give_Integral(GIVE.npriqrf,RUN.npriqstep,RUN.npriqrf); //网侧无功电流给定积分
 
 //	   if(M_ChkFlag(SL_LV_NSTOP)!=0)  	RUN.npriqrf=0; 							//201007BJTULVRT							
 	   if((M_ChkFlag(SL_LV_NSTOP)!=0) || (M_ChkFlag(SL_LV_STATE)!=0 && M_ChkFlag(SL_LV_QWORKING)==0))  
@@ -1240,8 +1240,6 @@ void RunCtrl(void)
 			RUN.mpridrf_exi =  RUN_mpridrf_exi;     
 		}		
 //----MagnetCurve200909 test_end-----------------------
-
-
 //----MagnetCurve2013-12-13 ZZJ增加励磁调整内容---end
 
 
@@ -2635,7 +2633,7 @@ void RUN_SYN(void)
 	{
       	if(M_ChkFlag(SL_SPEED_IN_RANGE)!=0)     					//转速在范围内
 		{
-			M_SetFlag(CL_PRE);          	 						//闭合こ涞缃哟テ
+			M_SetFlag(CL_PRE);          	 						//闭合预充接触器
 			M_SetFlag(SL_SYN_S1);									//置步骤标志位
 			MAIN_LOOP.cnt_synrun=0;           						//清计数器	
 		}

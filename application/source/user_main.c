@@ -32,8 +32,8 @@
 #include "math.h"
 #include "C28x_FPU_FastRTS.h"
 /*--------------------自定义头文件----------------------------*/
-#include "user_header.h"  						//变量常量定义
 #include "user_macro.h"							//宏函数
+#include "user_header.h"  						//变量常量定义
 #include "user_database.h"						//数据库   
 #include "user_interface.h"						//接口层
 #include "user_work.h"							//工作控制
@@ -1722,13 +1722,12 @@ void Scout(void)
 		} 
 
 //-----------------------电机工作转速范围判断-----------------------------------------------------
-//	    if(M_ChkFlag(SL_OCS_EIN)!=0)									//bit0才进行转速龇段卸 201005atcpc
 	    if((M_ChkFlag(SL_OCS_EIN)!=0)&&(M_ChkFlag(SL_IN1_CBSTS)!=0))	//bit0才进行转速超出范围判断 20120310
 		{
-//			if((M_ChkFlag(SL_MSPOUT)==0)&& ((PRO.speedflt<_SC_MSPEED1)||(PRO.speedflt>_SC_MSPEED2)))  //加个延时判断20090817
 			if((M_ChkFlag(SL_MSPOUT)==0) && (M_ChkFlag(SL_MPR_PWMOUT)!=0) && ((PRO.speedflt<_SC_MSPEED1)||(PRO.speedflt>_SC_MSPEED2)))  //加个延迸卸 20120310
 			{
-				if(M_ChkCounter(MAIN_LOOP.cnt_speedout,DELAY_SPEEDOUT)>=0)	M_SetFlag(SL_MSPOUT);	//50ms 20091022atzy									//置鲎俜锭标志位
+				if(M_ChkCounter(MAIN_LOOP.cnt_speedout,DELAY_SPEEDOUT)>=0)
+					M_SetFlag(SL_MSPOUT);	//50ms 20091022atzy									//置鲎俜锭标志位
 			}
 			else if((PRO.speedflt>(_SC_MSPEED1 + SC_MSPD_HW))&&(PRO.speedflt<(_SC_MSPEED2 - SC_MSPD_HW)))   //判断加回差201005atcpc
 			{
@@ -1738,8 +1737,8 @@ void Scout(void)
 		}
 		else 
 		{
-			M_ClrFlag(SL_MSPOUT);
 			MAIN_LOOP.cnt_speedout=0;
+			M_ClrFlag(SL_MSPOUT);
 		}
 /*
 //-----------------------网侧变流器软件过流判断-----------------------------------------------------
