@@ -34,6 +34,7 @@ void WRCOMMAND(void);
 
 Uint16 ScibDatpro(void);
 void Sci485Ctrl(void);
+
 void Scicanopen_Init(void);
 void Sci_canopenrx(void);
 void Sci_canopentx_read(void);
