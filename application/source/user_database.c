@@ -41,7 +41,6 @@ const struct PARA FUNC[PARA_NUM]={
 	{&_STDBY5,		10,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//备用5
 	{&_STDBY6,		604,		-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//备用6
 	{&_STDBY7,		10,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//备用7
-//	{&_STDBY8,		0,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//备用8
 	{&_MC_OK,		1,			-32767,		32767,		&_NULL_VAL,	&_NULL_VAL,	WR0+SIG},	//备用8励磁完成标志MagnetCurve2013-12-13--ZZJ
 	
 //-------------------------------'PI参数'---------------------------------------------------------
@@ -85,15 +84,7 @@ const struct PARA FUNC[PARA_NUM]={
 	{&_MPR_IQ_errmax,		500,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//机侧变流器电流闭环误差限幅
 	{&_MPR_IQ_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	//机侧变流器电流闭环误差限幅
 	{&_MPR_IQ_incrementmax,	550, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	//机侧变流器电流闭环增量限幅
-/*
-	{&_DYN_U_Kp,			40,	    1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	  //动态电压闭环比例系数
-	{&_DYN_U_Ki,			50,		1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//动态电压闭环积分系数//201007BJTULVRT
-	{&_DYN_U_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//动态电压闭环积分系数
-	{&_DYN_U_outmax,		600,	1,		1000,		&_NULL_VAL,	&_NULL_VAL,	WR0},		  //动态电压闭环输出限幅
-	{&_DYN_U_errmax,		1000,	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //动态电压闭环误差限幅
-	{&_DYN_U_errmin,		0,		0,		2000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3},	  //动态电压闭环误钭钚〉
-	{&_DYN_U_incrementmax,	1000, 	1,		10000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1},	  //动态电压闭环增量限幅
-*/
+
 	{&_DYN_U_Kp,			40,		1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT2},	  //动态电压闭环比例系数
 	{&_DYN_U_Ki,			1000,	1,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT1+VA0},//动态电压闭环积分系数//201007BJTULVRT
 	{&_DYN_U_Kd,			0,		0,		20000,		&_NULL_VAL,	&_NULL_VAL,	WR0+DOT3+VA0},//动态电压闭环积分系数
@@ -113,7 +104,6 @@ const struct PARA FUNC[PARA_NUM]={
 	{&_SC_IACOV1,	180, 		20,			200,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//网侧交流电流 过流保护值(基准电流的百分值)
 	{&_SC_UACOV1,	770,		690,		828,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//网侧电压 过压动作值(V) 20140503LJD电能质量
 	{&_SC_UACLV1,	610,	   	0,			690,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//网侧电压 欠压动作值(V) 20140503LJD电能质量
-//	{&_SC_UACLV1,	100,	   	0,			690,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//网侧电压 欠压动作值(V) 201005atcpc
 	{&_SC_IACOV2,	180, 		20,			200,		&_NULL_VAL,	&_NULL_VAL,	WR0},		//电机侧交流电流 过流保护值(基准电流的百分值)
 	{&_SC_PGOV,		1800,		0,			3000,		&_NULL_VAL,	&_NULL_VAL,	WR1},		//变流器有功功率过载阈值(kW) 201005atcpc
 

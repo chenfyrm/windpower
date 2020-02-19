@@ -144,8 +144,10 @@ struct PARA
 {
  Uint16 *para_add;						//变量地址指针
  Uint16 init;							//初始值
- Uint16	min,max;						//最小值 最大值
- Uint16	*min_add,*max_add;				//最小值 最大值指针
+ Uint16	min;
+ Uint16 max;						//最小值 最大值
+ Uint16	*min_add;
+ Uint16 *max_add;				//最小值 最大值指针
  Uint16 attr;							//属性
 };
 

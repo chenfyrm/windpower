@@ -33,7 +33,6 @@ extern "C" {
 #endif
 
 //--------------------------宏定义-----------------------------------------------
-				
 //-----------------------参数相关宏定义------------------------------------------
 //--------------------------版本信息-----------------------------------------------
 #define MC_TYPE 			2010			//机型参数
@@ -54,46 +53,19 @@ extern "C" {
 
 //********************************************************************************************//
 //===================额定电流基准值峰值（每次实验根据需要更改）=====================================
-//#define NPR_IACN  473        //网侧额定电流基准值 额定有效值为334A
-//#define MPR_IACN  545        //机侧额定电流基准值 额定有效值为385A
 #define NPR_IACN  682        //网侧额定电流基准值 201205LVRTatZB LVRT实验改大 20120601night
 #define MPR_IACN  682        //机侧额定电流基准值 额定有效值为482A 201107HC
 #define STA_IACN  1000       //定子额定电流基准值 
 #define GRD_UN    563        //额定电网相电压峰值690V系统
 #define CHOP_IDCN 650        //dc-chopper电流保护额定值BJTULVRT201204
-
 //********************************************************************************************//
  
 //----------------------------系统工作常数------------------------------------------------
-
 #define NPR_L       0.5e-3     //网侧滤波电感值（H）
 #define MPR_L	    0.071e-3   //机侧dv/dt电感值(H)
 #define	PLSPRVL     2048        //编码器每圈光栅数 注:该值改变，2.617994e-3要改,初始化EQep2Regs.QPOSMAX要改！encoder pulses per revolution cpc
-/*
-//电机参数----额定状态
-#define MPR_Ls   	24.494882e-3	 	//定子自感	--单位H			（实际相值）
-#define MPR_Lr   	15.889556e-3	 	//转子自感	--单位H			（实际相值）
-#define MPR_Lm   	19.02e-3	 	    //定转子互感--单位H
-#define MPR_Rs   	0.106	     		//定子电阻	--单位ohm		（实际相值）
-#define MPR_Rr   	0.14995	    		//转子电阻	--单位ohm		（实际相值）
-#define SIGMA	 	0.07053314			//(1-MPR_Lm*MPR_Lm/(MPR_Ls*MPR_Lr))	
-#define	STAROTRTO	1.246504       		//定转子变比
-#define	POLEPAIRES	2       			//电机极对数 
-*/
-/*
-//CPC电机参数----额定状态归算到定子侧参数
-#define MPR_Ls   	18.154e-3	 	    //定子自感	--单位H
-#define MPR_Lr   	18.3258e-3	 	    //转子自感	--单位H	
-#define MPR_Lm   	17.87e-3	 	    //定转子互感--单位H
-#define MPR_Rs   	0.007747	     	//定子电阻	--单位ohm
-#define MPR_Rr   	0.004175	    	//转子电阻	--单位ohm
-#define SIGMA	 	0.040127			//(1-MPR_Lm*MPR_Lm/(MPR_Ls*MPR_Lr))	        
-#define	STAROTRTO	0.5922       		//定转子变比
-#define	STAROTRTO2	0.35070084       	//定转子变比的平方
-#define	POLEPAIRES	2       			//电机极对数  
-*/
 
-///-------------常用常量宏定义-------------------------//
+//-------------常用常量宏定义-------------------------
 #define	SQRT3		1.73205081			//sqrt(3)
 #define	SQRT3_2		0.8660254           //sqrt(3)/2
 #define	SQRT3_3		0.57735027          //sqrt(3)/3
@@ -115,7 +87,6 @@ extern "C" {
 #define	DELAY_MAIN6			1000									//六级循环：1000ms
 
 //canopen
-//#define	DELAY_CANOPENTX		13										//CANOPENTX：7ms
 #define	DELAY_CANOPENTX		6										//CANOPENTX：6ms	120507
 #define	DELAY_CANOPENOVER	1000									//CANOPENOVER：500ms,HEARTBEAT 2014-05-06LJD临时修改CANopen
 #define	DELAY_SCICANOPENOVER 250									//20090817
@@ -214,8 +185,6 @@ extern "C" {
 #define	DELAY_LVFAULT1		200  	 //200ms
 #define	DELAY_LVFAULT2		100  	 //100ms
 
-
-
 //---------20121103atsp-----------
 #define	DELAY_LVQWORKING	100  	 //100ms 20121103
 #define	DELAY_PHICON		50  	 //50ms 
@@ -242,12 +211,11 @@ extern "C" {
 #define	et_gate	    		50000	    //过载保护计算
 
 //-----------------------------CANOPEN通信宏定义----------------------------------------------
-//#define	SCICANOPENRXNUM		10										//CANOPENRX数据包大小
-//#define	SCICANOPENTXNUM		18										//CANOPENTX数据包大小
 #define CANOPENCOM_HEAD		0x7E									//CANOPEN报头
 #define	SCICANOPENRXNUM		14										//CANOPENRX数据包大小120507
 #define	SCICANOPENTXNUM		22										//CANOPENTX数据包大小120507
 #define	SCICANOPENREADNUM	7										//CANOPENRD读取指令数据包大小120507
+
 //-----------------------------CANOPEN通信宏定义NORMAL----------------------------------------------
 #define CAN_TEN  	  10000     //主控指令额定转矩基准值 (常牵:1800r/min时P=1560kW,Te=P*60/(n*2*pie)=8276 NM )
 #define CAN_ANGLEN     90       //主控指令额定无功因数角度基准值 
@@ -256,9 +224,6 @@ extern "C" {
 
 //-----------------------------485通讯----------------------------------------------
 #define	SCI485NUM_RX		8										//485数据包大小modbus
-
-//#define UPSTART			    0x0064									//恢复出厂参数的校验码
-//#define SYSRESUME			0x0067									//恢复出厂参数的校验码
 
 //上位机发送命令
 #define COM_RDDO			0x0001									//读取功能码(读取下位机EEPROM中的功能码值写入到上位机EEPROM中)
@@ -325,8 +290,6 @@ extern "C" {
 
 //-------------------------AD、DA转换及数据读取的控制-----------------------------------------
 #define	AD8364_CONVERT		1										//8364开始转换
-//#define	AD1544_CONVERT		2										//1544开始转换
-//#define	DA7614_CONVERT		4										//7614开始转换
 //ad
 #define AD_ASTART		    ((Uint16 *)0x100000)						//片外AD的数荻寥∈椎刂
 #define AD_BSTART		    ((Uint16 *)0x110000)						//片外AD的数据读取首地址
@@ -346,7 +309,6 @@ extern "C" {
 #define RAM_BIAS			5000										//=2s/(0.4ms/point)=5000points/variable
 #define RAM_SEGMENT			1000											//每个波形每次发送分段打包长度
 
-
 //----------------------------输入输出地址定义--------------------------------------------
 #define IN1_ADDR			((Uint16 *)0x140000)	//输入地址1
 #define IN2_ADDR			((Uint16 *)0x150000)	//输入地址2
@@ -365,7 +327,7 @@ extern "C" {
 #define	HSPCLK				75      		//高速基准时钟频率(Hz)
 #define	LSPCLK				37500000		//低速基准时钟频率(Hz)
 
-//--------------------------------标志位定-----------------------------------------------
+//--------------------------------标志位定义-----------------------------------------------
 //flag[0]显示及设定标
 #define	SL_DISPLAY0			0x00			//LED显示0
 #define	SL_DISPLAY1			0x01			//LED显示1
@@ -383,9 +345,6 @@ extern "C" {
 #define SL_PC_BANKDATASAVE  0x0D            //PC指令外部RAM显示数据锁存 PCmodbus20100308
 #define	SL_MC_OK   			0x0E      		//励磁曲线MagnetCurve2013-12-13
 #define SL_MC_FAIL          0x0F    		//励磁曲线MagnetCurve2013-12-13
-
-//#define	SL_STA_PHORDE   	0x0E      		//TEST
-//#define SL_ROT_PHORDE  		0x0F            //
   
 //flag[1]串行通信相关标;eeprom相关标
 #define SL_TX		    	0x10			//1=表示sci正在发送
@@ -403,8 +362,6 @@ extern "C" {
 #define SL_EEBUSY_MCODE		0x1C			//=1修改功能码进行中
 #define SL_EEBUSY_ERRSAVE	0x1D			//=1保存故障信息进行中 
 #define SL_TXLONGDATA		0x1E			//=1发送长数据进行中 
-
-//#define SL_PHO_FH			0x1F			//=1TEST
 #define SL_CANOPENTX_FLAG	0x1F			//120507
 	
 //flag[2]QEP相关标志位 及故障标志位
@@ -415,7 +372,7 @@ extern "C" {
 #define	SL_QEPPCDE          0x24      		//编码器转向改变错误,A或B信号消失
 #define	SL_QCAPSPDIN        0x25      		//QEP的CAP电路能够正确检测 qcap speed in 
 #define	SL_SPEED_HIGH       0x26      		//高转速区采用QCLK128分频，低转速采用8分频 
-//flag[2]接触器故障标志位
+//接触器故障标志位
 #define SL_ERROR_CB        	0x27        	//=1主断有故障 
 #define SL_ERROR_MAINF   	0x28         	//=1主滤波器故障
 #define SL_ERROR_MAINK     	0x29         	//=1主接触器故障
@@ -430,7 +387,6 @@ extern "C" {
 #define SL_POWERON			0x30			//=1系统上电完成
 #define SL_WARNING			0x31			//=1报警
 #define SL_OFFCB			0x32			//=1断主断
-//#define SL_SOFT				0x33			//=1缓慢停止
 #define SL_DL_RESET			0x33			//=1延时允许复位
 #define SL_SHUT				0x34			//=1紧急停止
 #define SL_NRCVR			0x35			//=1故障不能恢复
@@ -495,7 +451,6 @@ extern "C" {
 #define SL_CONFIGPWM		0x6B			//=1PWM脉冲配置完成标志位,onfigPwm()只能运行一次
 #define SL_FAN_WORK         0x6C			//=1要求功率风扇开始工作
 #define SL_CHARGEOK			0x6D			//=1预充电完成
-//#define SL_SENSZFSTDY       0x6E            //=1传感器零漂滤波结束 
 #define SL_UNBALANCE       	0x6E            //=1电网不平衡标志位 20121103
 #define SL_SPEED_IN_RANGE	0x6F			//=1转速在范围以内
 								
@@ -508,7 +463,6 @@ extern "C" {
 #define CL_STATORK		    0x74			//=1要求合控制定子接触鱌5.9
 #define CL_CBFCON           0x75			//=1要求主断欠压链闭合，0=主断欠压链断开P5.10
 #define CL_FANWORK	        0x76			//=1要求功率风扇运行P5.11
-//#define CL_SAVEC	        0x77			//=1正常,安全链闭合P5.12 20110829
 #define CL_ZKLVRT	        0x77			//=1发生网压跌落，发给主控24V信号20121107
 
 //flag[8]输出标2         0x190000           //继电器输出，=1 输出AC220V
@@ -516,7 +470,6 @@ extern "C" {
 #define CL_RELAY8      		0x80			//备用
 #define CL_CHOPTEST        	0x81			//斩波测试 2013-12-6ZZJ 
 #define SL_WATCHDOG			0x82            //DSP软件看门狗 20100401at27
-//#define SL_SWITCHDETECT    	0x84         	//=1检测意舛		110818
 #define CL_CHOPEN			0x83			//enable chopper
 //--------以下标疚环鞘涑觯诓勘曛-------------------------------------------
 #define SL_ERRSTOP_S1		0x84            //一般故障步骤标志位20110829
@@ -531,8 +484,6 @@ extern "C" {
 #define SL_LV_VDSCRON		0x8D			//=1电压跌落触发SCR 20121203
 #define SL_LV_SCROFF1		0x8E			//=1 35%不对称关SCR 20121210
 #define SL_LV_SCROFF2		0x8F			//=1 50%不对称关SCR 20121210
-
-
 
 //flag[9]输入标12
 #define _IN12_DATA			flag[9]			//变流器布刺蠢
@@ -555,35 +506,20 @@ extern "C" {
 #define SL_IN2_IOVC2			0x9E			//=1 电机侧C相 SKiiP故障(过流者超温)
 #define SL_IN2_TBOV				0x9F			//=1 电机侧SKiiP超温故障
 
-
 //flag[10]输入标34      0x160000
 #define _IN34_DATA			flag[10]			//控制板硬件保护故障反馈
 //-----------------------------------------------------------------------------------------------				
 #define SL_IN3_VDCOV			0xA0			//=1 直流电压过压
 #define SL_IN3_NPRIOV			0xA1			//=1 网侧交流硬件保护过流故障
 #define SL_IN3_MPRIOV			0xA2			//=1 电机侧交流硬件保护过流故障
-
 #define SL_IN3_CBTRIP		    0xA3			//=1 主断过流脱扣故障  P4.9   20090816
 //#define SL_IN3_OCS_NPRSTART		0xA4			//=1 上位机允许发网侧脉冲  操作板信号，风场没用
 //#define SL_IN3_OCS_MPRSTART		0xA5			//=1 上位机允许发机侧脉冲  操作板信号，风场没用
 #define SL_IN3_IOVDC			0xA6			//=1 dc-link chopper errror 20120228atbjtu	BJTULVRT201204
-//注意：用高8位时，输入赋值会清零20130222atzb
 
-
-
-
-
-//flag[11]输出标4         0x1C0000          //AD址输出
-/*#define _OUT4_DATA			flag[11]
-#define SL_LSADA0			0xB0		     //A0
-#define SL_LSADA1			0xB1             //A1
-#define SL_LSADA2			0xB2             //A2
-#define SL_LSADA3			0xB3	         //A3
-*/
 //flag[11]LVRT相关标志位	20130222
 #define SL_LV_RECMSTOP			0xB0			//=1恢复时刻主动封脉冲	20130124
 #define SL_LV_ZDNSTOP			0xB1			//=1跌落时刻网侧主动封脉冲	20130202
-//#define SL_LV_XNZKKZ			0xB2			//=1虚拟阻抗控制期间	20130202
 #define SL_LV_STRICTLV			0xB2			//=1严格LV区间	20130222
 #define SL_LV_RECNSTOP			0xB3			//=1恢复时刻主动封脉冲	20130206
 #define SL_LV_ZDMSTOP			0xB4			//=1跌落时刻机侧主动封脉冲	20130221
@@ -592,7 +528,6 @@ extern "C" {
 #define SL_CANOPENHEAD			0xB7			//=1 收到报头	20130801
 #define SL_ENCODEPOS_OK			0xB8			//=1编码器位置检测完成	20130801
 #define SL_ECPOSSEARCH			0xB9			//=1编码器位置校验过 	20130801
-
 
 //flag[12]主控通讯及PC指令标志位
 #define SL_OCS_NPREIN       0xC0            //=1主控要求变流器网侧单独无功并网运行				
@@ -613,9 +548,7 @@ extern "C" {
 #define SL_CANOPENHEADOK	0xCE			//=1 SL_CANOPENHEADOK
 #define SL_CANOPENTX		0xCF			//=1 SL_CANOPENOVER 
 
-
-//flag[13]
-//LVRT标志位
+//flag[13]LVRT标志位
 #define SL_LV_QWORKING      0xD0       		    
 #define SL_LV_MSTOP         0xD1       		    
 #define SL_LV_NSTOP         0xD2
@@ -669,8 +602,6 @@ struct	MC_DATA
 };
 //---2013-12-13--ZZJ增加电机励磁
 
-
-
 //给定值寄存器
 struct	GIVE
 {
@@ -684,7 +615,6 @@ struct	GIVE
 	float   npriqrf_cl;                   //网侧无功电流给定值(仅网侧无功运行时使用)201205LVRTatZB
 	float   toqrf_lv;                      //机侧转矩给定值(有功)	20130128
 };
-
 
 //给定积分相关寄存器
 struct	RUN
@@ -761,8 +691,7 @@ struct	TRANS_DATA{
 	float qnbsf;	
     float ab;          //ab BJTULVRT201204
 	float bc;           //bc
-
-};																 
+};
 
 
 struct I_DATA_PLL				//201011PLL
@@ -940,7 +869,6 @@ struct	MAIN_LOOP{
 	int32 cnt_lv_holdpow;			//20130205
 	int32 cnt_lv_scrkeepon;			//20130221
 	int32 cnt_chopper;				//2013-12-6	ZZJ斩波测试
-
 };
 
 
@@ -958,7 +886,6 @@ struct  AMUX{
 	float MPR_skiiptemp;    //机侧SKIIP模块的温度最大值
 	float Lac_R;   			//交流电感pt100
 	float Ldudt_R; 			//du/dt的pt100
-
 };
 
 //AD模块处理寄存器
@@ -990,9 +917,6 @@ struct	ADFINAL{
     int16  ubc;			    //主断前bc线压
 	int16  uab;			    //主断前ab线压
     int16  AMUX;            //慢速AD信号
-
-
-
 };
    
 
@@ -1018,8 +942,6 @@ struct AD_DATA{
 };
 
 
-
-
 //求平均值
 struct MEAN_DATA{
        float ia1,ib1,ic1;  			//网侧电流平均值滤波
@@ -1039,11 +961,10 @@ struct MEAN_DATA{
 	   float uab,ubc;	   			//主断前网侧电压平均值滤波
 	   float zfuab,zfubc; 		    //主断前电压传感器零漂滤波
 	   float udc;
-	   float iac3,iba3,icb3;				//定子侧电流平均值滤波
+	   float iac3,iba3,icb3;		//定子侧电流平均值滤波
 	   float psactive;				//定子侧电流平均值滤
 	   float Lac_temp,Ldudt_temp;   //电感温度滤波
 	   float ubc_t;					//20130801
-	   	   
 };
 
 //保护模块结果变量
@@ -1094,7 +1015,6 @@ struct	PRO{
 				float   Pgreactive2;  							//网侧总霓功功率				
 
 				float   Pgactive_lv;   							//LVRT前的功率20121210	
-
 		   };
  
 //显示嗫乇淞
@@ -1314,23 +1234,22 @@ extern float	POLEPAIRES;       				//电机极对数
 extern Uint16  BANK_RAMDATA_POS;						    					//存储变量的存储点位置[0,4999]
 extern Uint16  ERROR_RAMDATA_POS;
 
-extern Uint16   _OUT4_DATA;		//该标志位无用改为宏定义20130222//存储变量的存储点位置[0,4999]
+extern Uint16   _OUT4_DATA;		//该标志位无用改为宏定义20130222
 
 //------------------------------------const定义--------------------------------------------
-
 //eeprom位操作
 extern const  Uint16 ONEBYTE[8];
 
 //AD1544通道选择
 extern const  Uint16 AD1544[4];
+
 //--------------------------------------变量定义-------------------------------------------
 extern Uint16	flag[16];													//标志位变量
-//extern Uint16	disp[15];
 
 extern struct MC_DATA MC_DATA;
 
-extern float   MC_y_test;
-extern float   MC_U_test;
+extern float   	MC_y_test;
+extern float   	MC_U_test;
 extern float	Uns_ft;
 extern Uint16	MC_N_test;
 extern Uint32	MC_F_cnt;
@@ -1338,7 +1257,6 @@ extern Uint32	MC_F_cnt;
 extern Uint32	QEP_CNT1;
 extern Uint32	QEP_CNT2;
 extern int16	QEPPHE_N;
-
 
 extern float   	pll_theta; 				//201011PLL
 extern float  	ptheta;
@@ -1355,27 +1273,25 @@ extern float   	NGS_Udq_p_ex;		//20130206
 extern float   	NGS_Udq_epsilon_lv;	//20130301
 extern float   	NGS_Udq_pflt;		//20130301
 
-extern float   LV_A1;				//201011LVRT
-extern float   LV_A2;
-extern float   LV_T1;
-extern float   LV_T2;
+extern float   	LV_A1;				//201011LVRT
+extern float   	LV_A2;
+extern float   	LV_T1;
+extern float   	LV_T2;
 
-extern float   lv_flag_flt;		//2013-12-6 LVRT标志位延时计数器
+extern float   	lv_flag_flt;		//2013-12-6 LVRT标志位延时计数器
 
 //ModbusRS485
-extern Uint16  length485;													//modbus
-extern Uint16  longtx_num;													//modbus
+extern Uint16  	length485;													//modbus
+extern Uint16  	longtx_num;													//modbus
 
-extern float   RUN_mpridrf_exi;
-extern Uint16  RUN_mpriq;
-extern Uint16  _OUT3_TEST;
-extern Uint16  _NQEPPCO;
-extern Uint16  R_SCOUT;
-extern float   Ud_lv;
-extern float   temp_ud;
+extern float   	RUN_mpridrf_exi;
+extern Uint16  	RUN_mpriq;
+extern Uint16  	_OUT3_TEST;
+extern Uint16  	_NQEPPCO;
+extern Uint16  	R_SCOUT;
+extern float   	Ud_lv;
+extern float   	temp_ud;
 
-//extern float   NGS_Udq_p;
-//extern float   NGS_Udq_epsilon;
 extern float   NGS_Udq;
 extern float   PHAI_d;
 extern float   PHAI_q;
@@ -1385,7 +1301,7 @@ extern int32   ET_SUM1;
 extern int32   ET_SUM2;
 
 /*下面的用作SVPWM计算*/
-extern Uint16 SW_NPR,SW_MPR;
+extern Uint16 	SW_NPR,SW_MPR;
 extern float   vdc;
 extern float   m;
 extern float   ua_m,ub_m,uc_m;  //调制波
@@ -1393,9 +1309,9 @@ extern float   u_alfa_NPR,u_beta_NPR;
 extern float   u_alfa_MPR,u_beta_MPR;
 
 extern struct	GIVE GIVE;
-extern float OCS_Trf;                          //主控给过来的转矩指令
+extern float 	OCS_Trf;                          //主控给过来的转矩指令
 
-extern struct RUN RUN;
+extern struct 	RUN RUN;
 
 extern struct	TRANS_DATA TRS_NPR_I;   //网侧变流器的电流（这里NPR作为后缀，不用grd，以区分电网电流还是网侧变流器电流）
 extern struct	TRANS_DATA TRS_MPR_I;   //机侧变流器的电流
@@ -1541,7 +1457,6 @@ extern Uint16 _STDBY4;							//备用4
 extern Uint16 _STDBY5;							//备用5
 extern Uint16 _STDBY6;							//备用6
 extern Uint16 _STDBY7;							//备用7
-//Uint16 _STDBY8;							//备用8
 extern Uint16 _MC_OK;							//备用8	 MagnetCurve2013-12-13
 extern Uint16 _STDBY9;							//备用9
 extern Uint16 _STDBY10;						//备用10
@@ -1573,6 +1488,7 @@ extern float _stdby05;							//备用经过小数处理后值
 extern float _stdby06;							//备用经过小数点处值
 extern float _stdby07;							//备用经过小数点处理后值
 extern float _stdby08;							//备用经过小数点处理后值
+
 //------------------------运行模式变量-------------------------------------------------------------
 extern Uint16 _ENSCR;							//
 
@@ -1609,22 +1525,21 @@ extern Uint16	_MPR_U_errmax;	  		//机侧变流器电压闭环误差限
 extern Uint16	_MPR_U_errmin;		 	//机侧变流器电压闭环误差最小值
 extern Uint16	_MPR_U_incrementmax; 	//机侧变流器电压闭环增量限幅
 
-extern Uint16 _MPR_ID_Kp;				//机侧变流器电流闭环比例系数
-extern Uint16 _MPR_ID_Ki;				//机侧变流器电流闭环积分系数
-extern Uint16 _MPR_ID_Kd;				//机侧变流器电流闭环微分系数
-extern Uint16 _MPR_ID_outmax;			//机侧变流器电流闭环输出限幅
-extern Uint16 _MPR_ID_errmax;			//机侧淞髌鞯缌鞅栈肺蟛钕薹
-extern Uint16 _MPR_ID_errmin;			//机侧变流器电流闭环误差最小值
-extern Uint16 _MPR_ID_incrementmax;		//机侧变流器电流闭环增量限幅
+extern Uint16 	_MPR_ID_Kp;				//机侧变流器电流闭环比例系数
+extern Uint16 	_MPR_ID_Ki;				//机侧变流器电流闭环积分系数
+extern Uint16 	_MPR_ID_Kd;				//机侧变流器电流闭环微分系数
+extern Uint16 	_MPR_ID_outmax;			//机侧变流器电流闭环输出限幅
+extern Uint16 	_MPR_ID_errmax;			//机侧淞髌鞯缌鞅栈肺蟛钕薹
+extern Uint16 	_MPR_ID_errmin;			//机侧变流器电流闭环误差最小值
+extern Uint16 	_MPR_ID_incrementmax;		//机侧变流器电流闭环增量限幅
 
-extern Uint16 _MPR_IQ_Kp;				//机侧变流器电流闭环比例系数
-extern Uint16 _MPR_IQ_Ki;				//机侧变流器电流闭环积分系数
-extern Uint16 _MPR_IQ_Kd;				//机侧变流器电流闭环微分系数
-extern Uint16 _MPR_IQ_outmax;			//机侧变流器电流闭环输出限幅
-extern Uint16 _MPR_IQ_errmax;			//机侧变流器电流闭环误差限幅
-extern Uint16 _MPR_IQ_errmin;			//机侧变流器电流闭环误差最小值
-extern Uint16 _MPR_IQ_incrementmax;	//机侧变流器电流闭环增量限幅
-
+extern Uint16 	_MPR_IQ_Kp;				//机侧变流器电流闭环比例系数
+extern Uint16 	_MPR_IQ_Ki;				//机侧变流器电流闭环积分系数
+extern Uint16 	_MPR_IQ_Kd;				//机侧变流器电流闭环微分系数
+extern Uint16 	_MPR_IQ_outmax;			//机侧变流器电流闭环输出限幅
+extern Uint16 	_MPR_IQ_errmax;			//机侧变流器电流闭环误差限幅
+extern Uint16 	_MPR_IQ_errmin;			//机侧变流器电流闭环误差最小值
+extern Uint16 	_MPR_IQ_incrementmax;		//机侧变流器电流闭环增量限幅
 
 extern Uint16	_DYN_U_Kp;	   			//机侧变流器电压闭环比例系数
 extern Uint16	_DYN_U_Ki;	  			//机侧变流器电压闭环积分系数
@@ -1642,7 +1557,6 @@ extern Uint16 _SC_IACOV1;													//基准电流的百分值)
 extern Uint16 _SC_UDCOV;													//中间直流电压过压值(V)
 extern Uint16 _SC_UDCOVH;													//中间直流电压过压值（网压跌落）(V)
 extern Uint16 _SC_IDCOV;													//改为dc-chopper电流保护BJTULVRT201204
-//extern Uint16 _SC_UDCLV;													//中间直流电压欠压值(V)
 extern Uint16 _SC_VDCON;													//上电电压
 extern Uint16 _SC_UACOV1;													//网压交流电压过压动作值(V)
 extern Uint16 _SC_UACLV1;													//交流电压缺相动作值(V)
