@@ -24,13 +24,17 @@
 **
 **------------------------------------------------------------------------------------------------------
 ********************************************************************************************************/
-/*---------------------自带头文件-----------------------------*/
 
+// ***************************************
+// the includes
+
+/*---------------------自带头文件-----------------------------*/
 #include "DSP2833x_Device.h"     				// DSP2833x Headerfile Include File
 #include "DSP2833x_Examples.h"   				// DSP2833x Examples Include File
 
-#include "math.h"
+#include <math.h>
 #include "C28x_FPU_FastRTS.h"
+
 /*--------------------自定义头文件----------------------------*/
 #include "user_macro.h"							//宏函数
 #include "user_header.h"  						//变量常量定义
@@ -38,13 +42,31 @@
 #include "user_interface.h"						//接口层
 #include "user_work.h"							//工作控制
 
+// *******************************
+// the defines
+
+
+// ************************************************
+// the typedefs
+
+
+// ***********************************
+// the globals
+
+// These are defined by the linker (see F28335_flash.cmd)
+extern Uint16 RamfuncsLoadStart;
+extern Uint16 RamfuncsLoadEnd;
+extern Uint16 RamfuncsRunStart;
+
+// **************************************************************************
+// the function prototypes
 
 /*-----------------------中断声明-----------------------------*/
 interrupt void CpuTimer0Isr(void);				//主定时器中断			
 interrupt void EPWM1_TZ1_Isr(void);				//TZ1中断
 interrupt void EPWM2_TZ2_Isr(void);				//TZ2中断
-/*-----------------------函数声明-----------------------------*/
 
+/*-----------------------函数声明-----------------------------*/
 void Protect(void);
 void Scout(void);
 void et_relay_N(void);
@@ -57,10 +79,7 @@ void BANK_Datasave(void);
 void ERROR_Datasave(void);					
 void ACrowbar(void);					
 
-// These are defined by the linker (see F28335_flash.cmd)
-extern Uint16 RamfuncsLoadStart;
-extern Uint16 RamfuncsLoadEnd;
-extern Uint16 RamfuncsRunStart;
+
 /*********************************************************************************************************
 ** 函数名称: main
 ** 功能描述: 系统初始化,主循环
@@ -77,8 +96,12 @@ extern Uint16 RamfuncsRunStart;
 ***********************************************************************************************/
 void main(void)
 {
+//将ram中运行的代码从flash中复制到ram中
+	MemCopy(&RamfuncsLoadStart, &RamfuncsLoadEnd, &RamfuncsRunStart);//flashd-->raml0
+
 //--------------------------------系统初始化--------------------------------
 	InitSysCtrl();
+
 //---------------------------------IO初始化---------------------------------
 	InitGpio();	
 
@@ -87,19 +110,21 @@ void main(void)
 	IER = 0x0000;
 	IFR = 0x0000;
 	InitPieVectTable();
+
 //--------------------------------外设初始化--------------------------------
 	InitPeripherals(); 	
+
 //---------------------------------写FLASH程序------------------------------
-	MemCopy(&RamfuncsLoadStart, &RamfuncsLoadEnd, &RamfuncsRunStart);
 	InitFlash();
+
 //--------------------------------工作初始化--------------------------------
 	InitWork();	
+
 //---------------------------用户自定义程序的初始化-------------------------
 	InitEeprom();
 
 //-----MagnetCurve2013-12-13-ZZJ------------------
-//-----读取EEROM内部存储的励磁参数----------------------
-
+//-----读取EEPROM内部存储的励磁参数----------------------
    	MC_DATA.y[0] = _SC_EXISTY1 * 0.001;
    	MC_DATA.y[1] = _SC_EXISTY1 * 0.001;
 	MC_DATA.y[2] = _SC_EXISTY2 * 0.001;
@@ -116,14 +141,13 @@ void main(void)
 
 	_MC_OK = 1;
 //--------2013-12-13--------
-
 //	InitRtimer();										//实时时钟初始化只在芯片需要初始化时才进行
+
 //-------------------------------中断地址初始化-----------------------------
 	EALLOW;  
 	PieVectTable.TINT0       = &CpuTimer0Isr;		  	//定时器T0周期中断
 	PieVectTable.EPWM1_TZINT = &EPWM1_TZ1_Isr;      	//TZ1 功率保护中断 
 	PieVectTable.EPWM2_TZINT = &EPWM2_TZ2_Isr;      	//TZ2 功率保护中断 
-
 	EDIS;    
 	
 //------------------------------加载中断使能寄存器--------------------------
@@ -131,12 +155,10 @@ void main(void)
     										//INT1(CPU)/INT1.7(PIE)
 	PieCtrlRegs.PIEIER2.bit.INTx1 = 1;		//epwm1.tz
 											//INT2(CPU)/INT2.1(PIE)
-	PieCtrlRegs.PIEIER2.bit.INTx2 = 1;		//epwm2.tz 																	//INT1(CPU)/INT1.1(PIE)
-												
-    PieCtrlRegs.PIECTRL.bit.ENPIE = 1;  	//使能PIE   
-    
+	PieCtrlRegs.PIEIER2.bit.INTx2 = 1;		//epwm2.tz
+											//INT2(CPU)/INT2.2(PIE)
+    PieCtrlRegs.PIECTRL.bit.ENPIE = 1;  	//使能PIE
    	IER |= (M_INT1|M_INT2);					//加载总中断屏蔽寄存器
-    
     EINT;   								//开总中断
     
 //-------------------------------定时器开始工作-------------------------------
@@ -144,19 +166,17 @@ void main(void)
 
 //----------------------------------主循环---------------------------------------------------------
 	for(;;) 
-	{				
-
+	{
 //----------------------------------每次运行----------------------------------
 		EeCtrl();							//eeprom控制
-		Sci485Ctrl(); 
-//		Sci_canopenrx();					//系统输入读取	
+		Sci485Ctrl();                       //485通讯控制，经网关服务器通过以太网与上位机通讯
 
 //-----------------------------一级循环5ms运行一次----------------------------
 		if(M_ChkCounter(MAIN_LOOP.cnt1,DELAY_MAIN1)>=0)		
 		{
 			MAIN_LOOP.cnt1=0;				//清空计数器
 			Input();						//系统输入读取
-	        M_NotFlag(SL_WATCHDOG);		    //DSP软件看门狗 20100401at27
+//	        M_NotFlag(SL_WATCHDOG);		    //DSP软件看门狗 20100401at27 没有使用
 			Output();						//系统输出指示
 		}
 
@@ -194,7 +214,7 @@ void main(void)
 				ClrPdpint();						//PDPINT中断清空	
 				EnPdpint();							//PDPINT使能中断
 			}			
-//20130801
+
 			if(M_ChkFlag(SL_ENCODEPOS_OK)==0 && M_ChkFlag(SL_ECPOSSEARCH)!=0 && M_ChkFlag(SL_MPR_START)!=0)	//20130604
 			{
 				*FUNC[20].para_add = - QEPDATA.encodpos * 1000;	//修改RAM和EEROM
@@ -203,21 +223,17 @@ void main(void)
 				M_SetFlag(SL_EEASK_MCODE);			//设EEPROM修改功能码请求标志
 			}
 		}
+
 //-----------------------------六级循环1000ms运行一次---------------------------
 		if(M_ChkCounter(MAIN_LOOP.cnt6,DELAY_MAIN6)>=0)
 		{
 			MAIN_LOOP.cnt6=0;
 
 			if(M_ChkFlag(SL_CODEOK)!=0)		
-				RtRead();							//在eeprom正常的情况下//读取实时时钟,很耗时，要13ms.20090801,CPC				
-//20121103										
-//			if(M_ChkCounter(MAIN_LOOP.cnt_senszfstdy,DELAY_SENSZFSTDY)>=0)
-//				M_SetFlag(SL_SENSZFSTDY);   		//延迟时间到后置零漂滤波稳定标志位
-
+				RtRead();							//在eeprom正常的情况下//读取实时时钟,很耗时，要13ms.20090801,CPC
 		}
 	}  					
 } 
-
 
 /*********************************************************************************************************
 ** 函数名称: CpuTimer0Isr
@@ -1467,25 +1483,23 @@ void Protect(void)
 ***********************************************************************************************/
 void Scout(void)
 {
-
-//  float temp_pgactive,temp_pgreactive;
   Uint16 tempb,tempc;
-//------------------根据子程序上报的畔ⅲ卸鲜荰AB_MSG中哪一个-------------------------------------
-	if(M_ChkFlag(SL_POWERON)==0)										//若电完成故障则检测故障
+//------------------根据子程序上报的故障信息决定TAB_MSG中哪一个-------------------------------------
+	if(M_ChkFlag(SL_POWERON)==0)										//若上电完成，则检测故障
 	{	
 //---------------------------------TZ1中断保护------------------------------------------------------
 		if(M_ChkFlag(SL_PDPINTA)!=0)	
 		{	
 			tempb = *IN2_ADDR;
 			tempc = *IN3_ADDR;
-			_IN12_DATA = (_IN12_DATA & 0x00FF) | ((tempb<<8) & 0xFF00);
-			_IN34_DATA = (tempc & 0x00FF);
+			_IN12_DATA = (_IN12_DATA & 0x00FF) | ((tempb<<8) & 0xFF00);//flag[9]
+			_IN34_DATA = (tempc & 0x00FF);//flag[10]
 
-			if(M_ChkFlag(SL_IN2_IOVA1)!=0)			M_SetFlag(SL_HIA1);		//网侧A相SKiiP故障
-			else if(M_ChkFlag(SL_IN2_IOVB1)!=0)	   	M_SetFlag(SL_HIB1);		//网侧B相SKiiP故障
-		    else if(M_ChkFlag(SL_IN2_IOVC1)!=0)	   	M_SetFlag(SL_HIC1);		//网侧C相SKiiP故障
-			else if(M_ChkFlag(SL_IN3_VDCOV)!=0)   	M_SetFlag(SL_HUDCOV);	//直流侧过压故障
-			else if(M_ChkFlag(SL_IN3_NPRIOV)!=0)  	M_SetFlag(SL_HIACOV1);	//网侧硬件过流故障
+			if(M_ChkFlag(SL_IN2_IOVA1)!=0)			M_SetFlag(SL_HIA1);		//网侧A相SKiiP故障 flag[9].bit8
+			else if(M_ChkFlag(SL_IN2_IOVB1)!=0)	   	M_SetFlag(SL_HIB1);		//网侧B相SKiiP故障 flag[9].bit9
+		    else if(M_ChkFlag(SL_IN2_IOVC1)!=0)	   	M_SetFlag(SL_HIC1);		//网侧C相SKiiP故障 flag[9].bit10
+			else if(M_ChkFlag(SL_IN3_VDCOV)!=0)   	M_SetFlag(SL_HUDCOV);	//直流侧过压故障 flag[10].bit0
+			else if(M_ChkFlag(SL_IN3_NPRIOV)!=0)  	M_SetFlag(SL_HIACOV1);	//网侧硬件过流故障 flag[10].bit1
 			else if(M_ChkFlag(SL_PDPASERIES)!=0)	M_ClrFlag(SL_PDPINTA);	//再允许启动变流器	20091107atzy						
 			else									M_SetFlag(SL_PDPASERIES);//发生硬件故障,CPLD没有存到故障
 		}
@@ -1507,11 +1521,11 @@ void Scout(void)
 			_IN12_DATA = (_IN12_DATA & 0x00FF) | ((tempb<<8) & 0xFF00);
 			_IN34_DATA = (tempc & 0x00FF);
 
-			if(M_ChkFlag(SL_IN2_IOVA2)!=0)			M_SetFlag(SL_HIA2);			//电机侧A相SKiiP故障
-			else if(M_ChkFlag(SL_IN2_IOVB2)!=0)	    M_SetFlag(SL_HIB2);			//电机侧B相SKiiP故障
-		    else if(M_ChkFlag(SL_IN2_IOVC2)!=0)	    M_SetFlag(SL_HIC2);			//电机侧C相SKiiP故障
-		    else if(M_ChkFlag(SL_IN3_MPRIOV)!=0)    M_SetFlag(SL_HIACOV2);		//电机侧硬件过流故障
-			else if(M_ChkFlag(SL_IN3_IOVDC)!=0)  	M_SetFlag(SL_HIDCOV);		//中间直流斩波IGBT硬件故障20120228atbjtu_chopper	BJTULVRT201204
+			if(M_ChkFlag(SL_IN2_IOVA2)!=0)			M_SetFlag(SL_HIA2);			//电机侧A相SKiiP故障 flag[9].bit12
+			else if(M_ChkFlag(SL_IN2_IOVB2)!=0)	    M_SetFlag(SL_HIB2);			//电机侧B相SKiiP故障 flag[9].bit13
+		    else if(M_ChkFlag(SL_IN2_IOVC2)!=0)	    M_SetFlag(SL_HIC2);			//电机侧C相SKiiP故障 flag[9].bit14
+		    else if(M_ChkFlag(SL_IN3_MPRIOV)!=0)    M_SetFlag(SL_HIACOV2);		//电机侧硬件过流故障 flag[10].bit2
+			else if(M_ChkFlag(SL_IN3_IOVDC)!=0)  	M_SetFlag(SL_HIDCOV);		//中间直流斩波IGBT硬件故障20120228atbjtu_chopper flag[10].bit6
 			else if(M_ChkFlag(SL_PDPBSERIES)!=0)	M_ClrFlag(SL_PDPINTB);		//允许启动变流器	20091107atzy						
 			else									M_SetFlag(SL_PDPBSERIES);	//发生硬件故障,CPLD没有存到故障
 		}
@@ -1528,7 +1542,7 @@ void Scout(void)
 //---------------------------------E-STOP保护-------------------------------------------------------
 		if(M_ChkFlag(SL_IN1_EXESTOP)!=0)								//外部急停故障  操作板信号绯∶挥
 		{
-			if(M_ChkCounter(MAIN_LOOP.cnt_estop,DELAY_ESTOP)>=0)   M_SetFlag(SL_ESTOP);		//紧急停止延迟时间到？
+			if(M_ChkCounter(MAIN_LOOP.cnt_estop,DELAY_ESTOP)>=0)   M_SetFlag(SL_ESTOP);		//紧急停止延迟时间6ms,延时
 			else M_ClrFlag(SL_ESTOP);									//清曛疚
 		}
 		else 

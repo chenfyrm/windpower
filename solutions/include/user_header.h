@@ -321,11 +321,11 @@ extern "C" {
 #define OUT4_ADDR			((Uint16 *)0x1C0000)	//输出地址4,与慢速AD有关
 
 //--------------------------------SPI通讯宏定义-------------------------------------------
-#define	SPINUM				4										//SPI口发送/接收数据量
+#define	SPINUM				4										//SPI，DA发送数据
 
 //-----------------------------------时钟--------------------------------------------------
-#define	HSPCLK				75      		//高速基准时钟频率(Hz)
-#define	LSPCLK				37500000		//低速基准时钟频率(Hz)
+#define	HSPCLK				75      		//高速基准时钟频率(Hz)   SysCtrlRegs.HISPCP.all = 0x0001; 缺省/2
+#define	LSPCLK				37500000		//低速基准时钟频率(Hz)   SysCtrlRegs.LOSPCP.all = 0x0002; 缺省/4
 
 //--------------------------------标志位定义-----------------------------------------------
 //flag[0]显示及设定标
@@ -455,7 +455,6 @@ extern "C" {
 #define SL_SPEED_IN_RANGE	0x6F			//=1转速在范围以内
 								
 //flag[7]输出标1,IO输出   0x180000          //电器输出，=1 输出DC24V
-#define _OUT1_DATA			flag[7]	
 #define CL_CBLVC            0x70         	//=0主断断开指令P5.5
 #define CL_CBON   			0x71			//=1要求合主断P5.6
 #define CL_PRE   			0x72			//=1要求合预充电P5.7
@@ -466,7 +465,6 @@ extern "C" {
 #define CL_ZKLVRT	        0x77			//=1发生网压跌落，发给主控24V信号20121107
 
 //flag[8]输出标2         0x190000           //继电器输出，=1 输出AC220V
-#define _OUT2_DATA			flag[8]				
 #define CL_RELAY8      		0x80			//备用
 #define CL_CHOPTEST        	0x81			//斩波测试 2013-12-6ZZJ 
 #define SL_WATCHDOG			0x82            //DSP软件看门狗 20100401at27
@@ -486,7 +484,6 @@ extern "C" {
 #define SL_LV_SCROFF2		0x8F			//=1 50%不对称关SCR 20121210
 
 //flag[9]输入标12
-#define _IN12_DATA			flag[9]			//变流器布刺蠢
 //---------------------0x140000----------------------------------------------------------------------------	
 #define SL_IN1_CBSTS 			0x90			//=1 主断处于闭合状态P4.1
 #define SL_IN1_CBRESET			0x91			//=1 检测到骺匾笾鞫蟁ESET指令(需要延时一段时间后才能合主断)，P4.2
@@ -507,7 +504,6 @@ extern "C" {
 #define SL_IN2_TBOV				0x9F			//=1 电机侧SKiiP超温故障
 
 //flag[10]输入标34      0x160000
-#define _IN34_DATA			flag[10]			//控制板硬件保护故障反馈
 //-----------------------------------------------------------------------------------------------				
 #define SL_IN3_VDCOV			0xA0			//=1 直流电压过压
 #define SL_IN3_NPRIOV			0xA1			//=1 网侧交流硬件保护过流故障
@@ -586,9 +582,15 @@ extern "C" {
 #define SL_SYN_FH         	0xEF   			//SYN步骤标志位
 
 //flag[15]输出标4         0x1A0000          //慢速AD地址输出
-#define _OUT3_DATA			flag[15]
-#define SL_PHASEA			0xF0		     //
+#define SL_PHASEA			0xF0		     //测量CPU占有率,测量DSP板上T1端子
 #define SL_PHASEB			0xF1             //
+
+
+#define _IN12_DATA			flag[9]			//变流器硬件状态和故障
+#define _IN34_DATA			flag[10]		//控制板硬件保护故障反馈
+#define _OUT1_DATA			flag[7]	        //IO输出
+#define _OUT2_DATA			flag[8]
+#define _OUT3_DATA			flag[15]
 
 //---2013-12-13--ZZJ增加电机励磁
 //------------------------电机励磁参数识别MagnetCurve200909------------------------------------
